@@ -10,11 +10,12 @@ namespace Player
           [SerializeField] private float moveSpeed = 5f;
           [SerializeField] private float gravity = 10f;
      
+          public Vector2 MoveInput { get; private set; }
+          
           private CharacterController _controller;
           private InputSystemActions _inputActions;
-          private Vector2 _moveInput;
           private Vector3 _velocity;
-
+          
           private void Awake()
           {
                _controller = GetComponent<CharacterController>();
@@ -37,7 +38,7 @@ namespace Player
 
           private void OnMove(InputAction.CallbackContext ctx)
           {
-               _moveInput = ctx.ReadValue<Vector2>();
+               MoveInput = ctx.ReadValue<Vector2>();
           }
 
           private void Update()
@@ -49,9 +50,9 @@ namespace Player
           private void Move()
           {
                var moveDirection = new Vector3(
-                    _moveInput.x,
+                    MoveInput.x,
                     0f,
-                    _moveInput.y
+                    MoveInput.y
                );
           
                moveDirection.Normalize();
