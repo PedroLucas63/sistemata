@@ -725,6 +725,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Map.WorldManager
   chunkPrefab: {fileID: 4297318868697304771, guid: 92ee1dfb78f0c60c1a56043dc65d5c5a, type: 3}
+  _player: {fileID: 248782228}
+  WorldSeed: 12345
 --- !u!4 &1715210118
 Transform:
   m_ObjectHideFlags: 0

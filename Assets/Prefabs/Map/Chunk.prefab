@@ -22399,8 +22399,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d4a752a371c2fe25b17b0762a04310d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  ChunkX: 0
-  ChunkZ: 0
+  areiaEscura: {fileID: 1890854524252840731}
+  areiaClara: {fileID: 3633485136704591466}
+  darkTile: {fileID: 11400000, guid: aad30eeafa508524d838b7673873baa2, type: 2}
+  lightTile: {fileID: 11400000, guid: 0d97a83d670d3804ab9bac28f9817f72, type: 2}
+  LightTileNoise: 0.15
+  LightTilePercentage: 0.4
+  rocksTilemap: {fileID: 1812076315025480027}
+  plantsTilemap: {fileID: 3703585112556369576}
+  cactiTilemap: {fileID: 2716826485736006770}
+  rockTiles:
+  - Tile: {fileID: 11400000, guid: de022c4f7dd2cd249bf0ed5af8a63e97, type: 2}
+    Weight: 1
+  plantTiles:
+  - Tile: {fileID: 11400000, guid: 801360228bac2514f97798b9a5d07778, type: 2}
+    Weight: 1
+  - Tile: {fileID: 11400000, guid: fff068fe90b2af243b7579b9ed60f208, type: 2}
+    Weight: 0.1
+  cactiTiles:
+  - Tile: {fileID: 11400000, guid: 904ba1368fb893a47a7918006bffd410, type: 2}
+    Weight: 0.2
+  - Tile: {fileID: 11400000, guid: 95277e4c4d27c4a40977f2aae753d036, type: 2}
+    Weight: 0.25
+  - Tile: {fileID: 11400000, guid: e53ec27e89bc78c4f8f02f1523ccf7cf, type: 2}
+    Weight: 0.4
+  - Tile: {fileID: 11400000, guid: 86c89aabac009ab4cb271f3175ffb0e5, type: 2}
+    Weight: 0.35
+  rockChance: 0.15
+  plantChance: 0.4
+  cactusChance: 0.05
+  DecorationChance: 0.1
 --- !u!1 &8484324149793961201
 GameObject:
   m_ObjectHideFlags: 0
