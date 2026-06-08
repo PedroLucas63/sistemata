@@ -1,3 +1,4 @@
+using Stats;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,8 +7,7 @@ namespace Player
      [RequireComponent(typeof(CharacterController))]
      public class PlayerMovement : MonoBehaviour
      {
-          [Header("Movement")] 
-          [SerializeField] private float moveSpeed = 5f;
+          [Header("Movement Settings")] 
           [SerializeField] private float gravity = 10f;
      
           public Vector2 MoveInput { get; private set; }
@@ -15,10 +15,31 @@ namespace Player
           private CharacterController _controller;
           private InputSystemActions _inputActions;
           private Vector3 _velocity;
+          private EntityStats _stats;
+          private Stat _moveSpeedStat;
+
+          public float MoveSpeed
+          {
+               get
+               {
+                    _moveSpeedStat ??= _stats.GetStat(StatType.MoveSpeed);
+                    return _moveSpeedStat?.Get() ?? 5f;
+               }
+          }
+          
+          public float BaseMoveSpeed
+          {
+               get
+               {
+                    _moveSpeedStat ??= _stats.GetStat(StatType.MoveSpeed);
+                    return _moveSpeedStat?.BaseValue ?? 5f;
+               }
+          }
           
           private void Awake()
           {
                _controller = GetComponent<CharacterController>();
+               _stats = GetComponent<EntityStats>();
                _inputActions = new InputSystemActions();
           }
 
@@ -49,6 +70,8 @@ namespace Player
 
           private void Move()
           {
+               _moveSpeedStat ??= _stats.GetStat(StatType.MoveSpeed);
+               
                var moveDirection = new Vector3(
                     MoveInput.x,
                     0f,
@@ -56,8 +79,7 @@ namespace Player
                );
           
                moveDirection.Normalize();
-          
-               _controller.Move(moveDirection * (moveSpeed * Time.deltaTime));
+              _controller.Move(moveDirection * (MoveSpeed * Time.deltaTime));
           }
 
           private void ApplyGravity()
