@@ -90,21 +90,23 @@ namespace Map
             var missingChunks = requiredChunks.Where(chunkId => !_chunks.ContainsKey(chunkId)).ToList();
             var reusableChunks = _chunks.Keys.Where(chunkId => !requiredChunks.Contains(chunkId)).ToList();
 
-            for (var i = 0; i < missingChunks.Count; i++)
+            var count = Mathf.Min(missingChunks.Count, reusableChunks.Count);
+            
+            for (var i = 0; i < count; i++)
             {
                 var oldId = reusableChunks[i];
                 var newId = missingChunks[i];
-
-                var chunk = _chunks[oldId];
+                
+                if (!_chunks.Remove(oldId, out var chunk))
+                    continue;
+                _chunks.Add(newId, chunk);
 
                 chunk.Initialize(
                     WorldSeed,
                     newId.x,
                     newId.y
                 );
-
-                _chunks.Remove(oldId);
-                _chunks.Add(newId, chunk);
+                
                 yield return null;
             }
 
