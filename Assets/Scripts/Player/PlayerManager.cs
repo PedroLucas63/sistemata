@@ -1,6 +1,7 @@
 using System;
 using Stats;
 using UnityEngine;
+using Upgrades;
 
 namespace Player
 {

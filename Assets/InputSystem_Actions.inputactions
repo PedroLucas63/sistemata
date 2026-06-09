@@ -991,6 +991,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Debug",
+            "id": "7b7f35d8-98b6-409b-8b11-108d8e58d975",
+            "actions": [
+                {
+                    "name": "ShowLevelUpPanel",
+                    "type": "Button",
+                    "id": "984282a8-a5af-46da-ae7c-07b5d284b067",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a667e8ee-106c-465a-aba7-c33665d1bf78",
+                    "path": "<Keyboard>/leftBracket",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ShowLevelUpPanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
