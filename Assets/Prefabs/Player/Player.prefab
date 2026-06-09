@@ -12,6 +12,9 @@ GameObject:
   - component: {fileID: 6808421613726009913}
   - component: {fileID: 1043795974097244075}
   - component: {fileID: 4771361802369038586}
+  - component: {fileID: 5423827661807452230}
+  - component: {fileID: 2105190835070906337}
+  - component: {fileID: 4980836720501141198}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -85,6 +88,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a59a187ee343e1bf9401d2a7e109198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+--- !u!114 &5423827661807452230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798192137038000196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89a6658668ce43528796dd14606b1a23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Stats.EntityStats
+--- !u!114 &2105190835070906337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798192137038000196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18d6ccab69e42c1a43615867d0f7f4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Common.EntityHealth
+--- !u!114 &4980836720501141198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798192137038000196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90a7b2e52b4846778735f638f54bb3f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerManager
+  baseData: {fileID: 11400000, guid: 2753b2df827cb614fa2a1e5b519d1eb9, type: 2}
 --- !u!1 &7058808293835032316
 GameObject:
   m_ObjectHideFlags: 0
