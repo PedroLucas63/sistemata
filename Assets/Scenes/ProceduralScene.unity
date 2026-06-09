@@ -2857,6 +2857,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2097366673}
   - component: {fileID: 2097366672}
+  - component: {fileID: 2097366674}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2899,6 +2900,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2097366674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097366671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393a08e569f04534b57a99bfd48cf743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Upgrades.UpgradePoolManager
+  availableUpgradesPool:
+  - {fileID: 11400000, guid: ae59c7d599cd3e68881a3f23d439fb84, type: 2}
+  - {fileID: 11400000, guid: b43446b77076fd496b1fd3d1abb9df7d, type: 2}
+  - {fileID: 11400000, guid: 68c36a17b7a270b4f96f5f47ca489486, type: 2}
+  - {fileID: 11400000, guid: 6050fd20b98466affb5cc40804e82e1e, type: 2}
+  - {fileID: 11400000, guid: f8f7ea69a6652c43fac423788fb6fdc5, type: 2}
+  - {fileID: 11400000, guid: 4dfad7133e0cf9a78b821417e94bdd53, type: 2}
+  - {fileID: 11400000, guid: 10f42b61a1c92f115b884fdc9a420c7a, type: 2}
+  - {fileID: 11400000, guid: 0f697aa4d996a7b36a15752623e437d6, type: 2}
+  - {fileID: 11400000, guid: 989dc41a1809bfd22b8efd3d7fc2036a, type: 2}
+  - {fileID: 11400000, guid: 8277c00ae79ba16459c1c9fbb6abb9b7, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
