@@ -2,7 +2,7 @@ using System;
 using Stats;
 using UnityEngine;
 
-namespace Common
+namespace Sistemata.Common
 {
     [RequireComponent(typeof(EntityStats))]
     public class EntityHealth : MonoBehaviour
