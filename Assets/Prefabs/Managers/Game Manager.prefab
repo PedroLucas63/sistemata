@@ -44,5 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca0c66ff4e054334eb638b378db97804, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  player: {fileID: 0}
   currentState: 0
   timeUntilBoss: 300
+  enemyPF: {fileID: 6564470530625821964, guid: 0ee131150ee0c504daa4fd15b372931f, type: 3}
+  enemyHolder: {fileID: 0}
+  cellSize: 20

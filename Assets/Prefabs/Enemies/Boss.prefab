@@ -105,7 +105,7 @@ SpriteRenderer:
   m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2324236343598682440, guid: 3d2f35717feffcb17b6fdf889e279142, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -123,9 +123,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5064950292464831959}
-  - component: {fileID: 4437742652370464109}
-  - component: {fileID: 860502043449631888}
-  - component: {fileID: 2986143851938440453}
+  - component: {fileID: -7975872942967225159}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -149,32 +147,7 @@ Transform:
   - {fileID: 2259855901146839515}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
---- !u!143 &4437742652370464109
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6564470530625821964}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 1.5
-  m_Radius: 0.35
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.75, z: 0}
---- !u!114 &860502043449631888
+--- !u!114 &-7975872942967225159
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,19 +156,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 6564470530625821964}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6ae2c8c96e1cc337acc04ff5ccf4013, type: 3}
+  m_Script: {fileID: 11500000, guid: 746a9286f3659ea4eab94f43d034c79f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
-  gravity: 0
---- !u!114 &2986143851938440453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6564470530625821964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a59a187ee343e1bf9401d2a7e109198, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  movementSpeed: 2.5
+  spatialGroup: {x: 0, y: 0}

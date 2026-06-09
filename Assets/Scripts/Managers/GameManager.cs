@@ -1,5 +1,7 @@
-using UnityEngine;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Sistemata.Core
 {
@@ -8,6 +10,11 @@ namespace Sistemata.Core
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }
+
+        [Header("Configurações Gerais")]
+        public Transform player;
+        private CharacterController playerScript;
+        public CharacterController PlayerScript { get { return playerScript; } }
 
         public GameState currentState;
 
@@ -33,7 +40,10 @@ namespace Sistemata.Core
         {
             currentState = GameState.Normal;
             phaseTimer = timeUntilBoss;
-            Time.timeScale = 1f; 
+            Time.timeScale = 1f;
+
+            if (player != null)
+                playerScript = player.GetComponent<CharacterController>();
         }
 
         private void Update()
