@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,6 +12,7 @@ namespace Map
 
         private const int TILES_X = 47;
         private const int TILES_Z = 26;
+        private const int TOTAL_TILES = TILES_X * TILES_Z;
 
         [Header("Tilemaps configuration")]
         [SerializeField] private Tilemap areiaEscura;
@@ -49,6 +52,20 @@ namespace Map
 
         private int ChunkX;
         private int ChunkZ;
+        private bool _firstGeneration = true;
+        
+        private static TileBase[] _darkTilesCache;
+        private static TileBase[] _lightTilesBuffer;
+        private static TileBase[] _rocksBuffer;
+        private static TileBase[] _plantsBuffer;
+        private static TileBase[] _cactiBuffer;
+        
+        private float _totalDecorationChanceWeight;
+        private float _totalRockWeight;
+        private float _totalPlantWeight;
+        private float _totalCactusWeight;
+        
+        private Coroutine _generationCoroutine;
 
         public void SetChunk(int chunkX, int chunkZ)
         {
@@ -65,9 +82,39 @@ namespace Map
         {
             return ChunkZ;
         }
+        
+        private void Start()
+        {
+            InitializeWeightsCache();
+        }
+        
+        private void OnValidate()
+        {
+            InitializeWeightsCache();
+        }
+        
+        private void InitializeWeightsCache()
+        {
+            _totalDecorationChanceWeight = rockChance + plantChance + cactusChance;
+
+            _totalRockWeight = CalculateTilesTotalWeight(rockTiles);
+            _totalPlantWeight = CalculateTilesTotalWeight(plantTiles);
+            _totalCactusWeight = CalculateTilesTotalWeight(cactiTiles);
+        }
+        
+        private static float CalculateTilesTotalWeight(WeightedTile[] tiles)
+        {
+            if (tiles == null || tiles.Length == 0) return 0f;
+            return tiles.Sum(tile => tile.Weight);
+        }
 
         public void Initialize(int seed, int chunkX, int chunkZ)
         {
+            if (_generationCoroutine != null)
+            {
+                StopCoroutine(_generationCoroutine);
+            }
+            
             transform.position = new Vector3(
                 chunkX * WIDTH,
                 0,
@@ -77,35 +124,62 @@ namespace Map
             ChunkX = chunkX;
             ChunkZ = chunkZ;
 
-            Generate(seed);
+            _generationCoroutine = StartCoroutine(GenerateRoutine(seed));
         }
 
-        private void Generate(int seed)
+        private IEnumerator GenerateRoutine(int seed)
         {
+            GenerateDarkTiles();
+            yield return null;
+            GenerateLightTiles(seed);
+            yield return null;
+            GenerateDecorations(seed);
+            _generationCoroutine = null;
+        }
+
+        private void GenerateDarkTiles()
+        {
+            if (!_firstGeneration)
+                return;
+            
             areiaEscura.ClearAllTiles();
-            areiaClara.ClearAllTiles();
-
-            for (int x = 0; x < TILES_X; x++)
+            
+            var bounds = new BoundsInt(0, 0, 0, TILES_X, TILES_Z, 1);
+            if (_darkTilesCache is not { Length: TOTAL_TILES })
             {
-                for (int z = 0; z < TILES_Z; z++)
+                _darkTilesCache = new TileBase[TOTAL_TILES];
+                for (var i = 0; i < TOTAL_TILES; i++)
                 {
-                    Vector3Int pos = new Vector3Int(x, z, 0);
+                    _darkTilesCache[i] = darkTile;
+                }
+            }
 
-                    areiaEscura.SetTile(pos, darkTile);
-
-                    float noise = Mathf.PerlinNoise(
+            areiaEscura.SetTilesBlock(bounds, _darkTilesCache);
+            _firstGeneration = false;
+        }
+        
+        private void GenerateLightTiles(int seed)
+        {
+            areiaClara.ClearAllTiles();
+            _lightTilesBuffer ??= new TileBase[TOTAL_TILES];
+            
+            var index = 0;
+            for (var z = 0; z < TILES_Z; z++)
+            {
+                for (var x = 0; x < TILES_X; x++)
+                {
+                    var noise = Mathf.PerlinNoise(
                         (ChunkX * TILES_X + x + seed) * LightTileNoise,
                         (ChunkZ * TILES_Z + z + seed) * LightTileNoise
                     );
 
-                    if (noise > LightTilePercentage)
-                    {
-                        areiaClara.SetTile(pos, lightTile);
-                    }
+                    _lightTilesBuffer[index] = (noise > LightTilePercentage) ? lightTile : null;
+                    index++;
                 }
             }
-
-            GenerateDecorations(seed);
+            
+            var bounds = new BoundsInt(0, 0, 0, TILES_X, TILES_Z, 1);
+            areiaClara.SetTilesBlock(bounds, _lightTilesBuffer);
         }
 
         private void GenerateDecorations(int seed)
@@ -113,53 +187,48 @@ namespace Map
             rocksTilemap.ClearAllTiles();
             plantsTilemap.ClearAllTiles();
             cactiTilemap.ClearAllTiles();
-
-            for (int x = 0; x < TILES_X; x++)
+            
+            _rocksBuffer ??= new TileBase[TOTAL_TILES];
+            _plantsBuffer ??= new TileBase[TOTAL_TILES];
+            _cactiBuffer ??= new TileBase[TOTAL_TILES];
+            
+            System.Array.Clear(_rocksBuffer, 0, TOTAL_TILES);
+            System.Array.Clear(_plantsBuffer, 0, TOTAL_TILES);
+            System.Array.Clear(_cactiBuffer, 0, TOTAL_TILES);
+            
+            var index = 0;
+            for (var z = 0; z < TILES_Z; z++)
             {
-                for (int z = 0; z < TILES_Z; z++)
+                for (var x = 0; x < TILES_X; x++)
                 {
-                    int worldX = ChunkX * TILES_X + x;
-                    int worldZ = ChunkZ * TILES_Z + z;
+                    var worldX = ChunkX * TILES_X + x;
+                    var worldZ = ChunkZ * TILES_Z + z;
+                    
+                    var spawnRoll = Hash(worldX, worldZ, seed);
+                    if (spawnRoll > DecorationChance)
+                    {
+                        index++;
+                        continue;
+                    }
 
-                    Vector3Int pos = new Vector3Int(x, z, 0);
-
-                    TrySpawnDecoration(
-                        pos,
-                        worldX,
-                        worldZ,
-                        seed
-                    );
+                    EvaluateDecorationBuffers(index, worldX, worldZ, seed);
+                    index++;
                 }
             }
+
+            var bounds = new BoundsInt(0, 0, 0, TILES_X, TILES_Z, 1);
+            rocksTilemap.SetTilesBlock(bounds, _rocksBuffer);
+            plantsTilemap.SetTilesBlock(bounds, _plantsBuffer);
+            cactiTilemap.SetTilesBlock(bounds, _cactiBuffer);
         }
-
-        private void TrySpawnDecoration(
-            Vector3Int pos,
-            int worldX,
-            int worldZ,
-            int seed)
+        
+        private void EvaluateDecorationBuffers(int index, int worldX, int worldZ, int seed)
         {
-            float spawnRoll = Hash(worldX, worldZ, seed);
-            
-            if (spawnRoll > DecorationChance)
-                return;
-
-            float totalWeight =
-                rockChance +
-                plantChance +
-                cactusChance;
-
-            float selection =
-                Hash(worldX + 9999, worldZ - 9999, seed)
-                * totalWeight;
+            var selection = Hash(worldX + 9999, worldZ - 9999, seed) * _totalDecorationChanceWeight;
 
             if (selection < rockChance)
             {
-                rocksTilemap.SetTile(
-                    pos,
-                    GetRandomTile(rockTiles, worldX, worldZ, seed)
-                );
-
+                _rocksBuffer[index] = GetRandomTile(rockTiles, worldX, worldZ, seed, _totalRockWeight);
                 return;
             }
 
@@ -167,26 +236,19 @@ namespace Map
 
             if (selection < plantChance)
             {
-                plantsTilemap.SetTile(
-                    pos,
-                    GetRandomTile(plantTiles, worldX, worldZ, seed)
-                );
-
+                _plantsBuffer[index] = GetRandomTile(plantTiles, worldX, worldZ, seed, _totalPlantWeight);
                 return;
             }
 
-            cactiTilemap.SetTile(
-                pos,
-                GetRandomTile(cactiTiles, worldX, worldZ, seed)
-            );
+            _cactiBuffer[index] = GetRandomTile(cactiTiles, worldX, worldZ, seed, _totalCactusWeight);
         }
 
-        private float Hash(
+        private static float Hash(
             int x,
             int z,
             int seed)
         {
-            uint h = (uint)(
+            var h = (uint)(
                 x * 374761393 +
                 z * 668265263 +
                 seed * 1442695041
@@ -202,24 +264,19 @@ namespace Map
             WeightedTile[] tiles,
             int worldX,
             int worldZ,
-            int seed)
+            int seed,
+            float weight
+        )
         {
             if (tiles == null || tiles.Length == 0)
                 return null;
 
-            float totalWeight = 0f;
-
-            foreach (var tile in tiles)
-            {
-                totalWeight += tile.Weight;
-            }
-
-            float roll =
+            var roll =
                 Hash(
                     worldX + 12345,
                     worldZ + 54321,
                     seed
-                ) * totalWeight;
+                ) * weight;
 
             foreach (var tile in tiles)
             {
@@ -229,7 +286,7 @@ namespace Map
                     return tile.Tile;
             }
 
-            return tiles[tiles.Length - 1].Tile;
+            return tiles[^1].Tile;
         }
     }
 }
