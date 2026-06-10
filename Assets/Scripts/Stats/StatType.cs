@@ -2,6 +2,7 @@ namespace Sistemata.Stats
 {
     public enum StatType
     {
+        /* Player and Ally */
         MaxHealth,
         Damage,
         MoveSpeed,
@@ -9,6 +10,11 @@ namespace Sistemata.Stats
         HealthRegen,
         PickupRadius,
         AttackRate,
-        SummonCap
+        SummonCap,
+        
+        /* Attacks */
+        Amount,
+        Ricochet,
+        AreaSize,
     }
 }

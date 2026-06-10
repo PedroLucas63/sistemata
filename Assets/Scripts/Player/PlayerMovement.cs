@@ -11,6 +11,7 @@ namespace Sistemata.Player
           [SerializeField] private float gravity = 10f;
      
           public Vector2 MoveInput { get; private set; }
+          public Vector2 LastMoveInput { get; private set; } = Vector2.down;
           
           private CharacterController _controller;
           private InputSystemActions _inputActions;
@@ -70,6 +71,8 @@ namespace Sistemata.Player
 
           private void Move()
           {
+               if (MoveInput != Vector2.zero) LastMoveInput = MoveInput;
+                    
                _moveSpeedStat ??= _stats.GetStat(StatType.MoveSpeed);
                
                var moveDirection = new Vector3(

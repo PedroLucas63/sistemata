@@ -79,8 +79,7 @@ namespace UI.LevelUp
             _isChoosing = false;
             
             levelUpPanel.SetActive(false);
-
-            PlayerManager.Instance.ApplyRunUpgrade(selectedData);
+            
             UpgradePoolManager.Instance.OnUpgradeChosen(selectedData);
 
             StartCoroutine(UnpauseRoutine());
