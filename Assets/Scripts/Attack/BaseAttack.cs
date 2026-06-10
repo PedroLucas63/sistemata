@@ -13,7 +13,7 @@ namespace Sistemata.Attack
         [SerializeField] protected ElementalType elementalType;
         
         [Header("Valores de Ataque")]
-        [SerializeField] private AttackBaseData baseData;
+        [SerializeField] protected AttackBaseData baseData;
 
         protected EntityStats AttackStats { get; private set; }
         private float _attackTimer;
@@ -26,8 +26,15 @@ namespace Sistemata.Attack
         protected virtual void Start()
         {
             InitializeAllBaseStats();
+            RegisterTag();
             ResetTimer();
-            
+        }
+
+        protected virtual void RegisterTag()
+        {
+            UpgradeRegistry.RegisterAttack(attackID, AttackStats);
+            if (UpgradePoolManager.Instance != null)
+                UpgradePoolManager.Instance.AddUnlockedTag($"Has_{attackID}");
         }
 
         protected virtual void InitializeAllBaseStats()
@@ -91,5 +98,7 @@ namespace Sistemata.Attack
                 return weaponRate * playerRate;
             }
         }
+
+        public string AttackId => attackID;
     }
 }

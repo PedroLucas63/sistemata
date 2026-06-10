@@ -28,6 +28,8 @@ namespace Sistemata.Core
         public event Action OnChaosStart;
         public event Action<int, float> OnGameOver;
 
+        [Header("Configurações de projéteis")] public Transform ProjectileParent;
+    
         private void Awake()
         {
             if (Instance == null) Instance = this;

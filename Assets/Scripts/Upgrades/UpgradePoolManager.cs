@@ -15,7 +15,12 @@ namespace Sistemata.Upgrades
         [Header("Pool de Upgrades Disponíveis")]
         [SerializeField] private List<UpgradeData> availableUpgradesPool;
         
+        [Header("Restrições globais de upgrades")]
+        [SerializeField] private int maxNewAttacks = 2;
+
+        
         private readonly HashSet<string> _unlockedTags = new();
+        private int _selectedNewAttacks = 0;
         
         private void Awake()
         {
@@ -78,12 +83,44 @@ namespace Sistemata.Upgrades
                 }
             }
             
-            if (chosenUpgrade.IsUnique)
+            if (chosenUpgrade.IsUnique || chosenUpgrade.Type == UpgradeType.NewAttack)
             {
                 availableUpgradesPool.Remove(chosenUpgrade);
             }
+
+            switch (chosenUpgrade.Type)
+            {
+                case UpgradeType.NewAttack:
+                    AddNewAttack(chosenUpgrade);
+                    break;
+                case UpgradeType.Stats:
+                    ApplyUpgradeToTarget(chosenUpgrade);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             
-            ApplyUpgradeToTarget(chosenUpgrade);
+        }
+
+        private void AddNewAttack(UpgradeData upgrade)
+        {
+            var attack = upgrade.AttackPrefab;
+            
+            if (!attack || UpgradeRegistry.GetAttack(attack.AttackId)) return;
+            if (_selectedNewAttacks >= maxNewAttacks) return;
+            
+            PlayerManager.Instance.UnlockNewAttack(upgrade.AttackPrefab);
+            _selectedNewAttacks++;
+
+            if (_selectedNewAttacks == maxNewAttacks)
+                RemoveNewAttacksUpgrades();
+        }
+
+        private void RemoveNewAttacksUpgrades()
+        {
+            availableUpgradesPool = availableUpgradesPool
+                .Where(u => u.Type != UpgradeType.NewAttack)
+                .ToList();
         }
 
         private static void ApplyUpgradeToTarget(UpgradeData upgrade)
@@ -95,7 +132,7 @@ namespace Sistemata.Upgrades
                 Source = upgrade
             };
             
-            switch (upgrade.UpgradeType)
+            switch (upgrade.TargetEntity)
             {
                 case TargetEntityType.Player:
                     PlayerManager.Instance.ApplyRunUpgrade(upgrade);
@@ -105,7 +142,6 @@ namespace Sistemata.Upgrades
                     if (attackStats)
                         attackStats.ApplyUpgrade(upgrade.TargetStat, modifier);
                     break;
-
                 case TargetEntityType.Ally:
                     var allyStats = UpgradeRegistry.GetAlly(upgrade.TargetID);
                     if (allyStats)

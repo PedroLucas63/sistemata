@@ -1,7 +1,9 @@
+using Sistemata.Core;
 using Sistemata.Player;
 using Sistemata.Stats;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.Serialization;
 
 namespace Sistemata.Attack
 {
@@ -14,6 +16,20 @@ namespace Sistemata.Attack
         
         private ObjectPool<Projectile> _arrowPool;
 
+        protected override void Start()
+        {
+            base.Start();
+
+            _arrowPool = new ObjectPool<Projectile>(
+                createFunc: CreateProjectile,
+                actionOnGet: OnTakeFromPool,
+                actionOnRelease: OnReturnedToPool,
+                actionOnDestroy: OnDestroyPoolObject,
+                collectionCheck: true,
+                defaultCapacity: 20,
+                maxSize: 100
+            );
+        }
         protected override void ExecuteAttack()
         {
             var amount = Mathf.Max(1, Mathf.FloorToInt(AttackStats.GetStat(StatType.Amount).Get()));
@@ -33,10 +49,33 @@ namespace Sistemata.Attack
                 var spawnDirection = Quaternion.Euler(0, currentAngle, 0) * baseDirection;
                 var spawnPosition = transform.position + 0.5f * baseDirection;
 
-                var projObj = Instantiate(arrowPrefab, spawnPosition, Quaternion.identity);
-                if (projObj.TryGetComponent<Projectile>(out var proj))
-                    proj.Setup(spawnDirection, arrowSpeed, damage, ricochet, size);
+                var proj = _arrowPool.Get();
+                proj.transform.position = spawnPosition;
+                proj.Setup(spawnDirection, arrowSpeed, damage, ricochet, size);
             }
+        }
+        
+        private Projectile CreateProjectile()
+        {
+            var parent = GameManager.Instance.ProjectileParent;
+            var proj = Instantiate(arrowPrefab, parent);
+            proj.ManagedPool = _arrowPool;
+            return proj;
+        }
+        
+        private static void OnTakeFromPool(Projectile proj)
+        {
+            proj.gameObject.SetActive(true);
+        }
+
+        private static void OnReturnedToPool(Projectile proj)
+        {
+            proj.gameObject.SetActive(false);
+        }
+
+        private static void OnDestroyPoolObject(Projectile proj)
+        {
+            Destroy(proj.gameObject);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Sistemata.Attack;
 using Sistemata.Stats;
 using UnityEngine;
 
@@ -12,8 +13,13 @@ namespace Sistemata.Upgrades
         [TextArea] public string Description;
         public Sprite Icon;
         public UpgradeQuality Quality;
+        public UpgradeType Type;
 
-        [Header("Destino do Upgrade")] public TargetEntityType UpgradeType;
+        [Header("Attack desbloqueado pelo upgrade")]
+        public BaseAttack AttackPrefab;
+
+        [Header("Destino do Upgrade")] 
+        public TargetEntityType TargetEntity;
         
         [Header("Efeito do Upgrade")]
         public StatType TargetStat;
@@ -25,16 +31,12 @@ namespace Sistemata.Upgrades
         public string TargetID;
         
         [Header("Regras de Sorteio")]
-        
         [Tooltip("Quanto maior o peso, maior a chance de aparecer.")]
         public int Weight = 100; 
-        
         [Tooltip("Se for verdadeiro, esse upgrade sai da pool geral assim que for escolhido.")]
         public bool IsUnique = false;
-        
         [Tooltip("Tags que o jogador DEVE TER para este upgrade aparecer na tela (ex: 'Has_Fireball')")]
         public List<string> RequiredTags = new();
-
         [Tooltip("Tags que o jogador GANHA ao pegar este upgrade (ex: desbloquear a 'Has_Fireball')")]
         public List<string> GrantedTags = new();
     }
