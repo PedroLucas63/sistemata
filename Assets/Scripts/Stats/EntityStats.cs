@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Stats
+namespace Sistemata.Stats
 { 
     public class EntityStats : MonoBehaviour
     {

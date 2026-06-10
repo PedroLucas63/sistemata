@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Global
+namespace Sistemata.Global
 {
     public class CameraFollow : MonoBehaviour
     {

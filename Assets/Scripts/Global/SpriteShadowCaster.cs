@@ -1,13 +1,16 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-[RequireComponent(typeof(SpriteRenderer))]
-public class SpriteShadowCaster : MonoBehaviour
+namespace Sistemata.Global
 {
-    void Start()
+    [RequireComponent(typeof(SpriteRenderer))]
+    public class SpriteShadowCaster : MonoBehaviour
     {
-        var spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.shadowCastingMode = ShadowCastingMode.TwoSided;
-        spriteRenderer.receiveShadows = true;
+        void Start()
+        {
+            var spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer.shadowCastingMode = ShadowCastingMode.TwoSided;
+            spriteRenderer.receiveShadows = true;
+        }
     }
 }

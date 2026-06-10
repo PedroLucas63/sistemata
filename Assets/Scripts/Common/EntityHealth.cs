@@ -1,5 +1,5 @@
 using System;
-using Stats;
+using Sistemata.Stats;
 using UnityEngine;
 
 namespace Sistemata.Common

@@ -1,63 +1,63 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class BackgroundController : MonoBehaviour
+namespace Sistemata.Map
 {
-
-    [SerializeField] private bool loopX;
-    [SerializeField] private bool loopZ;
-
-    [SerializeField] private float loopOffsetX;
-    [SerializeField] private float loopOffsetZ;
-
-    private float startPosX, startPosZ;
-    private float lengthX, lengthZ;
-
-    public GameObject cam;
-
-    void Start()
+    public class BackgroundController : MonoBehaviour
     {
 
-        startPosX = transform.position.x;
-        startPosZ = transform.position.z;
+        [SerializeField] private bool loopX;
+        [SerializeField] private bool loopZ;
 
-        Tilemap tm = this.GetComponent<Tilemap>();
-        lengthX = tm.localBounds.size.x;
-        lengthZ = tm.localBounds.size.y; // aqui precisa usar eixo y, por causa da rotação do grid em 90º
-    }
+        [SerializeField] private float loopOffsetX;
+        [SerializeField] private float loopOffsetZ;
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        float movementX, movementZ;
+        private float startPosX, startPosZ;
+        private float lengthX, lengthZ;
 
-        movementX = cam.transform.position.x;
-        movementZ = cam.transform.position.z;
+        public GameObject cam;
 
-        transform.position = new Vector3(
-            loopX ? startPosX : transform.position.x,
-            transform.position.y,
-            loopZ ? startPosZ : transform.position.z
-        );
-
-        if (loopX)
+        void Start()
         {
-            if (movementX > startPosX + lengthX)
-                startPosX += loopOffsetX;
-            else if (movementX < startPosX - lengthX)
-                startPosX -= loopOffsetX;
+
+            startPosX = transform.position.x;
+            startPosZ = transform.position.z;
+
+            Tilemap tm = this.GetComponent<Tilemap>();
+            lengthX = tm.localBounds.size.x;
+            lengthZ = tm.localBounds.size.y; // aqui precisa usar eixo y, por causa da rotaï¿½ï¿½o do grid em 90ï¿½
         }
 
-        if (loopZ)
+        // Update is called once per frame
+        void FixedUpdate()
         {
-            if (movementZ > startPosZ + lengthZ * 0.5f)
-                startPosZ += loopOffsetZ;
-            else if (movementZ < startPosZ - lengthZ * 0.5f)
-                startPosZ -= loopOffsetZ;
-        }
+            float movementX, movementZ;
 
+            movementX = cam.transform.position.x;
+            movementZ = cam.transform.position.z;
+
+            transform.position = new Vector3(
+                loopX ? startPosX : transform.position.x,
+                transform.position.y,
+                loopZ ? startPosZ : transform.position.z
+            );
+
+            if (loopX)
+            {
+                if (movementX > startPosX + lengthX)
+                    startPosX += loopOffsetX;
+                else if (movementX < startPosX - lengthX)
+                    startPosX -= loopOffsetX;
+            }
+
+            if (loopZ)
+            {
+                if (movementZ > startPosZ + lengthZ * 0.5f)
+                    startPosZ += loopOffsetZ;
+                else if (movementZ < startPosZ - lengthZ * 0.5f)
+                    startPosZ -= loopOffsetZ;
+            }
+
+        }
     }
 }

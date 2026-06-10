@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Stats
+namespace Sistemata.Stats
 {
     [System.Serializable]
     public class Stat

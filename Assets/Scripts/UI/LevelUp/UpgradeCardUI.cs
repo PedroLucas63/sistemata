@@ -2,7 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Upgrades;
+using Sistemata.Upgrades;
 
 namespace UI.LevelUp
 {

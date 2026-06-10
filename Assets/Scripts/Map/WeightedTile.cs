@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Map
+namespace Sistemata.Map
 {
     [System.Serializable]
     public class WeightedTile

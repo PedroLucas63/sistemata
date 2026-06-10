@@ -1,9 +1,9 @@
 using System;
-using Stats;
+using Sistemata.Stats;
 using UnityEngine;
-using Upgrades;
+using Sistemata.Upgrades;
 
-namespace Player
+namespace Sistemata.Player
 {
     [RequireComponent(typeof(EntityStats))]
     public class PlayerManager : MonoBehaviour

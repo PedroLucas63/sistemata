@@ -1,7 +1,7 @@
-using Stats;
+using Sistemata.Stats;
 using UnityEngine;
 
-namespace Upgrades
+namespace Sistemata.Upgrades
 {
     [CreateAssetMenu(fileName = "NewUpgrade", menuName = "Upgrade/Upgrade Data")]
     public class UpgradeData : ScriptableObject

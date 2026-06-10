@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Player 
+namespace Sistemata.Player 
 {
     public class PlayerAnimatorController : MonoBehaviour
     {
