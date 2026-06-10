@@ -17,8 +17,7 @@ namespace Sistemata.Enemy
         [Header("Movement")] [SerializeField] private float movementSpeed = 1f;
 
         [Header("Despawn")] public float despawnDistance = 55f;
-
-
+        
         private SpriteRenderer spriteRenderer;
 
         private Vector3 movementDirection;
@@ -35,7 +34,7 @@ namespace Sistemata.Enemy
         void Update()
         {
             // move em direcao ao jogador
-            transform.position += movementDirection * Time.deltaTime * movementSpeed;
+            transform.position += movementDirection * (Time.deltaTime * movementSpeed);
 
             // FLIP DO SPRITE
             if (movementDirection.x < 0)

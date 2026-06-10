@@ -11,7 +11,6 @@ namespace Sistemata.Player
         
         private Animator _animator;
         private SpriteRenderer _spriteRenderer;
-        private Vector2 _lastMove = Vector2.down;
         private PlayerMovement _playerMovement;
 
         public float SpeedMultiplier =>
@@ -31,14 +30,16 @@ namespace Sistemata.Player
         
         private void UpdateAnimation()  
         {
-            if (_playerMovement.MoveInput != Vector2.zero) _lastMove = _playerMovement.MoveInput;
-            
-            _animator.SetFloat(MoveX, _lastMove.x);
-            
-            if (_lastMove.x < 0) _spriteRenderer.flipX = true;
-            else if (_lastMove.x > 0) _spriteRenderer.flipX = false;
-            
-            _animator.SetFloat(MoveY, _lastMove.y);
+            _animator.SetFloat(MoveX, _playerMovement.LastMoveInput.x);
+
+            _spriteRenderer.flipX = _playerMovement.LastMoveInput.x switch
+            {
+                < 0 => true,
+                > 0 => false,
+                _ => _spriteRenderer.flipX
+            };
+
+            _animator.SetFloat(MoveY, _playerMovement.LastMoveInput.y);
             _animator.SetFloat(Speed, _playerMovement.MoveInput.sqrMagnitude);
             
             _animator.SetFloat(MoveAnimSpeed, SpeedMultiplier);

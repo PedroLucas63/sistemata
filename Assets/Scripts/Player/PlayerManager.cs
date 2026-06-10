@@ -10,6 +10,7 @@ namespace Sistemata.Player
     {
         [SerializeField] private PlayerBaseData baseData;
         private EntityStats _stats;
+        private PlayerMovement _playerMovement;
         
         public static PlayerManager Instance { get; private set; }
 
@@ -21,6 +22,7 @@ namespace Sistemata.Player
                 Destroy(gameObject);
             
             _stats = GetComponent<EntityStats>();
+            _playerMovement = GetComponent<PlayerMovement>();
         }
 
         private void Start()
@@ -53,5 +55,18 @@ namespace Sistemata.Player
             };
             _stats.ApplyUpgrade(chosenUpgrade.TargetStat, newModifier);
         }
+        
+        public Stat GetStat(StatType type) =>  _stats.GetStat(type);
+
+        public Vector3 GetDirection()
+        {
+            Vector3 dir = new(
+                _playerMovement.LastMoveInput.x,
+                0,
+                _playerMovement.LastMoveInput.y
+            );
+            
+            return dir.normalized;
+        } 
     }
 }
