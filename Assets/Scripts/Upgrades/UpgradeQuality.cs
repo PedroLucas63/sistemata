@@ -1,4 +1,4 @@
-namespace Upgrades
+namespace Sistemata.Upgrades
 {
     public enum UpgradeQuality
     {

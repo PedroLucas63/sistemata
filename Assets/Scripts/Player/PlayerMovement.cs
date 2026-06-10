@@ -1,8 +1,8 @@
-using Stats;
+using Sistemata.Stats;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Player
+namespace Sistemata.Player
 {
      [RequireComponent(typeof(CharacterController))]
      public class PlayerMovement : MonoBehaviour

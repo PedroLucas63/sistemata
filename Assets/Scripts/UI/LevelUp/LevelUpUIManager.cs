@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using Player;
+using Sistemata.Player;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using Upgrades;
+using Sistemata.Upgrades;
 
 namespace UI.LevelUp
 {

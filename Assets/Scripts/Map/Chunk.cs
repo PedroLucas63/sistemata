@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Map
+namespace Sistemata.Map
 {
     public class Chunk : MonoBehaviour
     {

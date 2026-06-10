@@ -2,6 +2,7 @@ using Sistemata.Core;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Sistemata.Enemy;
 
 namespace Sistemata.Spawning
 {
@@ -25,14 +26,14 @@ namespace Sistemata.Spawning
         private float currentSpawnTimer;
 
         [Header("Lógica de Lotes (Batches)")]
-        private Dictionary<int, List<Enemy>> enemyBatches = new Dictionary<int, List<Enemy>>();
+        private Dictionary<int, List<EnemyController>> enemyBatches = new Dictionary<int, List<EnemyController>>();
         private float runLogicTimer = 0f;
         private float runLogicTimerCD = 1f;
 
         [Header("Particionamento Espacial Infinito")]
         public float cellSize = 20f; // Tamanho de cada célula (equivalente ao tamanho de uma partição local)
 
-        [HideInInspector] public Dictionary<Vector2Int, HashSet<Enemy>> enemySpatialGroups = new Dictionary<Vector2Int, HashSet<Enemy>>();
+        [HideInInspector] public Dictionary<Vector2Int, HashSet<EnemyController>> enemySpatialGroups = new Dictionary<Vector2Int, HashSet<EnemyController>>();
 
         private void Awake()
         {
@@ -130,7 +131,7 @@ namespace Sistemata.Spawning
 
             // Instancia o inimigo
             GameObject enemyGO = Instantiate(enemy, new Vector3(xVal, enemy.transform.position.y, zVal), Quaternion.Euler(45f, 0f, 0f), enemyHolder);
-            Enemy enemyScript = enemyGO.GetComponent<Enemy>();
+            EnemyController enemyScript = enemyGO.GetComponent<EnemyController>();
 
             // Registra o inimigo no grupo espacial e no batch de lógica
             enemyScript.spatialGroup = spawnCell;
@@ -178,13 +179,13 @@ namespace Sistemata.Spawning
             for (int i = 0; i < 50; i++)
             {
                 BatchScore batchScore = new BatchScore(i, 0);
-                enemyBatches.Add(i, new List<Enemy>());
+                enemyBatches.Add(i, new List<EnemyController>());
                 batchScoreMap_Enemy.Add(i, batchScore);
                 batchQueue_Enemy.Add(batchScore);
             }
         }
 
-        public void AddToEnemyBatch(int batchId, Enemy enemy)
+        public void AddToEnemyBatch(int batchId, EnemyController enemy)
         {
             enemyBatches[batchId].Add(enemy);
         }
@@ -229,7 +230,7 @@ namespace Sistemata.Spawning
             // Usa ToList() ou iteração segura se houver remoção de inimigos no meio do loop
             if (enemyBatches.ContainsKey(batchID))
             {
-                foreach (Enemy enemy in enemyBatches[batchID].ToList())
+                foreach (EnemyController enemy in enemyBatches[batchID].ToList())
                 {
                     if (enemy) enemy.RunLogic();
                 }
@@ -246,16 +247,16 @@ namespace Sistemata.Spawning
             return new Vector2Int(Mathf.FloorToInt(xPos / cellSize), Mathf.FloorToInt(zPos / cellSize));
         }
 
-        public void AddToSpatialGroup(Vector2Int cell, Enemy enemy)
+        public void AddToSpatialGroup(Vector2Int cell, EnemyController enemy)
         {
             if (!enemySpatialGroups.ContainsKey(cell))
             {
-                enemySpatialGroups[cell] = new HashSet<Enemy>();
+                enemySpatialGroups[cell] = new HashSet<EnemyController>();
             }
             enemySpatialGroups[cell].Add(enemy);
         }
 
-        public void RemoveFromSpatialGroup(Vector2Int cell, Enemy enemy)
+        public void RemoveFromSpatialGroup(Vector2Int cell, EnemyController enemy)
         {
             if (enemySpatialGroups.ContainsKey(cell))
             {
@@ -283,16 +284,16 @@ namespace Sistemata.Spawning
             return expandedGroups;
         }
 
-        public IEnumerable<Enemy> GetEnemiesInSpatialGroup(Vector2Int cell)
+        public IEnumerable<EnemyController> GetEnemiesInSpatialGroup(Vector2Int cell)
         {
             // TryGetValue tenta pegar batch. Se existir, devolve a lista.
-            if (enemySpatialGroups.TryGetValue(cell, out HashSet<Enemy> group))
+            if (enemySpatialGroups.TryGetValue(cell, out HashSet<EnemyController> group))
             {
                 return group;
             }
 
             // Se batch não existir (ninguém pisou lá), devolve uma lista vazia segura
-            return Enumerable.Empty<Enemy>();
+            return Enumerable.Empty<EnemyController>();
         }
     }
 }

@@ -1,4 +1,4 @@
-namespace Stats
+namespace Sistemata.Stats
 {
     [System.Serializable]
     public class StatModifier
