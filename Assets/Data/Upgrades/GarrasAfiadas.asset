@@ -13,11 +13,17 @@ MonoBehaviour:
   m_Name: GarrasAfiadas
   m_EditorClassIdentifier: Assembly-CSharp::Upgrades.UpgradeData
   UpgradeName: Garras Afiadas
-  Description: Seu dano aumenta em 15%.
+  Description: "Sua for\xE7a aumenta em 15%."
   Icon: {fileID: 0}
   Quality: 0
-  TargetStat: 1
+  Type: 0
+  AttackPrefab: {fileID: 0}
+  TargetEntity: 0
+  TargetStat: 7
   ModType: 1
   Amount: 0.15
+  TargetID: 
   Weight: 100
   IsUnique: 0
+  RequiredTags: []
+  GrantedTags: []

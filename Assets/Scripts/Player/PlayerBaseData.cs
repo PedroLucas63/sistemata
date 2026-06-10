@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace Sistemata.Player
 {
-    using UnityEngine;
 
     [CreateAssetMenu(fileName = "NewPlayerBaseData", menuName = "Stats/Player Base Data")]
     public class PlayerBaseData : ScriptableObject
@@ -22,8 +21,8 @@ namespace Sistemata.Player
         public float DefaultPickupRadius = 2f;
 
         [Header("Combate do Player")]
-        [Tooltip("Dano do ataque básico do player .")]
-        public float DefaultDamage = 10f;
+        [Tooltip("Força multiplicadora do player.")]
+        public float DefaultStrength = 1f;
 
         [Tooltip("Velocidade do ataque básico do player.")]
         public float DefaultAttackRate = 1f;

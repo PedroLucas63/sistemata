@@ -126,6 +126,8 @@ GameObject:
   - component: {fileID: 3429555011691044535}
   - component: {fileID: 1030615666761937508}
   - component: {fileID: 1172547619462933089}
+  - component: {fileID: 269586773146060746}
+  - component: {fileID: 6848165600271096875}
   m_Layer: 3
   m_Name: Enemy
   m_TagString: Enemy
@@ -164,6 +166,7 @@ MonoBehaviour:
   movementSpeed: 1
   despawnDistance: 55
   spatialGroup: {x: 0, y: 0}
+  baseData: {fileID: 11400000, guid: 3c365457bf62f80838f7b485ee957fee, type: 2}
 --- !u!54 &1030615666761937508
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -211,6 +214,30 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.3
-  m_Height: 0.6
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.2, z: 0}
+  m_Height: 0.2
+  m_Direction: 0
+  m_Center: {x: 0, y: 0.1, z: 0}
+--- !u!114 &269586773146060746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6564470530625821964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89a6658668ce43528796dd14606b1a23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Stats.EntityStats
+--- !u!114 &6848165600271096875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6564470530625821964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18d6ccab69e42c1a43615867d0f7f4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Common.EntityHealth

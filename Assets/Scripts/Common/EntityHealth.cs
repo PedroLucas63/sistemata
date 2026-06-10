@@ -71,6 +71,8 @@ namespace Sistemata.Common
         public void TakeDamage(float amount)
         {
             if (IsDead) return;
+            
+            Debug.Log($"Levando dano: {amount} ({CurrentHealth}/{MaxHealth})");
 
             CurrentHealth -= amount;
 

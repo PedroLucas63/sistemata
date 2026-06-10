@@ -1,4 +1,5 @@
 using Sistemata.Common;
+using Sistemata.Enemy;
 using Sistemata.Player;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -74,15 +75,14 @@ namespace Sistemata.Attack
             return false;
         }
 
-        private bool CheckDistanceToPlayer()
+        private void CheckDistanceToPlayer()
         {
-            if (!PlayerManager.Instance) return true;
+            if (!PlayerManager.Instance) return;
             
             var distance = Vector3.Distance(transform.position, PlayerManager.Instance.transform.position);
-            if (!(distance > maxRangeFromPlayer)) return true;
+            if (!(distance > maxRangeFromPlayer)) return;
                 
             ReleaseProjectile();
-            return false;
         }
         
         private void OnTriggerEnter(Collider collision)
@@ -90,6 +90,10 @@ namespace Sistemata.Attack
             if (!collision.CompareTag(EnemyTag)) return;
             
             // TODO: CHAMAR AÇÃO DE DANO NO INIMIGO
+            var enemy = collision.GetComponent<EnemyController>();
+            if (!enemy) return;
+            
+            enemy.TakeDamage(_damage);
             
             if (_ricochetsLeft > 0)
             {

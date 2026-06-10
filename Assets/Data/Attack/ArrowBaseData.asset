@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17aa6a8bd1954146ab5c3e0ba45cb375, type: 3}
   m_Name: ArrowBaseData
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Attack.AttackBaseData
-  DefaultDamage: 5
-  DefaultAttackRate: 0.5
+  DefaultDamage: 10
+  DefaultAttackRate: 1
   DefaultAmount: 1
   DefaultRicochet: 0
   DefaultAreaSize: 3

@@ -17,7 +17,7 @@ MonoBehaviour:
   Icon: {fileID: 0}
   Quality: 3
   Type: 0
-  AttackPrefab: {fileID: 8552119123712051953, guid: 1b1e2103ef59e6b3fa7ec0e8cae6d9b2, type: 3}
+  AttackPrefab: {fileID: 0}
   TargetEntity: 1
   TargetStat: 8
   ModType: 0

@@ -16,8 +16,14 @@ MonoBehaviour:
   Description: "Movimente-se 10% mais r\xE1pido."
   Icon: {fileID: 0}
   Quality: 0
-  TargetStat: 2
+  Type: 0
+  AttackPrefab: {fileID: 0}
+  TargetEntity: 0
+  TargetStat: 1
   ModType: 1
   Amount: 0.1
+  TargetID: 
   Weight: 100
   IsUnique: 0
+  RequiredTags: []
+  GrantedTags: []

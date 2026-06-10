@@ -16,8 +16,14 @@ MonoBehaviour:
   Description: Receba +2 de armadura.
   Icon: {fileID: 0}
   Quality: 1
-  TargetStat: 3
+  Type: 0
+  AttackPrefab: {fileID: 0}
+  TargetEntity: 0
+  TargetStat: 2
   ModType: 0
   Amount: 2
+  TargetID: 
   Weight: 60
   IsUnique: 0
+  RequiredTags: []
+  GrantedTags: []

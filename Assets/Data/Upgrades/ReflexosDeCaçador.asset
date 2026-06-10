@@ -16,8 +16,14 @@ MonoBehaviour:
   Description: Aumenta sua velocidade de ataque em 20%.
   Icon: {fileID: 0}
   Quality: 2
-  TargetStat: 6
+  Type: 0
+  AttackPrefab: {fileID: 0}
+  TargetEntity: 0
+  TargetStat: 5
   ModType: 1
   Amount: 0.2
+  TargetID: 
   Weight: 30
   IsUnique: 0
+  RequiredTags: []
+  GrantedTags: []

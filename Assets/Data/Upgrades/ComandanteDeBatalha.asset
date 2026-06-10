@@ -16,8 +16,14 @@ MonoBehaviour:
   Description: Permite invocar mais 1 criatura.
   Icon: {fileID: 0}
   Quality: 3
-  TargetStat: 7
+  Type: 0
+  AttackPrefab: {fileID: 0}
+  TargetEntity: 0
+  TargetStat: 6
   ModType: 0
   Amount: 1
+  TargetID: 
   Weight: 20
   IsUnique: 1
+  RequiredTags: []
+  GrantedTags: []

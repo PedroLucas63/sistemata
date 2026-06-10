@@ -16,8 +16,14 @@ MonoBehaviour:
   Description: Aumenta o raio de coleta em 30%.
   Icon: {fileID: 0}
   Quality: 1
-  TargetStat: 5
+  Type: 0
+  AttackPrefab: {fileID: 0}
+  TargetEntity: 0
+  TargetStat: 4
   ModType: 1
   Amount: 0.3
+  TargetID: 
   Weight: 60
   IsUnique: 0
+  RequiredTags: []
+  GrantedTags: []

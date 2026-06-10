@@ -13,11 +13,17 @@ MonoBehaviour:
   m_Name: Frenesi
   m_EditorClassIdentifier: Assembly-CSharp::Upgrades.UpgradeData
   UpgradeName: Frenesi
-  Description: Multiplica seu dano final em 25%.
+  Description: Multiplica sua velocidade de ataque aumenta em 40%
   Icon: {fileID: 0}
   Quality: 4
-  TargetStat: 6
+  Type: 0
+  AttackPrefab: {fileID: 0}
+  TargetEntity: 0
+  TargetStat: 5
   ModType: 2
-  Amount: 0.25
+  Amount: 0.4
+  TargetID: 
   Weight: 10
   IsUnique: 1
+  RequiredTags: []
+  GrantedTags: []

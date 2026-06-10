@@ -160,4 +160,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   movementSpeed: 2.5
+  despawnDistance: 55
   spatialGroup: {x: 0, y: 0}
+  baseData: {fileID: 11400000, guid: 84e249af0beab4810b0ec4dfd4c5d33f, type: 2}

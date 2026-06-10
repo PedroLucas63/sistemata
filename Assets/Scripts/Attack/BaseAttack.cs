@@ -75,11 +75,11 @@ namespace Sistemata.Attack
                 
                 if (!PlayerManager.Instance) return weaponDamage;
 
-                var playerDamage = 1f;
-                var playerStat = PlayerManager.Instance.GetStat(StatType.Damage);
-                if (playerStat != null) playerDamage = playerStat.Get();
+                var playerWeight = 1f;
+                var playerStat = PlayerManager.Instance.GetStat(StatType.Strength);
+                if (playerStat != null) playerWeight = playerStat.Get();
 
-                return weaponDamage * playerDamage;
+                return weaponDamage * playerWeight;
             }
         }
         

@@ -4,15 +4,16 @@ namespace Sistemata.Stats
     {
         /* Player and Ally */
         MaxHealth,
-        Damage,
         MoveSpeed,
         Armor,
         HealthRegen,
         PickupRadius,
         AttackRate,
         SummonCap,
+        Strength,
         
         /* Attacks */
+        Damage,
         Amount,
         Ricochet,
         AreaSize,

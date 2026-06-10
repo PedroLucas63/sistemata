@@ -1,4 +1,3 @@
-using System;
 using Sistemata.Attack;
 using Sistemata.Stats;
 using UnityEngine;
@@ -49,7 +48,7 @@ namespace Sistemata.Player
             _stats.InitializeStat(StatType.MoveSpeed, baseData.DefaultMoveSpeed);
             _stats.InitializeStat(StatType.PickupRadius, baseData.DefaultPickupRadius);
         
-            _stats.InitializeStat(StatType.Damage, baseData.DefaultDamage);
+            _stats.InitializeStat(StatType.Strength, baseData.DefaultStrength);
             _stats.InitializeStat(StatType.AttackRate, baseData.DefaultAttackRate);
             _stats.InitializeStat(StatType.Armor, baseData.DefaultArmor);
         

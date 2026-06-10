@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17aa6a8bd1954146ab5c3e0ba45cb375, type: 3}
-  m_Name: ArrowFireBaseData
-  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Attack.AttackBaseData
-  DefaultDamage: 15
+  m_Script: {fileID: 11500000, guid: 4f6203cfcb9a41909a5ad91d9432a606, type: 3}
+  m_Name: EnemyBaseData
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Enemy.EnemyBaseData
+  DefaultMaxHealth: 20
+  DefaultMoveSpeed: 4
+  DefaultDamage: 5
   DefaultAttackRate: 1
-  DefaultAmount: 1
-  DefaultRicochet: 0
-  DefaultAreaSize: 2
+  DefaultArmor: 1

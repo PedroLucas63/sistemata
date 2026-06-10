@@ -1,5 +1,9 @@
-﻿using Sistemata.Core;
+﻿using System;
+using System.Text.RegularExpressions;
+using Sistemata.Common;
+using Sistemata.Core;
 using Sistemata.Spawning;
+using Sistemata.Stats;
 using UnityEngine;
 
 namespace Sistemata.Enemy
@@ -24,11 +28,53 @@ namespace Sistemata.Enemy
 
         public Vector2Int spatialGroup = Vector2Int.zero;
 
+        [Header("Stats")] [SerializeField] private EnemyBaseData baseData;
+        
+        private EntityStats _stats;
+        private EntityHealth _health;
+
+        private void Awake()
+        {
+            _stats = GetComponent<EntityStats>();
+            _health = GetComponent<EntityHealth>();
+        }
+
         void Start()
         {
-            // Se você não quiser arrastar no Inspector, o código busca automaticamente
             if (spriteRenderer == null)
                 spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            InitializeAllBaseStats();
+            ConfigureEntityHealth();
+        }
+
+        private void ConfigureEntityHealth()
+        {
+            _health.OnDeath += HandleDeath;
+        }
+        
+        private void HandleDeath()
+        {
+            _health.OnDeath -= HandleDeath;
+            Debug.Log($"{gameObject.name} foi derrotado e removido do mapa.");
+            
+            // TODO: Ativar animação de morte, dropar XP e Moedas de Ouro, Destruir.
+            Destroy(gameObject);
+        }
+
+        private void InitializeAllBaseStats()
+        {
+            _stats.InitializeStat(StatType.MaxHealth, baseData.DefaultMaxHealth);
+            _stats.InitializeStat(StatType.MoveSpeed, baseData.DefaultMoveSpeed);
+            _stats.InitializeStat(StatType.Damage, baseData.DefaultDamage);
+            _stats.InitializeStat(StatType.AttackRate, baseData.DefaultAttackRate);
+            _stats.InitializeStat(StatType.Armor, baseData.DefaultArmor);
+        }
+
+        public void TakeDamage(float damage)
+        {
+            damage -= _stats.GetStat(StatType.Armor).Get();
+            damage = Mathf.Clamp(damage, 0f, damage);
+            _health.TakeDamage(damage);
         }
 
         void Update()
