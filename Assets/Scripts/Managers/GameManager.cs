@@ -1,3 +1,4 @@
+using Sistemata.Audio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,9 @@ namespace Sistemata.Core
         public Transform player;
         private CharacterController playerScript;
         public CharacterController PlayerScript { get { return playerScript; } }
+
+        [Header("Áudio")]
+        public AudioClip roundMusic;
 
         public GameState currentState;
 
@@ -38,12 +42,22 @@ namespace Sistemata.Core
 
         private void Start()
         {
+            if (AudioManager.Instance != null && roundMusic != null)
+            {
+                AudioManager.Instance.ChangeBGM(roundMusic);
+            }
+            else
+            {
+                Debug.LogWarning("AudioManager não encontrado na cena ou roundMusic está vazio!");
+            }
+
             currentState = GameState.Normal;
             phaseTimer = timeUntilBoss;
             Time.timeScale = 1f;
 
             if (player != null)
                 playerScript = player.GetComponent<CharacterController>();
+
         }
 
         private void Update()
