@@ -89,6 +89,8 @@ namespace Sistemata.Attack
         {
             if (!collision.CompareTag(EnemyTag)) return;
             
+            // TODO: CHAMAR AÇÃO DE DANO NO INIMIGO
+            
             if (_ricochetsLeft > 0)
             {
                 _ricochetsLeft--;
