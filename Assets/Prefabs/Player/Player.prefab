@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 8213492203652435778}
   - component: {fileID: 1671104506427255514}
   - component: {fileID: 5310013401398304316}
+  - component: {fileID: 2438761243614962054}
   m_Layer: 9
   m_Name: Magnet
   m_TagString: Untagged
@@ -112,6 +113,18 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &2438761243614962054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503880142946466914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a5be794172a663df95d78fe61a8f2ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Common.CollectibleMagnet
 --- !u!1 &1798192137038000196
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,6 +239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e18d6ccab69e42c1a43615867d0f7f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Common.EntityHealth
+  damageCooldown: 0.3
 --- !u!114 &4980836720501141198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,7 +258,7 @@ MonoBehaviour:
   currentLevel: 1
   currentXP: 0
   gold: 0
-  magnetCollider: {fileID: 5310013401398304316}
+  magnetScript: {fileID: 0}
 --- !u!1 &7058808293835032316
 GameObject:
   m_ObjectHideFlags: 0
