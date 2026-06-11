@@ -59,7 +59,6 @@ namespace Sistemata.Attack
 
             if (visualChild)
             {
-                visualChild.localRotation = Quaternion.Euler(90f, 0f, 0f);
                 visualChild.localScale = new Vector3(1f, 1f * perspectiveYFactor, 1f);
             }
 
@@ -98,12 +97,60 @@ namespace Sistemata.Attack
             if (CheckLifetime())
                 CheckDistanceToPlayer();
         }
-        
+
         private void UpdateDirectionalBehavior()
         {
             if (_direction == Vector3.zero) return;
-            var angle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+            // Calcula o ângulo em graus baseado na direção
+            // Atan2 retorna de -180 a 180. Multiplicamos por Rad2Deg para virar graus.
+            float angle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg;
+
+            // Normaliza o ângulo para ser sempre positivo (0 a 360) para facilitar a nossa lógica
+            if (angle < 0) angle += 360f;
+
+            // --- FATIAMOS O CÍRCULO EM 8 PEDAÇOS (de 45 em 45 graus) ---
+
+            if (angle >= 337.5f || angle < 22.5f)
+            {
+                // N (Norte) -> A fatia do Norte cruza a linha do 360/0
+                transform.rotation = Quaternion.Euler(-135, 0, 180); // Seu valor original
+            }
+            else if (angle >= 22.5f && angle < 67.5f)
+            {
+                // NE (Nordeste)
+                transform.rotation = Quaternion.Euler(45, 0, -45);
+            }
+            else if (angle >= 67.5f && angle < 112.5f)
+            {
+                // E (Leste)
+                transform.rotation = Quaternion.Euler(45, 0, -90); // Seu valor original
+            }
+            else if (angle >= 112.5f && angle < 157.5f)
+            {
+                // SE (Sudeste)
+                transform.rotation = Quaternion.Euler(45, 0, -135);
+            }
+            else if (angle >= 157.5f && angle < 202.5f)
+            {
+                // S (Sul)
+                transform.rotation = Quaternion.Euler(45, 0, 180); // Seu valor original
+            }
+            else if (angle >= 202.5f && angle < 247.5f)
+            {
+                // SW (Sudoeste)
+                transform.rotation = Quaternion.Euler(45, 0, 135);
+            }
+            else if (angle >= 247.5f && angle < 292.5f)
+            {
+                // W (Oeste)
+                transform.rotation = Quaternion.Euler(45, 0, 90); // Seu valor original
+            }
+            else if (angle >= 292.5f && angle < 337.5f)
+            {
+                // NW (Noroeste)
+                transform.rotation = Quaternion.Euler(45, 0, 45);
+            }
         }
 
         private bool CheckLifetime()
