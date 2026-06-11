@@ -17,44 +17,44 @@ namespace Sistemata.Enemy
             get { return batchId; }
             set { batchId = value; }
         }
-
-        [Header("Movement")] [SerializeField] private float movementSpeed = 1f;
-
+        
         [Header("Despawn")] public float despawnDistance = 55f;
         
-        private SpriteRenderer spriteRenderer;
-
-        private Vector3 movementDirection;
-
+        protected SpriteRenderer SpriteRenderer;
+        protected Vector3 MovementDirection;
         public Vector2Int spatialGroup = Vector2Int.zero;
 
-        [Header("Stats")] [SerializeField] private EnemyBaseData baseData;
+        [Header("Stats")] [SerializeField] protected EnemyBaseData baseData;
         
-        private EntityStats _stats;
-        private EntityHealth _health;
+        protected EntityStats Stats;
+        protected EntityHealth Health;
+
+        public float MoveSpeed => Stats.GetStat(StatType.MoveSpeed).Get() ;
+        public float BaseMoveSpeed => Stats.GetStat(StatType.MoveSpeed).BaseValue;
+        public Vector2 LastMove => new(MovementDirection.x, MovementDirection.z);
 
         private void Awake()
         {
-            _stats = GetComponent<EntityStats>();
-            _health = GetComponent<EntityHealth>();
+            Stats = GetComponent<EntityStats>();
+            Health = GetComponent<EntityHealth>();
         }
 
-        void Start()
+        protected virtual void Start()
         {
-            if (spriteRenderer == null)
-                spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            if (SpriteRenderer == null)
+                SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
             InitializeAllBaseStats();
             ConfigureEntityHealth();
         }
 
         private void ConfigureEntityHealth()
         {
-            _health.OnDeath += HandleDeath;
+            Health.OnDeath += HandleDeath;
         }
         
-        private void HandleDeath()
+        protected virtual void HandleDeath()
         {
-            _health.OnDeath -= HandleDeath;
+            Health.OnDeath -= HandleDeath;
             Debug.Log($"{gameObject.name} foi derrotado e removido do mapa.");
             
             // TODO: Ativar animação de morte, dropar XP e Moedas de Ouro, Destruir.
@@ -63,35 +63,35 @@ namespace Sistemata.Enemy
 
         private void InitializeAllBaseStats()
         {
-            _stats.InitializeStat(StatType.MaxHealth, baseData.DefaultMaxHealth);
-            _stats.InitializeStat(StatType.MoveSpeed, baseData.DefaultMoveSpeed);
-            _stats.InitializeStat(StatType.Damage, baseData.DefaultDamage);
-            _stats.InitializeStat(StatType.AttackRate, baseData.DefaultAttackRate);
-            _stats.InitializeStat(StatType.Armor, baseData.DefaultArmor);
+            Stats.InitializeStat(StatType.MaxHealth, baseData.DefaultMaxHealth);
+            Stats.InitializeStat(StatType.MoveSpeed, baseData.DefaultMoveSpeed);
+            Stats.InitializeStat(StatType.Damage, baseData.DefaultDamage);
+            Stats.InitializeStat(StatType.AttackRate, baseData.DefaultAttackRate);
+            Stats.InitializeStat(StatType.Armor, baseData.DefaultArmor);
         }
 
-        public void TakeDamage(float damage)
+        public virtual void TakeDamage(float damage)
         {
-            damage -= _stats.GetStat(StatType.Armor).Get();
+            damage -= Stats.GetStat(StatType.Armor).Get();
             damage = Mathf.Clamp(damage, 0f, damage);
-            _health.TakeDamage(damage);
+            Health.TakeDamage(damage);
         }
 
-        void Update()
+        protected virtual void Update()
         {
             // move em direcao ao jogador
-            transform.position += movementDirection * (Time.deltaTime * movementSpeed);
+            transform.position += MovementDirection * (Time.deltaTime * MoveSpeed);
 
             // FLIP DO SPRITE
-            if (movementDirection.x < 0)
+            if (MovementDirection.x < 0)
             {
                 // O inimigo deve olhar para a esquerda
-                spriteRenderer.flipX = true;
+                SpriteRenderer.flipX = true;
             }
-            else if (movementDirection.x > 0)
+            else if (MovementDirection.x > 0)
             {
                 // O inimigo deve olhar para a direita
-                spriteRenderer.flipX = false;
+                SpriteRenderer.flipX = false;
             }
         }
 
@@ -111,16 +111,16 @@ namespace Sistemata.Enemy
                 return;
 
             // calcula direcao do movimento
-            movementDirection = GameManager.Instance.player.position - transform.position;
-            movementDirection.y = 0;
+            MovementDirection = GameManager.Instance.player.position - transform.position;
+            MovementDirection.y = 0;
 
-            if (movementDirection.sqrMagnitude > despawnDistance * despawnDistance)
+            if (MovementDirection.sqrMagnitude > despawnDistance * despawnDistance)
             {
                 Destroy(gameObject); // Destrói o inimigo se estiver muito longe do jogador
                 return;
             }
 
-            movementDirection.Normalize();
+            MovementDirection.Normalize();
 
             // Afasta outros inimigos proximos
             PushNearbyEnemies();
@@ -173,8 +173,8 @@ namespace Sistemata.Enemy
 
                 // Misturamos a vontade de "ir at� o player" com a vontade de "afastar dos amigos"
                 // Esse 1.5f � a FOR�A do empurr�o. Aumente se quiser que eles espalhem mais r�pido.
-                movementDirection += separationVector * 1.5f;
-                movementDirection.Normalize();
+                MovementDirection += separationVector * 1.5f;
+                MovementDirection.Normalize();
             }
         }
     }

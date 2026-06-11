@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2259855901146839515}
   - component: {fileID: 6328171769439790642}
+  - component: {fileID: 11796173223080609}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -91,6 +92,28 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 1
+--- !u!95 &11796173223080609
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478192879998491187}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6e91575e599379e7bbe19cf675e18ebe, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6564470530625821964
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,9 +124,13 @@ GameObject:
   m_Component:
   - component: {fileID: 5064950292464831959}
   - component: {fileID: -7975872942967225159}
+  - component: {fileID: 4650375570613019478}
+  - component: {fileID: 6917756140943482592}
+  - component: {fileID: 2639814325685152492}
+  - component: {fileID: 2815800001826609760}
   m_Layer: 0
-  m_Name: Boss
-  m_TagString: Untagged
+  m_Name: CactiBoss
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -118,7 +145,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2259855901146839515}
@@ -136,7 +163,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 746a9286f3659ea4eab94f43d034c79f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  movementSpeed: 2.5
   despawnDistance: 55
   spatialGroup: {x: 0, y: 0}
   baseData: {fileID: 11400000, guid: 84e249af0beab4810b0ec4dfd4c5d33f, type: 2}
+--- !u!114 &4650375570613019478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6564470530625821964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89a6658668ce43528796dd14606b1a23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Stats.EntityStats
+--- !u!114 &6917756140943482592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6564470530625821964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18d6ccab69e42c1a43615867d0f7f4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Common.EntityHealth
+--- !u!114 &2639814325685152492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6564470530625821964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19ff904edb224ac5bec87ab5cd4e1a96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Enemy.CactiAnimatorController
+--- !u!114 &2815800001826609760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6564470530625821964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca55c3c1ac9426ca90ad4c6222af1c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Enemy.Cacti.CactiController
+  despawnDistance: 55
+  spatialGroup: {x: 0, y: 0}
+  baseData: {fileID: 11400000, guid: 84e249af0beab4810b0ec4dfd4c5d33f, type: 2}
+  IsAttacking: 0
