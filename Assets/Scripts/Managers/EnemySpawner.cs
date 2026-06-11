@@ -1,22 +1,37 @@
+using System;
 using Sistemata.Core;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Sistemata.Enemy;
+using Random = UnityEngine.Random;
 
 namespace Sistemata.Spawning
 {
     public class EnemySpawner : MonoBehaviour
     {
+        [Serializable]
+        public class EnemyWeight
+        {
+            public EnemyController Enemy;
+            public int Weight;
+        }
+        
         public static EnemySpawner Instance { get; private set; }
 
         [Header("Prefabs")]
-        public GameObject enemyPrefab;
-        public GameObject bossPrefab;
+        public List<EnemyWeight> EnemyPrefabs;
+        public List<EnemyWeight> BossPrefabs;
 
         [Header("Configurações de Spawn")]
+        public float initialSpawnDelay = 8f;
         public float normalSpawnDelay = 2f;
         public float chaosSpawnDelay = 0.5f;
+        [Tooltip("O menor atraso possível que o spawn normal pode atingir ao acelerar.")]
+        public float minimumSpawnDelay = 0.4f; 
+        [Tooltip("Quão rápido a dificuldade cresce. Valores maiores aceleram o spawn mais cedo.")]
+        public float difficultyScaleSpeed = 0.005f; 
+        
         public int maxEnemyCount = 100;
         public int initEnemyCount = 20;
         public float minSpawnRadius = 25f;
@@ -31,60 +46,162 @@ namespace Sistemata.Spawning
         private float runLogicTimerCD = 1f;
 
         [Header("Particionamento Espacial Infinito")]
-        public float cellSize = 20f; // Tamanho de cada célula (equivalente ao tamanho de uma partição local)
+        public float cellSize = 20f;
 
-        [HideInInspector] public Dictionary<Vector2Int, HashSet<EnemyController>> enemySpatialGroups = new Dictionary<Vector2Int, HashSet<EnemyController>>();
+        [HideInInspector] 
+        public Dictionary<Vector2Int, HashSet<EnemyController>> enemySpatialGroups = new Dictionary<Vector2Int, HashSet<EnemyController>>();
+
+        private float _initialSpawnTimer;
+        private bool _firstSpawn = false;
+        private int _enemyWeightSum = 0;
+        private int _bossWeightSum = 0;
+
+        // Coleções devidamente inicializadas direto na declaração para evitar falhas de ciclo de vida
+        private SortedSet<BatchScore> batchQueue_Enemy = new SortedSet<BatchScore>();
+        private Dictionary<int, BatchScore> batchScoreMap_Enemy = new Dictionary<int, BatchScore>();
 
         private void Awake()
         {
             if (Instance == null) {
                 Instance = this;
+                InitializeBatches(); // Garante que as estruturas do Batch existam antes de qualquer Start
             }
-            else Destroy(gameObject);
+            else {
+                Destroy(gameObject);
+            }
         }
 
         private void Start()
         {
-            GameManager.Instance.OnBossWarning += StopSpawning;
-            GameManager.Instance.OnBossSpawn += SpawnTheBoss;
-            GameManager.Instance.OnChaosStart += StartChaosMode;
-
-            InitializeBatches();
-
-            for (int i = 0; i < initEnemyCount; i++)
+            if (GameManager.Instance != null)
             {
-                SpawnEnemy(enemyPrefab);
+                GameManager.Instance.OnBossWarning += StopSpawning;
+                GameManager.Instance.OnBossSpawn += SpawnTheBoss;
+                GameManager.Instance.OnChaosStart += StartChaosMode;
             }
+
+            UpdateWeights();
+            _initialSpawnTimer = initialSpawnDelay;
         }
 
         private void OnDestroy()
         {
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.OnBossWarning -= StopSpawning;
-                GameManager.Instance.OnBossSpawn -= SpawnTheBoss;
-                GameManager.Instance.OnChaosStart -= StartChaosMode;
-            }
+            if (GameManager.Instance == null) return;
+            GameManager.Instance.OnBossWarning -= StopSpawning;
+            GameManager.Instance.OnBossSpawn -= SpawnTheBoss;
+            GameManager.Instance.OnChaosStart -= StartChaosMode;
+        }
+
+        private void UpdateWeights()
+        {
+            _enemyWeightSum = EnemyPrefabs?.Sum(e => e.Weight) ?? 0;
+            _bossWeightSum = BossPrefabs?.Sum(e => e.Weight) ?? 0;
         }
 
         private void Update()
         {
-            GameState state = GameManager.Instance.currentState;
-
-            if (state == GameState.Normal || state == GameState.Chaos)
+            if (!_firstSpawn)
             {
-                currentSpawnTimer -= Time.deltaTime;
-                if (currentSpawnTimer <= 0 && enemyHolder.childCount < maxEnemyCount)
+                FirstSpawn();
+                return;
+            }
+            
+            var state = GameManager.Instance.currentState;
+            if (state != GameState.Normal && state != GameState.Chaos) return;
+            
+            currentSpawnTimer -= Time.deltaTime;
+            if (currentSpawnTimer <= 0 && enemyHolder.childCount < maxEnemyCount)
+            {
+                EnemyController chosenEnemy = SelectRandomEnemy();
+                if (chosenEnemy != null)
                 {
-                    SpawnEnemy(enemyPrefab);
-                    currentSpawnTimer = (state == GameState.Chaos) ? chaosSpawnDelay : normalSpawnDelay;
+                    SpawnEnemy(chosenEnemy);
+                }
+                
+                // Calcula a frequência dinâmica de spawn baseada no tempo de sobrevivência
+                currentSpawnTimer = CalculateDynamicSpawnDelay(state);
+            }
+        }
+
+        /// <summary>
+        /// Calcula o tempo de espera do spawn reduzindo o delay progressivamente com o tempo
+        /// </summary>
+        private float CalculateDynamicSpawnDelay(GameState state)
+        {
+            if (state == GameState.Chaos) return chaosSpawnDelay;
+
+            float timeSurvived = GameManager.Instance.totalTimeSurvived;
+            
+            // Aplica uma curva decrescente baseada no tempo. 
+            // Quanto maior o totalTimeSurvived, menor e mais frequente o delay se tornará.
+            float dynamicDelay = normalSpawnDelay / (1f + (timeSurvived * difficultyScaleSpeed));
+
+            // Impele que o spawn fique rápido demais a ponto de quebrar a CPU
+            return Mathf.Max(dynamicDelay, minimumSpawnDelay);
+        }
+        
+        private EnemyController SelectRandomEnemy()
+        {
+            if (EnemyPrefabs == null || EnemyPrefabs.Count == 0 || _enemyWeightSum <= 0)
+                return null;
+
+            var randomValue = Random.Range(0, _enemyWeightSum);
+            var currentWeightCounter = 0;
+
+            foreach (var prefabData in EnemyPrefabs)
+            {
+                currentWeightCounter += prefabData.Weight;
+                if (randomValue < currentWeightCounter)
+                {
+                    return prefabData.Enemy;
                 }
             }
+
+            return EnemyPrefabs.FirstOrDefault()?.Enemy;
+        }
+        
+        private EnemyController SelectRandomBoss()
+        {
+            if (BossPrefabs == null || BossPrefabs.Count == 0 || _bossWeightSum <= 0)
+                return null;
+
+            var randomValue = Random.Range(0, _bossWeightSum);
+            var currentWeightCounter = 0;
+
+            foreach (var prefabData in BossPrefabs)
+            {
+                currentWeightCounter += prefabData.Weight;
+                if (randomValue < currentWeightCounter)
+                {
+                    return prefabData.Enemy;
+                }
+            }
+
+            return BossPrefabs.FirstOrDefault()?.Enemy;
+        }
+
+        private void FirstSpawn()
+        {
+            _initialSpawnTimer -= Time.deltaTime;
+            if (_initialSpawnTimer > 0) return;
+            
+            for (var i = 0; i < initEnemyCount; i++)
+            {
+                var enemyToSpawn = SelectRandomEnemy();
+                if (enemyToSpawn != null) SpawnEnemy(enemyToSpawn);
+            }
+            _firstSpawn = true;
+            currentSpawnTimer = normalSpawnDelay;
+        }
+
+        private void SpawnTheBoss()
+        {
+            var bossToSpawn = SelectRandomBoss();
+            if (bossToSpawn != null) SpawnEnemy(bossToSpawn);
         }
 
         private void FixedUpdate()
         {
-            // Os batches ficam no FixedUpdate, garantindo que rodem perfeitamente 50 vezes por segundo
             runLogicTimer += Time.fixedDeltaTime;
 
             if (runLogicTimer >= runLogicTimerCD)
@@ -92,18 +209,14 @@ namespace Sistemata.Spawning
                 runLogicTimer = 0f;
             }
 
-            RunBatchLogic((int)(runLogicTimer * 50));
+            // Clampa a conversão matemática para travar estritamente entre os indexes válidos (0 a 49)
+            int targetBatch = Mathf.Clamp((int)(runLogicTimer * 50), 0, 49);
+            RunBatchLogic(targetBatch);
         }
 
         private void StopSpawning()
         {
             Debug.Log("O spawn normal parou. Boss se aproximando!");
-        }
-
-        private void SpawnTheBoss()
-        {
-            Debug.Log("Boss Spawnou!");
-            SpawnEnemy(bossPrefab);
         }
 
         private void StartChaosMode()
@@ -112,36 +225,30 @@ namespace Sistemata.Spawning
             currentSpawnTimer = chaosSpawnDelay;
         }
 
-        void SpawnEnemy(GameObject enemy)
+        void SpawnEnemy(EnemyController enemy)
         {
+            if (enemy == null) return;
+
             int batchToBeAdded = GetBestBatch("enemy");
 
-            // Cria uma direção aleatória em 360 graus
             Vector2 randomDir = Random.insideUnitCircle.normalized;
-
-            // Sorteia uma distância entre o limite mínimo (fora da tela) e máximo
             float randomDistance = Random.Range(minSpawnRadius, maxSpawnRadius);
 
-            // Calcula a posição exata no mundo (usando X e Z)
             float xVal = GameManager.Instance.player.position.x + (randomDir.x * randomDistance);
             float zVal = GameManager.Instance.player.position.z + (randomDir.y * randomDistance);
 
-            // Descobre em qual célula do Grid essa posição caiu (para o Hashing)
             Vector2Int spawnCell = GetSpatialGroup(xVal, zVal);
 
-            // Instancia o inimigo
-            GameObject enemyGO = Instantiate(enemy, new Vector3(xVal, enemy.transform.position.y, zVal), Quaternion.Euler(45f, 0f, 0f), enemyHolder);
-            EnemyController enemyScript = enemyGO.GetComponent<EnemyController>();
+            var obj = Instantiate(enemy, new Vector3(xVal, enemy.transform.position.y, zVal), Quaternion.Euler(45f, 0f, 0f), enemyHolder);
 
-            // Registra o inimigo no grupo espacial e no batch de lógica
-            enemyScript.spatialGroup = spawnCell;
-            AddToSpatialGroup(spawnCell, enemyScript);
+            obj.spatialGroup = spawnCell;
+            AddToSpatialGroup(spawnCell, obj);
 
-            enemyScript.BatchID = batchToBeAdded;
-            AddToEnemyBatch(batchToBeAdded, enemyScript);
+            obj.BatchID = batchToBeAdded;
+            AddToEnemyBatch(batchToBeAdded, obj);
         }
 
-        public class BatchScore : System.IComparable<BatchScore>
+        public class BatchScore : IComparable<BatchScore>
         {
             public int BatchId { get; }
             public int Score { get; private set; }
@@ -159,6 +266,7 @@ namespace Sistemata.Spawning
 
             public int CompareTo(BatchScore other)
             {
+                if (other == null) return 1;
                 int scoreComparison = Score.CompareTo(other.Score);
                 if (scoreComparison == 0)
                 {
@@ -168,14 +276,15 @@ namespace Sistemata.Spawning
             }
         }
 
-        private SortedSet<BatchScore> batchQueue_Enemy = new SortedSet<BatchScore>();
-        private Dictionary<int, BatchScore> batchScoreMap_Enemy = new Dictionary<int, BatchScore>();
-
         // ==========================================
         // GERENCIAMENTO DE LOTES (BATCHES)
         // ==========================================
         void InitializeBatches()
         {
+            enemyBatches.Clear();
+            batchScoreMap_Enemy.Clear();
+            batchQueue_Enemy.Clear();
+
             for (int i = 0; i < 50; i++)
             {
                 BatchScore batchScore = new BatchScore(i, 0);
@@ -187,7 +296,10 @@ namespace Sistemata.Spawning
 
         public void AddToEnemyBatch(int batchId, EnemyController enemy)
         {
-            enemyBatches[batchId].Add(enemy);
+            if (enemyBatches.ContainsKey(batchId))
+            {
+                enemyBatches[batchId].Add(enemy);
+            }
         }
 
         public void UpdateBatchOnUnitDeath(string option, int batchId)
@@ -197,9 +309,8 @@ namespace Sistemata.Spawning
 
         void UpdateBatchOnEnemyDeathRaw(SortedSet<BatchScore> batchQueue, Dictionary<int, BatchScore> batchScoreMap, int batchId)
         {
-            if (batchScoreMap.ContainsKey(batchId))
+            if (batchScoreMap.TryGetValue(batchId, out BatchScore batchScore))
             {
-                BatchScore batchScore = batchScoreMap[batchId];
                 batchQueue.Remove(batchScore);
                 batchScore.UpdateScore(-1);
                 batchQueue.Add(batchScore);
@@ -208,12 +319,14 @@ namespace Sistemata.Spawning
 
         public int GetBestBatch(string option)
         {
-            if (option == "enemy") return GetBestBatchRaw(batchQueue_Enemy);
-            return -1;
+            if (option == "enemy" && batchQueue_Enemy.Count > 0) return GetBestBatchRaw(batchQueue_Enemy);
+            return 0;
         }
 
         int GetBestBatchRaw(SortedSet<BatchScore> batchQueue)
         {
+            if (batchQueue == null || batchQueue.Count == 0) return 0;
+
             BatchScore leastLoadedBatch = batchQueue.Min;
 
             if (leastLoadedBatch == null) return 0;
@@ -227,12 +340,13 @@ namespace Sistemata.Spawning
 
         void RunBatchLogic(int batchID)
         {
-            // Usa ToList() ou iteração segura se houver remoção de inimigos no meio do loop
-            if (enemyBatches.ContainsKey(batchID))
+            if (enemyBatches.TryGetValue(batchID, out List<EnemyController> batchList))
             {
-                foreach (EnemyController enemy in enemyBatches[batchID].ToList())
+                // Cria uma cópia rasa temporária para evitar erros de modificação concorrente se monstros morrerem no loop
+                var currentActiveEnemies = batchList.Where(e => e != null).ToList();
+                foreach (EnemyController enemy in currentActiveEnemies)
                 {
-                    if (enemy) enemy.RunLogic();
+                    enemy.RunLogic();
                 }
             }
         }
@@ -241,7 +355,6 @@ namespace Sistemata.Spawning
         // SISTEMA DE HASH ESPACIAL (GRID INFINITA)
         // ==========================================
 
-        // Retorna a coordenada do grid com base nas posições reais X e Z
         public Vector2Int GetSpatialGroup(float xPos, float zPos)
         {
             return new Vector2Int(Mathf.FloorToInt(xPos / cellSize), Mathf.FloorToInt(zPos / cellSize));
@@ -262,7 +375,6 @@ namespace Sistemata.Spawning
             {
                 enemySpatialGroups[cell].Remove(enemy);
 
-                // Opcional: Remove a célula do dicionário se ficar vazia (libera memória)
                 if (enemySpatialGroups[cell].Count == 0)
                 {
                     enemySpatialGroups.Remove(cell);
@@ -270,7 +382,6 @@ namespace Sistemata.Spawning
             }
         }
 
-        // Retorna a célula central + os 8 vizinhos (útil para detecção de colisão/visão)
         public List<Vector2Int> GetExpandedSpatialGroups(Vector2Int centerCell)
         {
             List<Vector2Int> expandedGroups = new List<Vector2Int>(9);
@@ -286,13 +397,12 @@ namespace Sistemata.Spawning
 
         public IEnumerable<EnemyController> GetEnemiesInSpatialGroup(Vector2Int cell)
         {
-            // TryGetValue tenta pegar batch. Se existir, devolve a lista.
+            // O uso do ToList() aqui blinda o método contra erros de leitura assíncrona/concorrente do Ally.cs
             if (enemySpatialGroups.TryGetValue(cell, out HashSet<EnemyController> group))
             {
-                return group;
+                return group.Where(e => e != null).ToList();
             }
 
-            // Se batch não existir (ninguém pisou lá), devolve uma lista vazia segura
             return Enumerable.Empty<EnemyController>();
         }
     }

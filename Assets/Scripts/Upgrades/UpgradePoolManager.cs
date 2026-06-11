@@ -137,16 +137,20 @@ namespace Sistemata.Upgrades
                 case TargetEntityType.Player:
                     PlayerManager.Instance.ApplyRunUpgrade(upgrade);
                     break;
+                    
                 case TargetEntityType.Attack:
-                    var attackStats = UpgradeRegistry.GetAttack(upgrade.TargetID);
-                    if (attackStats)
-                        attackStats.ApplyUpgrade(upgrade.TargetStat, modifier);
+                    var playerAttackStats = UpgradeRegistry.GetAttack(upgrade.TargetID);
+                    if (playerAttackStats)
+                        playerAttackStats.ApplyUpgrade(upgrade.TargetStat, modifier);
+                    UpgradeRegistry.ApplyUpgradeToAllMatchingAttacks(upgrade.TargetID, upgrade.TargetStat, modifier);
                     break;
+                    
                 case TargetEntityType.Ally:
                     var allyStats = UpgradeRegistry.GetAlly(upgrade.TargetID);
                     if (allyStats)
                         allyStats.ApplyUpgrade(upgrade.TargetStat, modifier);
                     break;
+                    
                 default:
                     throw new ArgumentOutOfRangeException();
             }

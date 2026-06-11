@@ -2,241 +2,263 @@ using Sistemata.Core;
 using Sistemata.Enemy;
 using Sistemata.Spawning;
 using System.Collections.Generic;
+using Sistemata.Common;
+using Sistemata.Stats;
 using UnityEngine;
 
-public class Ally : MonoBehaviour
+namespace Sistemata.Ally
 {
-    // --- LISTA GLOBAL DE ALIADOS PARA REPULSÃO ---
-    public static List<Ally> activeAllies = new List<Ally>();
-
-    [Header("Visual")]
-    public SpriteRenderer spriteRenderer;
-
-    [Header("Configurações de Movimento")]
-    public float moveSpeed = 2.5f;
-    public float followDistance = 2f;
-    public float maxDistance = 6f;
-    public float teleportDistance = 15f;
-    public float allyRepulsionRadius = 1.2f; // Distância que eles tentam manter um do outro
-
-    [Header("Configurações de Combate")]
-    public float attackDamage = 15f;
-    public float attackRange = 1.5f;
-    public float attackCooldown = 1f;
-    public float detectionRadius = 5f;
-
-    private Transform player;
-    private float attackTimer;
-
-    private EnemyController targetEnemy;
-
-    // Adiciona e remove da lista global automaticamente
-    private void OnEnable() { activeAllies.Add(this); }
-    private void OnDisable() { activeAllies.Remove(this); }
-
-    void Start()
+    public abstract class Ally : MonoBehaviour
     {
-        if (GameManager.Instance != null && GameManager.Instance.player != null)
+        public static readonly List<Ally> ActiveAllies = new List<Ally>();
+
+        [Header("ConfiguraÃ§Ãµes de Movimento")]
+        public float followDistance = 2f;
+        public float maxDistance = 6f;
+        public float teleportDistance = 15f;
+        public float allyRepulsionRadius = 1.2f;
+
+        [Header("ConfiguraÃ§Ãµes de Combate")]
+        public float attackRange = 1.5f;
+        public float detectionRadius = 5f;
+        
+        [Header("Stats")] 
+        [SerializeField] protected AllyBaseData baseData;
+
+        protected Transform Player;
+        protected float AttackTimer;
+        protected float AttackVisualTimer;
+
+        // Modificado para protected para que as classes filhas saibam exatamente quem atacar/mirar
+        protected EnemyController TargetEnemy;
+        protected SpriteRenderer SpriteRenderer;
+        
+        protected EntityStats Stats;
+        protected EntityHealth Health;
+        
+        protected Vector3 MovementDirection;
+        public float MoveSpeed => Stats.GetStat(StatType.MoveSpeed).Get();
+        public float BaseMoveSpeed => Stats.GetStat(StatType.MoveSpeed).BaseValue;
+        
+        public Vector2 LastMove => new(MovementDirection.x, MovementDirection.z);
+        public float AttackCooldown => 1 / Stats.GetStat(StatType.AttackRate).Get();
+        public float Damage => Stats.GetStat(StatType.Damage).Get();
+        
+        public bool IsAttacking => AttackVisualTimer > 0f;
+
+        private void OnEnable() { ActiveAllies.Add(this); }
+        private void OnDisable() { ActiveAllies.Remove(this); }
+        
+        private void Awake()
         {
-            player = GameManager.Instance.player;
+            Stats = GetComponent<EntityStats>();
+            if (Stats == null) Stats = GetComponentInChildren<EntityStats>();
+
+            Health = GetComponent<EntityHealth>();
+            if (Health == null) Health = GetComponentInChildren<EntityHealth>();
+
+            SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+            if (Health != null) ConfigureEntityHealth();
+            
+            InitializeAllBaseStats();
         }
-
-        if (spriteRenderer == null)
-            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-
-    }
-
-    void Update()
-    {
-        if (player == null) return;
-
-        if (attackTimer > 0) attackTimer -= Time.deltaTime;
-
-        float distToPlayer = Vector3.Distance(transform.position, player.position);
-
-        if (distToPlayer > teleportDistance)
+        
+        private void ConfigureEntityHealth()
         {
-            TeleportToPlayer();
-            return;
+            Health.OnDeath += HandleDeath;
         }
-
-        if (distToPlayer > maxDistance)
+            
+        protected virtual void HandleDeath()
         {
-            targetEnemy = null; // Solta o alvo e volta correndo
-            MoveTowards(player.position);
-            return;
+            Health.OnDeath -= HandleDeath;
+            Debug.Log($"[{gameObject.name}] Aliado morreu.");
+            Destroy(gameObject);
         }
-
-        // --- 1. LÓGICA DE FOCO NO ALVO ---
-        // Se o inimigo morrer (a Unity destrói o gameObject) ou fugir muito, limpa o alvo
-        if (targetEnemy != null)
+        
+        private void InitializeAllBaseStats()
         {
-            float distToTarget = Vector3.Distance(transform.position, targetEnemy.transform.position);
-            if (distToTarget > detectionRadius) // Dá uma margem para ele não desistir tão fácil
+            Stats.InitializeStat(StatType.MaxHealth, baseData.DefaultMaxHealth);
+            Stats.InitializeStat(StatType.MoveSpeed, baseData.DefaultMoveSpeed);
+            Stats.InitializeStat(StatType.Damage, baseData.DefaultDamage);
+            Stats.InitializeStat(StatType.AttackRate, baseData.DefaultAttackRate);
+            Stats.InitializeStat(StatType.Armor, baseData.DefaultArmor);
+
+            if (Health != null)
             {
-                targetEnemy = null;
+                Health.Heal(Health.MaxHealth);
             }
         }
 
-        // Só procura um alvo novo se estiver sem nenhum
-        if (targetEnemy == null)
+        protected virtual void Start()
         {
-            targetEnemy = FindBestEnemyInGrid();
+            if (GameManager.Instance != null && GameManager.Instance.player != null)
+                Player = GameManager.Instance.player;
         }
 
-        // --- MÁQUINA DE ESTADOS ---
-        if (targetEnemy != null)
+        protected virtual void Update()
         {
-            float distToEnemy = Vector3.Distance(transform.position, targetEnemy.transform.position);
+            if (!Player) return;
+            
+            if (AttackTimer > 0) AttackTimer -= Time.deltaTime;
+            if (AttackVisualTimer > 0) AttackVisualTimer -= Time.deltaTime;
 
-            if (distToEnemy > attackRange)
+            var distToPlayer = Vector3.Distance(transform.position, Player.position);
+
+            if (distToPlayer > teleportDistance)
             {
-                MoveTowards(targetEnemy.transform.position);
+                TeleportToPlayer();
+                return;
+            }
+
+            if (distToPlayer > maxDistance)
+            {
+                TargetEnemy = null;
+                MoveTowards(Player.position);
+                return;
+            }
+
+            if (TargetEnemy)
+            {
+                var distToTarget = Vector3.Distance(transform.position, TargetEnemy.transform.position);
+                if (distToTarget > detectionRadius)
+                    TargetEnemy = null;
+            }
+
+            if (!TargetEnemy)
+            {
+                TargetEnemy = FindBestEnemyInGrid();
+            }
+
+            if (TargetEnemy)
+            {
+                var distToEnemy = Vector3.Distance(transform.position, TargetEnemy.transform.position);
+
+                if (distToEnemy > attackRange)
+                {
+                    MoveTowards(TargetEnemy.transform.position);
+                }
+                else if (AttackTimer <= 0) 
+                {
+                    AttackTimer = AttackCooldown;
+                    AttackVisualTimer = Mathf.Min(0.25f, AttackCooldown * 0.5f);
+                    
+                    ExecuteAttack();
+                }
+                else
+                {
+                    var lookDir = (TargetEnemy.transform.position - transform.position);
+                    lookDir.y = 0;
+                    if (lookDir.sqrMagnitude > 0.001f) MovementDirection = lookDir.normalized;
+                }
             }
             else
             {
-                if (attackTimer <= 0) AttackTarget();
+                if (distToPlayer > followDistance)
+                    MoveTowards(Player.position);
+                else
+                    ApplyIdleRepulsion();
             }
         }
-        else
+
+        private void MoveTowards(Vector3 targetPosition)
         {
-            if (distToPlayer > followDistance)
+            var direction = (targetPosition - transform.position);
+            direction.y = 0;
+            direction.Normalize();
+
+            direction += GetAllyRepulsion();
+            direction.Normalize();
+
+            transform.position += direction * (MoveSpeed * Time.deltaTime);
+            MovementDirection = direction;
+        }
+
+        private void ApplyIdleRepulsion()
+        {
+            var repulsion = GetAllyRepulsion();
+            if (repulsion != Vector3.zero)
             {
-                MoveTowards(player.position);
+                transform.position += repulsion * (MoveSpeed * 0.5f * Time.deltaTime);
+                MovementDirection = repulsion;
             }
             else
             {
-                // Se já chegou perto do player e não tem alvo, só aplica a repulsão para eles se espalharem bonitinho
-                ApplyIdleRepulsion();
+                MovementDirection = new Vector3(MovementDirection.x * 0.001f, 0, MovementDirection.z * 0.001f);
             }
         }
-    }
 
-    private void MoveTowards(Vector3 targetPosition)
-    {
-        Vector3 direction = (targetPosition - transform.position);
-        direction.y = 0;
-        direction.Normalize();
-
-        // --- 2. APLICA REPULSÃO NO MOVIMENTO ---
-        direction += GetAllyRepulsion();
-        direction.Normalize();
-
-        transform.position += direction * (moveSpeed * Time.deltaTime);
-
-        // FLIP DO SPRITE
-        if (direction.x < 0)
+        protected Vector3 GetAllyRepulsion()
         {
-            // O inimigo deve olhar para a esquerda
-            spriteRenderer.flipX = true;
-        }
-        else if (direction.x > 0)
-        {
-            // O inimigo deve olhar para a direita
-            spriteRenderer.flipX = false;
-        }
-    }
+            var separationVector = Vector3.zero;
+            var pushCount = 0;
 
-    // Usado quando o aliado está parado ao lado do player só esperando, para não ficarem amontoados
-    private void ApplyIdleRepulsion()
-    {
-        Vector3 repulsion = GetAllyRepulsion();
-        if (repulsion != Vector3.zero)
-        {
-            transform.position += repulsion * (moveSpeed * 0.5f * Time.deltaTime);
-        }
-    }
-
-    // Calcula o vetor de fuga dos outros aliados
-    private Vector3 GetAllyRepulsion()
-    {
-        Vector3 separationVector = Vector3.zero;
-        int pushCount = 0;
-
-        foreach (Ally otherAlly in activeAllies)
-        {
-            if (otherAlly == null || otherAlly == this) continue;
-
-            // Distância de Manhattan (super rápida para CPU)
-            float distance = Mathf.Abs(transform.position.x - otherAlly.transform.position.x) +
-                             Mathf.Abs(transform.position.z - otherAlly.transform.position.z);
-
-            if (distance < allyRepulsionRadius && distance > 0.001f)
+            foreach (var otherAlly in ActiveAllies)
             {
-                Vector3 pushDir = transform.position - otherAlly.transform.position;
+                if (!otherAlly || otherAlly == this) continue;
+
+                var distance = Mathf.Abs(transform.position.x - otherAlly.transform.position.x) +
+                               Mathf.Abs(transform.position.z - otherAlly.transform.position.z);
+
+                if (distance >= allyRepulsionRadius || distance <= 0.001f) continue;
+                
+                var pushDir = transform.position - otherAlly.transform.position;
                 pushDir.y = 0;
                 separationVector += pushDir.normalized;
                 pushCount++;
             }
-        }
 
-        if (pushCount > 0)
-        {
+            if (pushCount <= 0) return Vector3.zero;
             separationVector /= pushCount;
-            return separationVector * 1.5f; // Força do empurrão
+            return separationVector * 1.5f;
         }
 
-        return Vector3.zero;
-    }
-
-    private void TeleportToPlayer()
-    {
-        Vector2 randomCircle = Random.insideUnitCircle * 2f;
-        transform.position = new Vector3(
-            player.position.x + randomCircle.x,
-            transform.position.y,
-            player.position.z + randomCircle.y
-        );
-    }
-
-    private void AttackTarget()
-    {
-        attackTimer = attackCooldown;
-        targetEnemy.TakeDamage(attackDamage);
-    }
-
-    private EnemyController FindBestEnemyInGrid()
-    {
-        Vector2Int myCell = EnemySpawner.Instance.GetSpatialGroup(transform.position.x, transform.position.z);
-        List<Vector2Int> nearbyCells = EnemySpawner.Instance.GetExpandedSpatialGroups(myCell);
-
-        EnemyController bestEnemy = null;
-        float bestScore = float.MaxValue;
-
-        // 1. Calculamos o quadrado do raio de detecção (super rápido para a CPU)
-        float detectionSqr = detectionRadius * detectionRadius;
-
-        foreach (Vector2Int cell in nearbyCells)
+        private void TeleportToPlayer()
         {
-            foreach (EnemyController enemy in EnemySpawner.Instance.GetEnemiesInSpatialGroup(cell))
+            var randomCircle = Random.insideUnitCircle * 2f;
+            transform.position = new Vector3(
+                Player.position.x + randomCircle.x,
+                transform.position.y,
+                Player.position.z + randomCircle.y
+            );
+        }
+
+        /// <summary>
+        /// MÃ©todo abstrato que forÃ§a as classes derivadas a implementarem suas prÃ³prias mecÃ¢nicas de ataque (ProjÃ©teis, Melee, etc.).
+        /// </summary>
+        protected abstract void ExecuteAttack();
+
+        private EnemyController FindBestEnemyInGrid()
+        {
+            if (!EnemySpawner.Instance) return null;
+
+            var myCell = EnemySpawner.Instance.GetSpatialGroup(transform.position.x, transform.position.z);
+            var nearbyCells = EnemySpawner.Instance.GetExpandedSpatialGroups(myCell);
+
+            EnemyController bestEnemy = null;
+            var bestScore = float.MaxValue;
+            var detectionSqr = detectionRadius * detectionRadius;
+
+            foreach (var cell in nearbyCells)
             {
-                if (enemy == null) continue;
-
-                float distSqr = (transform.position - enemy.transform.position).sqrMagnitude;
-
-                // 2. A CORREÇÃO VITAL: Se o inimigo estiver fora do raio de detecção, ignora ele imediatamente!
-                if (distSqr > detectionSqr) continue;
-
-                // 3. Ruído muito menor. Serve apenas como critério de desempate para zumbis próximos.
-                float randomNoise = Random.Range(0f, 3f);
-                float score = distSqr + randomNoise;
-
-                if (score < bestScore)
+                foreach (var enemy in EnemySpawner.Instance.GetEnemiesInSpatialGroup(cell))
                 {
+                    if (!enemy) continue;
+
+                    var distSqr = (transform.position - enemy.transform.position).sqrMagnitude;
+
+                    if (distSqr > detectionSqr) continue;
+
+                    var randomNoise = Random.Range(0f, 3f);
+                    var score = distSqr + randomNoise;
+
+                    if (!(score < bestScore)) continue;
                     bestScore = score;
                     bestEnemy = enemy;
                 }
             }
-        }
 
-        return bestEnemy;
-    }
-
-    public void SetSprite(Sprite newSprite)
-    {
-        if (spriteRenderer != null && newSprite != null)
-        {
-            spriteRenderer.sprite = newSprite;
+            return bestEnemy;
         }
     }
 }

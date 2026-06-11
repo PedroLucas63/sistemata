@@ -60,6 +60,7 @@ MonoBehaviour:
   attackID: Arrow
   elementalType: 0
   baseData: {fileID: 11400000, guid: cbd7c83734a9a6871b400426b6b51a95, type: 2}
+  belongsToPlayer: 0
   arrowPrefab: {fileID: 4654985686313772912, guid: e0cad7e6b1c616471b6354ba0e75aeb8, type: 3}
   arrowSpeed: 8
   fanAngleSpread: 15

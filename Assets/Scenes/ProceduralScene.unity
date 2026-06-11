@@ -1348,12 +1348,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 149ffcfc6b7081d49be4d3f601cc7c24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AllySpawner
-  allyPrefab: {fileID: 1444332622434311970, guid: 35a482998be397a448ede5c5f528264f, type: 3}
   amountToSpawn: 2
   spawnRadius: 2
-  allySprites:
-  - {fileID: 1154967298955580547, guid: 03885fd4ebafb524585241478c8a257c, type: 3}
-  - {fileID: 3019155423022939230, guid: 12411599ef0cf554088ed3648fbb4886, type: 3}
+  allyPrefabs:
+  - {fileID: 1136727074548248329, guid: e0615e46b787de165af68df7356ae4ed, type: 3}
+  - {fileID: 3603237076617942878, guid: d1ee5b2f5768c4143b3b979722b715d5, type: 3}
 --- !u!4 &1114772619
 Transform:
   m_ObjectHideFlags: 0
@@ -2045,8 +2044,52 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6564470530625821964, guid: 0ee131150ee0c504daa4fd15b372931f, type: 3}
     - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: maxEnemyCount
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: initEnemyCount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: chaosSpawnDelay
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: normalSpawnDelay
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: initialSpawnDelay
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: minimumSpawnDelay
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: BossPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: EnemyPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: BossPrefabs.Array.data[0].Enemy
+      value: 
+      objectReference: {fileID: 7130518854873482354, guid: cfbdf3c8af9cc7e449ac2a91dc672761, type: 3}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: BossPrefabs.Array.data[0].Weight
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: EnemyPrefabs.Array.data[0].Enemy
+      value: 
+      objectReference: {fileID: 863410815870789386, guid: 0ee131150ee0c504daa4fd15b372931f, type: 3}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: EnemyPrefabs.Array.data[0].Weight
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3726457396479981460, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: m_Name
@@ -2102,6 +2145,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1789167081}
+  - component: {fileID: 1789167082}
   m_Layer: 0
   m_Name: ProjectileHolder
   m_TagString: Untagged
@@ -2124,6 +2168,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1789167082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1789167080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c91147d021e416fbe96b32b924191d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Attack.ProjectilePoolManager
 --- !u!1 &1813775068
 GameObject:
   m_ObjectHideFlags: 0
@@ -2727,7 +2783,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5520307711142703031, guid: 87389200176828f4eadf34d3b91ce710, type: 3}
       propertyPath: timeUntilBoss
-      value: 20
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 5520307711142703031, guid: 87389200176828f4eadf34d3b91ce710, type: 3}
       propertyPath: ProjectileParent

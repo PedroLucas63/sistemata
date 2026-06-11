@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6203cfcb9a41909a5ad91d9432a606, type: 3}
   m_Name: CactiBaseData
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Enemy.EnemyBaseData
-  DefaultMaxHealth: 20
+  DefaultMaxHealth: 15
   DefaultMoveSpeed: 1
   DefaultDamage: 5
   DefaultAttackRate: 1

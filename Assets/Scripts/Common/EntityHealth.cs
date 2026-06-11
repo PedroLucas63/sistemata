@@ -22,7 +22,7 @@ namespace Sistemata.Common
             get
             {
                 _maxHealthStat ??= _stats.GetStat(StatType.MaxHealth);
-                return _maxHealthStat?.Get() ?? 100f;
+                return _maxHealthStat?.Get() ?? 1f; // Failsafe reduzido para evitar bugs de "imortalidade"
             } 
         }
 
@@ -37,12 +37,18 @@ namespace Sistemata.Common
 
         private void Awake()
         {
-            _stats = GetComponent<EntityStats>();
+            if (_stats == null) _stats = GetComponent<EntityStats>();
+            if (_stats == null) _stats = GetComponentInParent<EntityStats>();
+            if (_stats == null) _stats = GetComponentInChildren<EntityStats>();
         }
 
         private void Start()
         {
-            CurrentHealth = MaxHealth;
+            // Se o CurrentHealth ainda é 0 (ou seja, não foi inicializado por fora), usamos o MaxHealth
+            if (CurrentHealth <= 0)
+            {
+                CurrentHealth = MaxHealth;
+            }
             OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
         }
 
@@ -72,13 +78,13 @@ namespace Sistemata.Common
         {
             if (IsDead) return;
             
-            Debug.Log($"Levando dano: {amount} ({CurrentHealth}/{MaxHealth})");
-
             CurrentHealth -= amount;
+            Debug.Log($"[{gameObject.name}] Levando dano: {amount} (HP Restante: {CurrentHealth}/{MaxHealth})");
 
             if (CurrentHealth <= 0)
             {
                 CurrentHealth = 0;
+                Debug.Log($"[{gameObject.name}] Morreu!");
                 Die();
             }
 

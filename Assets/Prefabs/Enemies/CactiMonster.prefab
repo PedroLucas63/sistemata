@@ -127,8 +127,8 @@ GameObject:
   - component: {fileID: 1172547619462933089}
   - component: {fileID: 269586773146060746}
   - component: {fileID: 6848165600271096875}
-  - component: {fileID: 6147322200574121103}
   - component: {fileID: 1067310942408240261}
+  - component: {fileID: 863410815870789386}
   m_Layer: 3
   m_Name: CactiMonster
   m_TagString: Enemy
@@ -226,22 +226,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e18d6ccab69e42c1a43615867d0f7f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Common.EntityHealth
---- !u!114 &6147322200574121103
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6564470530625821964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aca55c3c1ac9426ca90ad4c6222af1c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Enemy.Cacti.CactiController
-  despawnDistance: 55
-  spatialGroup: {x: 0, y: 0}
-  baseData: {fileID: 11400000, guid: 3c365457bf62f80838f7b485ee957fee, type: 2}
-  IsAttacking: 0
 --- !u!114 &1067310942408240261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,3 +238,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19ff904edb224ac5bec87ab5cd4e1a96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Enemy.CactiAnimatorController
+--- !u!114 &863410815870789386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6564470530625821964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a22b84b91124289b3eaf94e0354be45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Enemy.MeleeEnemy
+  despawnDistance: 55
+  spatialGroup: {x: 0, y: 0}
+  baseData: {fileID: 11400000, guid: d3943c2b6cb00a3799e46e3117e629f9, type: 2}
+  meleeAttackRange: 1.3

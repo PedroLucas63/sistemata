@@ -1,49 +1,49 @@
-using Sistemata.Core;
 using System.Collections.Generic;
 using UnityEngine;
+using Sistemata.Core;
 
-public class AllySpawner : MonoBehaviour
+namespace Sistemata.Ally
 {
-    [Header("Configurações")]
-    [SerializeField] private GameObject allyPrefab;
-    [SerializeField] private int amountToSpawn = 2;
-    [SerializeField] private float spawnRadius = 2f; // Distância do player ao nascer
-
-    [Header("Visuais")]
-    [SerializeField] private List<Sprite> allySprites; // Lista de imagens diferentes
-
-    void Start()
+    public class AllySpawner : MonoBehaviour
     {
-        // Executa o spawn assim que a rodada começa
-        SpawnInitialAllies();
-    }
+        [Header("ConfiguraÃ§Ãµes de Spawn")]
+        [SerializeField] private int amountToSpawn = 2;
+        [SerializeField] private float spawnRadius = 2f;
 
-    void SpawnInitialAllies()
-    {
-        if (GameManager.Instance == null || GameManager.Instance.player == null) return;
+        [Header("Lista de Aliados DisponÃ­veis")]
+        [Tooltip("Arraste para cÃ¡ os Prefabs configurados de cada aliado diferente.")]
+        [SerializeField] private List<Ally> allyPrefabs;
 
-        Transform playerTransform = GameManager.Instance.player;
-
-        for (int i = 0; i < amountToSpawn; i++)
+        private void Start()
         {
-            Vector2 randomCircle = Random.insideUnitCircle * spawnRadius;
-            Vector3 spawnPos = new Vector3(
-                playerTransform.position.x + randomCircle.x,
-                playerTransform.position.y,
-                playerTransform.position.z + randomCircle.y
-            );
+            SpawnInitialAllies();
+        }
 
-            GameObject allyGO = Instantiate(allyPrefab, spawnPos, Quaternion.Euler(45f, 0f, 0f));
-            Ally allyScript = allyGO.GetComponent<Ally>();
+        private void SpawnInitialAllies()
+        {
+            if (GameManager.Instance == null || GameManager.Instance.player == null) return;
+            
+            if (allyPrefabs == null || allyPrefabs.Count == 0)
+                return;
 
-            // --- TROCA DE SPRITE ---
-            if (allySprites.Count > 0)
+            var playerTransform = GameManager.Instance.player;
+            
+            for (var i = 0; i < amountToSpawn; i++)
             {
-                Sprite chosenSprite = allySprites[i % allySprites.Count];
-                allyScript.SetSprite(chosenSprite);
-            }
+                var randomCircle = Random.insideUnitCircle * spawnRadius;
+                var spawnPos = new Vector3(
+                    playerTransform.position.x + randomCircle.x,
+                    playerTransform.position.y,
+                    playerTransform.position.z + randomCircle.y
+                );
+                
+                Ally chosenPrefab = allyPrefabs[i % allyPrefabs.Count];
 
-            allyGO.transform.SetParent(transform);
+                if (chosenPrefab == null) continue;
+
+                Ally allyInstance = Instantiate(chosenPrefab, spawnPos, Quaternion.Euler(45f, 0f, 0f));
+                allyInstance.transform.SetParent(transform);
+            }
         }
     }
 }

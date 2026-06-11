@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using Sistemata.Common;
 using Sistemata.Core;
 using Sistemata.Spawning;
@@ -8,43 +7,62 @@ using UnityEngine;
 
 namespace Sistemata.Enemy
 {
-    public class EnemyController : MonoBehaviour
+    public abstract class EnemyController : MonoBehaviour
     {
-        int batchId;
+        private int batchId;
 
         public int BatchID
         {
-            get { return batchId; }
-            set { batchId = value; }
+            get => batchId;
+            set => batchId = value;
         }
         
-        [Header("Despawn")] public float despawnDistance = 55f;
+        [Header("Despawn")] 
+        public float despawnDistance = 55f;
         
         protected SpriteRenderer SpriteRenderer;
         protected Vector3 MovementDirection;
         public Vector2Int spatialGroup = Vector2Int.zero;
 
-        [Header("Stats")] [SerializeField] protected EnemyBaseData baseData;
+        [Header("Stats")] 
+        [SerializeField] protected EnemyBaseData baseData;
         
         protected EntityStats Stats;
         protected EntityHealth Health;
 
-        public float MoveSpeed => Stats.GetStat(StatType.MoveSpeed).Get() ;
+        protected float AttackTimer;
+        protected float AttackVisualTimer;
+
+        protected Transform CurrentTarget;
+
+        public float MoveSpeed => Stats.GetStat(StatType.MoveSpeed).Get();
         public float BaseMoveSpeed => Stats.GetStat(StatType.MoveSpeed).BaseValue;
         public Vector2 LastMove => new(MovementDirection.x, MovementDirection.z);
+        public float AttackCooldown => 1f / Stats.GetStat(StatType.AttackRate).Get();
+        public float Damage => Stats.GetStat(StatType.Damage).Get();
+        
+        public bool IsAttacking => AttackVisualTimer > 0f;
 
         private void Awake()
         {
             Stats = GetComponent<EntityStats>();
+            if (Stats == null) Stats = GetComponentInChildren<EntityStats>();
+            
             Health = GetComponent<EntityHealth>();
+            if (Health == null) Health = GetComponentInChildren<EntityHealth>();
+            
+            if (Health != null) ConfigureEntityHealth();
+            
+            InitializeAllBaseStats();
+            OnAwake();
         }
+
+        protected virtual void OnAwake() { }
 
         protected virtual void Start()
         {
             if (SpriteRenderer == null)
                 SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
-            InitializeAllBaseStats();
-            ConfigureEntityHealth();
         }
 
         private void ConfigureEntityHealth()
@@ -55,9 +73,7 @@ namespace Sistemata.Enemy
         protected virtual void HandleDeath()
         {
             Health.OnDeath -= HandleDeath;
-            Debug.Log($"{gameObject.name} foi derrotado e removido do mapa.");
-            
-            // TODO: Ativar animação de morte, dropar XP e Moedas de Ouro, Destruir.
+            Debug.Log($"[{gameObject.name}] HandleDeath executado. Destruindo objeto.");
             Destroy(gameObject);
         }
 
@@ -68,114 +84,134 @@ namespace Sistemata.Enemy
             Stats.InitializeStat(StatType.Damage, baseData.DefaultDamage);
             Stats.InitializeStat(StatType.AttackRate, baseData.DefaultAttackRate);
             Stats.InitializeStat(StatType.Armor, baseData.DefaultArmor);
+            
+            // Forçamos a sincronização da vida com o MaxHealth recém-inicializado
+            if (Health != null)
+            {
+                // Curamos o valor total para garantir que a vida atual suba (ou desça) para o MaxHealth
+                Health.Heal(Health.MaxHealth); 
+            }
         }
 
         public virtual void TakeDamage(float damage)
         {
-            damage -= Stats.GetStat(StatType.Armor).Get();
-            damage = Mathf.Clamp(damage, 0f, damage);
+            if (Health == null) Health = GetComponent<EntityHealth>();
+            if (Health == null) return;
+
+            var armor = Stats.GetStat(StatType.Armor)?.Get() ?? 0f;
+            damage -= armor;
+            damage = Mathf.Max(0f, damage);
+            
             Health.TakeDamage(damage);
         }
 
         protected virtual void Update()
         {
-            // move em direcao ao jogador
-            transform.position += MovementDirection * (Time.deltaTime * MoveSpeed);
+            if (AttackTimer > 0) AttackTimer -= Time.deltaTime;
+            if (AttackVisualTimer > 0) AttackVisualTimer -= Time.deltaTime;
 
-            // FLIP DO SPRITE
-            if (MovementDirection.x < 0)
-            {
-                // O inimigo deve olhar para a esquerda
-                SpriteRenderer.flipX = true;
-            }
-            else if (MovementDirection.x > 0)
-            {
-                // O inimigo deve olhar para a direita
-                SpriteRenderer.flipX = false;
-            }
+            if (!IsAttacking)
+                transform.position += MovementDirection * (Time.deltaTime * MoveSpeed);
         }
 
         private void OnDestroy()
         {
-            // Quando este inimigo for destruído, ele avisa o Spawner para tirá-lo das listas
-            if (EnemySpawner.Instance != null)
-            {
-                EnemySpawner.Instance.RemoveFromSpatialGroup(spatialGroup, this);
-                EnemySpawner.Instance.UpdateBatchOnUnitDeath("enemy", BatchID);
-            }
+            if (EnemySpawner.Instance == null) return;
+            EnemySpawner.Instance.RemoveFromSpatialGroup(spatialGroup, this);
+            EnemySpawner.Instance.UpdateBatchOnUnitDeath("enemy", BatchID);
         }
 
         public void RunLogic()
         {
-            if (GameManager.Instance.player == null)
-                return;
+            CurrentTarget = FindNearestTarget();
 
-            // calcula direcao do movimento
-            MovementDirection = GameManager.Instance.player.position - transform.position;
+            if (!CurrentTarget)
+            {
+                MovementDirection = Vector3.zero;
+                return;
+            }
+
+            MovementDirection = CurrentTarget.position - transform.position;
             MovementDirection.y = 0;
 
             if (MovementDirection.sqrMagnitude > despawnDistance * despawnDistance)
             {
-                Destroy(gameObject); // Destrói o inimigo se estiver muito longe do jogador
+                Destroy(gameObject); 
                 return;
             }
 
-            MovementDirection.Normalize();
-
-            // Afasta outros inimigos proximos
+            var distanceToTarget = MovementDirection.magnitude;
+            UpdateCombatBehavior(distanceToTarget);
             PushNearbyEnemies();
+            
+            var newSpatialGroup = EnemySpawner.Instance.GetSpatialGroup(transform.position.x, transform.position.z);
+            
+            if (newSpatialGroup == spatialGroup) return;
+            EnemySpawner.Instance.RemoveFromSpatialGroup(spatialGroup, this);
 
-            //Atualiza grupo espacial
-            Vector2Int newSpatialGroup =
-                EnemySpawner.Instance.GetSpatialGroup(transform.position.x, transform.position.z); // GET spatial group
-            if (newSpatialGroup != spatialGroup)
-            {
-                EnemySpawner.Instance.RemoveFromSpatialGroup(spatialGroup, this);
-
-                spatialGroup = newSpatialGroup; // UPDATE current spatial group
-                EnemySpawner.Instance.AddToSpatialGroup(spatialGroup, this); // ADD to new spatial group
-            }
+            spatialGroup = newSpatialGroup;
+            EnemySpawner.Instance.AddToSpatialGroup(spatialGroup, this);
         }
 
-        void PushNearbyEnemies()
+        /// <summary>
+        /// Comportamento de combate implementado de formas diferentes para Curta e Longa distância
+        /// </summary>
+        protected abstract void UpdateCombatBehavior(float distanceToTarget);
+
+        /// <summary>
+        /// Varre o jogador e a lista estática de aliados ativos para eleger o alvo mais próximo
+        /// </summary>
+        private Transform FindNearestTarget()
         {
-            Vector3 separationVector = Vector3.zero;
-            int pushCount = 0;
+            Transform closest = null;
+            var closestDistSqr = float.MaxValue;
 
-            // 1. Usamos o m�todo seguro para n�o dar erro de KeyNotFound e iteramos DIRETO na cole��o, sem .ToList()
-            foreach (EnemyController otherEnemy in EnemySpawner.Instance.GetEnemiesInSpatialGroup(spatialGroup))
+            if (GameManager.Instance && GameManager.Instance.player)
             {
-                if (otherEnemy == null || otherEnemy == this) continue;
-
-                // 2. Corrigido para Eixos X e Z (Dist�ncia de Manhattan super r�pida)
-                float distance = Mathf.Abs(transform.position.x - otherEnemy.transform.position.x) +
-                                 Mathf.Abs(transform.position.z - otherEnemy.transform.position.z);
-
-                // Se estiver muito perto (ajuste esse 0.2f se eles forem gordinhos)
-                if (distance < 0.2f &&
-                    distance > 0.001f) // > 0.001f evita divis�o por zero se estiverem no exato mesmo pixel
-                {
-                    // 3. Calculamos a dire��o para fugir do colega
-                    Vector3 pushDir = transform.position - otherEnemy.transform.position;
-                    pushDir.y = 0; // Garante que ningu�m vai voar
-
-                    // Acumulamos a for�a de repuls�o
-                    separationVector += pushDir.normalized;
-                    pushCount++;
-                }
+                closest = GameManager.Instance.player;
+                closestDistSqr = (closest.position - transform.position).sqrMagnitude;
             }
 
-            // 4. Se precisamos ser empurrados, ajustamos a dire��o principal do inimigo!
-            if (pushCount > 0)
+            var allies = Ally.Ally.ActiveAllies;
+            foreach (var ally in allies)
             {
-                // Tira a m�dia da repuls�o para n�o ser arremessado longe se tiverem 5 zumbis perto
-                separationVector /= pushCount;
+                if (!ally) continue;
 
-                // Misturamos a vontade de "ir at� o player" com a vontade de "afastar dos amigos"
-                // Esse 1.5f � a FOR�A do empurr�o. Aumente se quiser que eles espalhem mais r�pido.
-                MovementDirection += separationVector * 1.5f;
-                MovementDirection.Normalize();
+                var distSqr = (ally.transform.position - transform.position).sqrMagnitude;
+                if (!(distSqr < closestDistSqr)) continue;
+                closestDistSqr = distSqr;
+                closest = ally.transform;
             }
+
+            return closest;
+        }
+
+        private void PushNearbyEnemies()
+        {
+            var separationVector = Vector3.zero;
+            var pushCount = 0;
+
+            foreach (var otherEnemy in EnemySpawner.Instance.GetEnemiesInSpatialGroup(spatialGroup))
+            {
+                if (!otherEnemy || otherEnemy == this) continue;
+
+                var distance = Mathf.Abs(transform.position.x - otherEnemy.transform.position.x) +
+                               Mathf.Abs(transform.position.z - otherEnemy.transform.position.z);
+
+                if (!(distance < 0.2f) || !(distance > 0.001f)) continue;
+                
+                var pushDir = transform.position - otherEnemy.transform.position;
+                pushDir.y = 0;
+
+                separationVector += pushDir.normalized;
+                pushCount++;
+            }
+
+            if (pushCount <= 0) return;
+            separationVector /= pushCount;
+            
+            MovementDirection += separationVector * 1.5f;
+            MovementDirection.Normalize();
         }
     }
 }

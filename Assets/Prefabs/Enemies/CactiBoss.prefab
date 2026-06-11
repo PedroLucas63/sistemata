@@ -123,11 +123,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5064950292464831959}
-  - component: {fileID: -7975872942967225159}
   - component: {fileID: 4650375570613019478}
   - component: {fileID: 6917756140943482592}
   - component: {fileID: 2639814325685152492}
-  - component: {fileID: 2815800001826609760}
+  - component: {fileID: 7130518854873482354}
   m_Layer: 0
   m_Name: CactiBoss
   m_TagString: Enemy
@@ -151,21 +150,6 @@ Transform:
   - {fileID: 2259855901146839515}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
---- !u!114 &-7975872942967225159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6564470530625821964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 746a9286f3659ea4eab94f43d034c79f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  despawnDistance: 55
-  spatialGroup: {x: 0, y: 0}
-  baseData: {fileID: 11400000, guid: 84e249af0beab4810b0ec4dfd4c5d33f, type: 2}
 --- !u!114 &4650375570613019478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,7 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19ff904edb224ac5bec87ab5cd4e1a96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Enemy.CactiAnimatorController
---- !u!114 &2815800001826609760
+--- !u!114 &7130518854873482354
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -211,10 +195,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6564470530625821964}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aca55c3c1ac9426ca90ad4c6222af1c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a22b84b91124289b3eaf94e0354be45, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Enemy.Cacti.CactiController
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Enemy.MeleeEnemy
   despawnDistance: 55
   spatialGroup: {x: 0, y: 0}
   baseData: {fileID: 11400000, guid: 84e249af0beab4810b0ec4dfd4c5d33f, type: 2}
-  IsAttacking: 0
+  meleeAttackRange: 1.3

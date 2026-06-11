@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Sistemata.Stats;
 
 namespace Sistemata.Upgrades
@@ -15,5 +16,19 @@ namespace Sistemata.Upgrades
         public static void RegisterAlly(string id, EntityStats stats) => _allyRegistry[id] = stats;
         public static void UnregisterAlly(string id) => _allyRegistry.Remove(id);
         public static EntityStats GetAlly(string id) => _allyRegistry.GetValueOrDefault(id);
+        
+        public static void ApplyUpgradeToAllMatchingAttacks(string targetId, StatType stat, StatModifier modifier)
+        {
+            var matchingPairs = _attackRegistry
+                .Where(kvp => kvp.Key == targetId || kvp.Key.EndsWith($"_{targetId}"))
+                .ToList();
+
+            foreach (var pair in matchingPairs
+                         .Where(pair => pair.Value)
+            )
+            {
+                pair.Value.ApplyUpgrade(stat, modifier);
+            }
+        }
     }
 }

@@ -1,9 +1,10 @@
+using System;
 using Sistemata.Core;
 using Sistemata.Player;
 using Sistemata.Stats;
+using Sistemata.Enemy;
+using Sistemata.Ally;
 using UnityEngine;
-using UnityEngine.Pool;
-using UnityEngine.Serialization;
 
 namespace Sistemata.Attack
 {
@@ -14,32 +15,29 @@ namespace Sistemata.Attack
         [SerializeField] private float arrowSpeed = 12f;
         [SerializeField] private float fanAngleSpread = 15f;
         
-        private ObjectPool<Projectile> _arrowPool;
+        private Ally.Ally _cachedAllyOwner;
+        private EnemyController _cachedEnemyOwner;
 
         protected override void Start()
         {
             base.Start();
-
-            _arrowPool = new ObjectPool<Projectile>(
-                createFunc: CreateProjectile,
-                actionOnGet: OnTakeFromPool,
-                actionOnRelease: OnReturnedToPool,
-                actionOnDestroy: OnDestroyPoolObject,
-                collectionCheck: true,
-                defaultCapacity: 20,
-                maxSize: 100
-            );
+            
+            _cachedAllyOwner = GetComponentInParent<Ally.Ally>();
+            _cachedEnemyOwner = GetComponentInParent<EnemyController>();
         }
+
         protected override void ExecuteAttack()
         {
+            if (!ProjectilePoolManager.Instance || !arrowPrefab) return;
+
             var amount = Mathf.Max(1, Mathf.FloorToInt(AttackStats.GetStat(StatType.Amount).Get()));
             var damage = Damage;
             var ricochet = AttackStats.GetStat(StatType.Ricochet).Get();
             var size = AttackStats.GetStat(StatType.AreaSize).Get();
 
-            var baseDirection = transform.right; 
-            if (PlayerManager.Instance)
-                baseDirection = PlayerManager.Instance.GetDirection(); 
+            var baseDirection = GetOwnerForwardDirection(); 
+
+            var targetTag = belongsToPlayer || _cachedAllyOwner ? "Enemy" : "Player";
 
             var startAngle = -((amount - 1) * fanAngleSpread) / 2f;
 
@@ -49,33 +47,44 @@ namespace Sistemata.Attack
                 var spawnDirection = Quaternion.Euler(0, currentAngle, 0) * baseDirection;
                 var spawnPosition = transform.position + 0.5f * baseDirection;
 
-                var proj = _arrowPool.Get();
-                proj.transform.position = spawnPosition;
-                proj.Setup(spawnDirection, arrowSpeed, damage, ricochet, size);
+                var proj = ProjectilePoolManager.Instance.GetProjectile(arrowPrefab, spawnPosition, Quaternion.identity);
+                
+                if (proj)
+                    proj.Setup(spawnDirection, arrowSpeed, damage, ricochet, size, targetTag);
             }
         }
-        
-        private Projectile CreateProjectile()
-        {
-            var parent = GameManager.Instance.ProjectileParent;
-            var proj = Instantiate(arrowPrefab, parent);
-            proj.ManagedPool = _arrowPool;
-            return proj;
-        }
-        
-        private static void OnTakeFromPool(Projectile proj)
-        {
-            proj.gameObject.SetActive(true);
-        }
 
-        private static void OnReturnedToPool(Projectile proj)
+        /// <summary>
+        /// Calcula matematicamente a "frente" real para onde o dono está apontando no plano XZ
+        /// </summary>
+        private Vector3 GetOwnerForwardDirection()
         {
-            proj.gameObject.SetActive(false);
-        }
+            var forwardVector = transform.right; // Failsafe padrão
 
-        private static void OnDestroyPoolObject(Projectile proj)
-        {
-            Destroy(proj.gameObject);
+            if (belongsToPlayer && PlayerManager.Instance)
+            {
+                forwardVector = PlayerManager.Instance.GetDirection();
+            }
+            else if (_cachedAllyOwner)
+            {
+                var allyLook = _cachedAllyOwner.LastMove;
+                if (allyLook.sqrMagnitude > 0.001f)
+                {
+                    forwardVector = new Vector3(allyLook.x, 0f, allyLook.y);
+                }
+            }
+            else if (_cachedEnemyOwner)
+            {
+                forwardVector = transform.parent ? transform.parent.forward :
+                    transform.right;
+            }
+
+            forwardVector.y = 0;
+
+            if (forwardVector.sqrMagnitude < 0.001f)
+                forwardVector = transform.right;
+
+            return forwardVector.normalized;
         }
     }
 }

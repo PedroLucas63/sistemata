@@ -14,6 +14,9 @@ namespace Sistemata.Attack
         
         [Header("Valores de Ataque")]
         [SerializeField] protected AttackBaseData baseData;
+        
+        [Header("Vínculo do Ataque")]
+        [SerializeField] protected bool belongsToPlayer = true;
 
         protected EntityStats AttackStats { get; private set; }
         private float _attackTimer;
@@ -26,7 +29,17 @@ namespace Sistemata.Attack
         protected virtual void Start()
         {
             InitializeAllBaseStats();
-            RegisterTag();
+            
+            if (belongsToPlayer)
+            {
+                RegisterTag();
+            }
+            else
+            {
+                var uniqueId = $"{transform.root.name}_{attackID}";
+                UpgradeRegistry.RegisterAttack(uniqueId, AttackStats);
+            }
+            
             ResetTimer();
         }
 
@@ -64,7 +77,15 @@ namespace Sistemata.Attack
 
         protected virtual void OnDestroy()
         {
-            UpgradeRegistry.UnregisterAttack(attackID);
+            if (belongsToPlayer)
+            {
+                UpgradeRegistry.UnregisterAttack(attackID);
+            }
+            else
+            {
+                var uniqueId = $"{transform.root.name}_{attackID}";
+                UpgradeRegistry.UnregisterAttack(uniqueId);
+            }
         }
 
         protected float Damage
@@ -73,7 +94,8 @@ namespace Sistemata.Attack
             {
                 var weaponDamage = AttackStats.GetStat(StatType.Damage).Get();
                 
-                if (!PlayerManager.Instance) return weaponDamage;
+                // Se não pertence ao player ou se o PlayerManager não existe, usamos apenas o dano da arma
+                if (!belongsToPlayer || !PlayerManager.Instance) return weaponDamage;
 
                 var playerWeight = 1f;
                 var playerStat = PlayerManager.Instance.GetStat(StatType.Strength);
@@ -89,7 +111,8 @@ namespace Sistemata.Attack
             {
                 var weaponRate = AttackStats.GetStat(StatType.AttackRate).Get();
                 
-                if (!PlayerManager.Instance) return weaponRate;
+                // Se não pertence ao player ou se o PlayerManager não existe, usamos apenas a cadência da arma
+                if (!belongsToPlayer || !PlayerManager.Instance) return weaponRate;
 
                 var playerRate = 1f;
                 var playerStat = PlayerManager.Instance.GetStat(StatType.AttackRate);

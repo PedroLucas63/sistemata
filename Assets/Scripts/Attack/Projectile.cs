@@ -25,17 +25,22 @@ namespace Sistemata.Attack
         private float _damage;
         private float _ricochetsLeft;
         private float _currentLifetime;
-        private const string EnemyTag = "Enemy";
+        
+        private string _targetTag = "Enemy"; 
         
         public IObjectPool<Projectile> ManagedPool { get; set; }
 
-        public void Setup(Vector3 direction, float speed, float damage, float ricochet, float size)
+        /// <summary>
+        /// Configura o projétil injetando comportamento, física e a tag alvo que ele deve colidir.
+        /// </summary>
+        public void Setup(Vector3 direction, float speed, float damage, float ricochet, float size, string targetTag = "Enemy")
         {
             _direction = new Vector3(direction.x, 0f, direction.z).normalized;
             _speed = speed;
             _damage = damage;
             _ricochetsLeft = ricochet;
             _currentLifetime = 0f;
+            _targetTag = targetTag;
             
             transform.localScale = Vector3.one * size;
             
@@ -87,13 +92,18 @@ namespace Sistemata.Attack
         
         private void OnTriggerEnter(Collider collision)
         {
-            if (!collision.CompareTag(EnemyTag)) return;
+            if (!collision.CompareTag(_targetTag)) return;
             
-            // TODO: CHAMAR AÇÃO DE DANO NO INIMIGO
-            var enemy = collision.GetComponent<EnemyController>();
-            if (!enemy) return;
-            
-            enemy.TakeDamage(_damage);
+            if (_targetTag == "Enemy")
+            {
+                var enemy = collision.GetComponentInParent<EnemyController>();
+                if (enemy) enemy.TakeDamage(_damage);
+            }
+            else 
+            {
+                var health = collision.GetComponentInParent<EntityHealth>();
+                if (health) health.TakeDamage(_damage);
+            }
             
             if (_ricochetsLeft > 0)
             {
@@ -104,7 +114,6 @@ namespace Sistemata.Attack
             {
                 ReleaseProjectile();
             }
-            
         }
         
         public void ReleaseProjectile()

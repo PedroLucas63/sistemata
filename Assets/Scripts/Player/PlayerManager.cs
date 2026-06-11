@@ -1,4 +1,5 @@
 using Sistemata.Attack;
+using Sistemata.Common;
 using Sistemata.Stats;
 using UnityEngine;
 using Sistemata.Upgrades;
@@ -17,6 +18,7 @@ namespace Sistemata.Player
         [SerializeField] private Transform attacksContainer;
         
         private EntityStats _stats;
+        private EntityHealth _playerHealth;
         private PlayerMovement _playerMovement;
         private int currentAttacks = 0;
         
@@ -31,6 +33,7 @@ namespace Sistemata.Player
             
             _stats = GetComponent<EntityStats>();
             _playerMovement = GetComponent<PlayerMovement>();
+            _playerHealth = GetComponent<EntityHealth>();
             if (attacksContainer == null) attacksContainer = transform;
         }
 
@@ -38,6 +41,23 @@ namespace Sistemata.Player
         {
             InitializeAllBaseStats();
             SpawnStartingAttack();
+            ConfigurePlayerHealth();
+        }
+
+         private void ConfigurePlayerHealth()
+        {
+            _playerHealth.OnDeath += HandleDeath;
+        }
+        
+        private void HandleDeath()
+        {
+            _playerHealth.OnDeath -= HandleDeath;
+            Destroy(gameObject);
+        }
+
+        public void TakeDamage(float damage)
+        {
+            _playerHealth.TakeDamage(damage);
         }
 
         private void InitializeAllBaseStats()
