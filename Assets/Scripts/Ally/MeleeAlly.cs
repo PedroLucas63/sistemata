@@ -12,6 +12,14 @@ namespace Sistemata.Ally
         {
             if (!TargetEnemy) return;
 
+            // Adicionamos um pequeno atraso para o dano acontecer quando a animação "acertar"
+            Invoke(nameof(ApplyMeleeDamage), 0.15f);
+        }
+
+        private void ApplyMeleeDamage()
+        {
+            if (!TargetEnemy) return;
+
             TargetEnemy.TakeDamage(Damage);
             if (hitEffectPrefab)
                 Instantiate(hitEffectPrefab, TargetEnemy.transform.position, Quaternion.identity);

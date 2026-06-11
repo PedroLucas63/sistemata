@@ -18,8 +18,13 @@ namespace Sistemata.Attack
         [Header("Vínculo do Ataque")]
         [SerializeField] protected bool belongsToPlayer = true;
 
+        [Header("Controle de Sincronização")]
+        [Tooltip("Se marcado, o ataque NÃO dispara sozinho pelo timer. Ele esperará uma chamada externa (ex: Evento de Animação).")]
+        [SerializeField] protected bool useManualTrigger = false;
+
         protected EntityStats AttackStats { get; private set; }
         private float _attackTimer;
+        private bool _canAttackManual = true;
 
         protected virtual void Awake()
         {
@@ -52,6 +57,7 @@ namespace Sistemata.Attack
 
         protected virtual void InitializeAllBaseStats()
         {
+            AttackStats.InitializeStat(StatType.MaxHealth, 100f); // Failsafe para EntityHealth não reclamar
             AttackStats.InitializeStat(StatType.Damage, baseData.DefaultDamage);
             AttackStats.InitializeStat(StatType.AttackRate, baseData.DefaultAttackRate);
             AttackStats.InitializeStat(StatType.Amount, baseData.DefaultAmount);
@@ -62,8 +68,28 @@ namespace Sistemata.Attack
         private void Update()
         {
             _attackTimer -= Time.deltaTime;
+
+            if (useManualTrigger)
+            {
+                if (_attackTimer <= 0f)
+                {
+                    _canAttackManual = true;
+                }
+                return;
+            }
+
             if (!(_attackTimer <= 0f)) return;
             ExecuteAttack();
+            ResetTimer();
+        }
+
+        public void TriggerAttack()
+        {
+            // Se o timer ainda não resetou, ignoramos o gatilho manual para respeitar o AttackRate
+            if (!useManualTrigger || !_canAttackManual) return;
+
+            ExecuteAttack();
+            _canAttackManual = false;
             ResetTimer();
         }
 

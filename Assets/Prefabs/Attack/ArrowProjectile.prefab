@@ -106,14 +106,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 534fe463f84c42a492818323662156c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Attack.Projectile
-  spriteRenderer: {fileID: 5846266349560991619}
-  directionalSprites:
-  - {fileID: 21300000, guid: 3c3caefed778165b6b355ce70417b031, type: 3}
-  - {fileID: 21300000, guid: 554ea31fbc0d754ea8df384d0ee84d9c, type: 3}
-  - {fileID: 21300000, guid: 3b5e84c0bea0f2d6e952cc159dbe41ab, type: 3}
-  - {fileID: 21300000, guid: f5d256df24768af3581be5695b2c48f4, type: 3}
+  visualChild: {fileID: 0}
+  perspectiveYFactor: 0.6
   maxLifetime: 5
   maxRangeFromPlayer: 20
+  allyOutlineMaterial: {fileID: 2100000, guid: 47709a391b3396b37ae9d2a97e7ef420, type: 2}
+  enemyOutlineMaterial: {fileID: 2100000, guid: aad809ad909b10c9f9eb08c7864a9312, type: 2}
 --- !u!54 &8466532948187882965
 Rigidbody:
   m_ObjectHideFlags: 0

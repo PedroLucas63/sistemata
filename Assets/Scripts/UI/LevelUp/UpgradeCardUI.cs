@@ -40,6 +40,8 @@ namespace UI.LevelUp
 
         private void SetQualityColor(UpgradeQuality quality)
         {
+            if (!backgroundQualityImage) return;
+
             backgroundQualityImage.color = quality switch
             {
                 UpgradeQuality.Normal => Color.white,

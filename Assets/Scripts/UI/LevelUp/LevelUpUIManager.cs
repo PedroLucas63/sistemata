@@ -51,8 +51,14 @@ namespace UI.LevelUp
         public void TriggerLevelUp()
         {
             _currentOptions = UpgradePoolManager.Instance.GetRandomUpgrades(3);
-            if (_currentOptions.Count == 0) return;
+            
+            if (_currentOptions == null || _currentOptions.Count == 0)
+            {
+                Debug.LogWarning("Nenhum upgrade disponível na Pool!");
+                return;
+            }
 
+            // Ativa o painel antes de configurar os cards
             levelUpPanel.SetActive(true);
             Time.timeScale = 0f;
             
@@ -68,9 +74,12 @@ namespace UI.LevelUp
                 }
                 else
                 {
+                    // Desativa os cards que não têm dados (caso venham menos de 3)
                     cardsUI[i].gameObject.SetActive(false);
                 }
             }
+            
+            Debug.Log($"Tela de Level Up aberta com {_currentOptions.Count} opções.");
         }
 
         private void OnUpgradeSelected(UpgradeData selectedData)

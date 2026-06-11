@@ -15,8 +15,8 @@ MonoBehaviour:
   DefaultMaxHealth: 100
   DefaultHealthRegen: 1
   DefaultMoveSpeed: 5
-  DefaultPickupRadius: 2
-  DefaultDamage: 10
+  DefaultPickupRadius: 3
+  DefaultStrength: 1
   DefaultAttackRate: 1
   DefaultArmor: 1
   DefaultSummonCap: 3

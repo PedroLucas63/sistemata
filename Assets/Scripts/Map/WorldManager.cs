@@ -31,6 +31,8 @@ namespace Sistemata.Map
 
         private void Update()
         {
+            if (_player == null) return;
+
             var playerPos = _player.transform.position;
             var chunkId = GetChunkIdByPosition(playerPos);
 

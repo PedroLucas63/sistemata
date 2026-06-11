@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2259855901146839515}
   - component: {fileID: 5342865070817071403}
   - component: {fileID: 6328171769439790642}
+  - component: {fileID: 8720630690145043430}
   m_Layer: 3
   m_Name: Visual
   m_TagString: Untagged
@@ -81,7 +82,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: aad809ad909b10c9f9eb08c7864a9312, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -114,6 +115,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 1
+--- !u!114 &8720630690145043430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478192879998491187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8458693499ea092b1bd779e1d279230d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Common.AnimationEventBridge
 --- !u!1 &6564470530625821964
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,4 +266,11 @@ MonoBehaviour:
   despawnDistance: 55
   spatialGroup: {x: 0, y: 0}
   baseData: {fileID: 11400000, guid: d3943c2b6cb00a3799e46e3117e629f9, type: 2}
+  xpPrefab: {fileID: 8399440314936118968, guid: a41e6bbfe515b4eaea289575b569459b, type: 3}
+  minXP: 1
+  maxXP: 3
+  coinPrefab: {fileID: 3815465021333323952, guid: 27223886b14987037b5a8c7511d1b77a, type: 3}
+  coinDropChance: 0.1
+  minCoin: 1
+  maxCoin: 2
   meleeAttackRange: 1.3

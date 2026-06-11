@@ -62,4 +62,4 @@ MonoBehaviour:
   baseData: {fileID: 11400000, guid: a788f9e2332d8b2d9821ff0a81c0fce0, type: 2}
   belongsToPlayer: 1
   projectilePrefab: {fileID: 4654985686313772912, guid: 9374b90d5decc0a72959f6e9788a5b73, type: 3}
-  projectileSpeed: 15
+  projectileSpeed: 8

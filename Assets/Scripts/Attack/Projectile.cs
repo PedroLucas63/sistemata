@@ -20,11 +20,16 @@ namespace Sistemata.Attack
         [Tooltip("Distância máxima do Player antes de ser reciclado.")]
         [SerializeField] private float maxRangeFromPlayer = 20f;
         
+        [Header("Materiais de Contorno")]
+        [SerializeField] private Material allyOutlineMaterial;
+        [SerializeField] private Material enemyOutlineMaterial;
+
         private Vector3 _direction;
         private float _speed;
         private float _damage;
         private float _ricochetsLeft;
         private float _currentLifetime;
+        private SpriteRenderer _spriteRenderer;
         
         private string _targetTag = "Enemy"; 
         
@@ -44,16 +49,46 @@ namespace Sistemata.Attack
             
             transform.localScale = Vector3.one * size;
             
-            if (!visualChild && transform.childCount > 0)
-                visualChild = transform.GetChild(0);
+            // Busca robusta pelo SpriteRenderer
+            if (_spriteRenderer == null)
+            {
+                if (visualChild != null) _spriteRenderer = visualChild.GetComponent<SpriteRenderer>();
+                if (_spriteRenderer == null) _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+                if (_spriteRenderer == null) _spriteRenderer = GetComponent<SpriteRenderer>();
+            }
 
             if (visualChild)
             {
                 visualChild.localRotation = Quaternion.Euler(90f, 0f, 0f);
                 visualChild.localScale = new Vector3(1f, 1f * perspectiveYFactor, 1f);
             }
+
+            if (_spriteRenderer != null)
+            {
+                ApplyOutlineMaterial(targetTag);
+            }
             
             UpdateDirectionalBehavior();
+        }
+
+        private void ApplyOutlineMaterial(string target)
+        {
+            // Se o alvo for "Enemy", o projétil é do Jogador/Aliado -> Branco
+            if (target == "Enemy")
+            {
+                if (allyOutlineMaterial != null)
+                {
+                    _spriteRenderer.material = allyOutlineMaterial;
+                }
+            }
+            // Se o alvo for "Player", o projétil é do Inimigo -> Vermelho
+            else
+            {
+                if (enemyOutlineMaterial != null)
+                {
+                    _spriteRenderer.material = enemyOutlineMaterial;
+                }
+            }
         }
         
         private void Update()

@@ -72,7 +72,42 @@ namespace Sistemata.Ally
         protected virtual void HandleDeath()
         {
             Health.OnDeath -= HandleDeath;
-            Debug.Log($"[{gameObject.name}] Aliado morreu.");
+            
+            // --- NOVO: Trava o aliado ---
+            this.enabled = false; 
+            MovementDirection = Vector3.zero;
+
+            var anim = GetComponentInChildren<Animator>();
+            if (anim) anim.enabled = false;
+
+            var collider = GetComponent<Collider>();
+            if (collider) collider.enabled = false;
+            // ---------------------------
+
+            StartCoroutine(DeathSequence());
+        }
+
+        private System.Collections.IEnumerator DeathSequence()
+        {
+            float duration = 0.5f;
+            float elapsed = 0f;
+            Quaternion startRotation = SpriteRenderer ? SpriteRenderer.transform.localRotation : transform.localRotation;
+            Quaternion endRotation = startRotation * Quaternion.Euler(0, 0, 90f);
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / duration;
+                
+                if (SpriteRenderer)
+                    SpriteRenderer.transform.localRotation = Quaternion.Slerp(startRotation, endRotation, t);
+                else
+                    transform.localRotation = Quaternion.Slerp(startRotation, endRotation, t);
+                    
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(0.5f);
             Destroy(gameObject);
         }
         

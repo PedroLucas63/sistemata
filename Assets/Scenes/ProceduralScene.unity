@@ -641,6 +641,17 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &605478560 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 753570039062682906, guid: af30da06091277a4e88811447603d094, type: 3}
+  m_PrefabInstance: {fileID: 4545413730765709439}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53254bdac828402d9de4562d056d85f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.LevelUp.UpgradeCardUI
 --- !u!1 &641336922
 GameObject:
   m_ObjectHideFlags: 0
@@ -1624,6 +1635,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1300084064}
   m_CullTransparentMesh: 1
+--- !u!1 &1306491124
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1306491126}
+  - component: {fileID: 1306491125}
+  m_Layer: 0
+  m_Name: CollectibleHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1306491125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306491124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59df786a17da71be9bf0ee6db016beb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Common.CollectablePoolManager
+  maxPoolSize: 2000
+--- !u!4 &1306491126
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306491124}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.344, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1546842691 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3797970589339536869, guid: af30da06091277a4e88811447603d094, type: 3}
@@ -2052,6 +2108,14 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: maxSpawnRadius
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: minSpawnRadius
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: chaosSpawnDelay
       value: 0.2
       objectReference: {fileID: 0}
@@ -2069,18 +2133,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: BossPrefabs.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: EnemyPrefabs.Array.size
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: BossPrefabs.Array.data[0].Enemy
       value: 
       objectReference: {fileID: 7130518854873482354, guid: cfbdf3c8af9cc7e449ac2a91dc672761, type: 3}
     - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: BossPrefabs.Array.data[1].Enemy
+      value: 
+      objectReference: {fileID: 5066702936169762682, guid: 12fb468be9f6621bcbc1faa9f4bd431e, type: 3}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: BossPrefabs.Array.data[0].Weight
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: BossPrefabs.Array.data[1].Weight
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
@@ -2088,8 +2160,32 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 863410815870789386, guid: 0ee131150ee0c504daa4fd15b372931f, type: 3}
     - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: EnemyPrefabs.Array.data[1].Enemy
+      value: 
+      objectReference: {fileID: 7503366709453120761, guid: 3d9655f35386188879b67ced66aa2a29, type: 3}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: EnemyPrefabs.Array.data[2].Enemy
+      value: 
+      objectReference: {fileID: 863410815870789386, guid: 2e244a1177bf87708b11602ed680240b, type: 3}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: EnemyPrefabs.Array.data[3].Enemy
+      value: 
+      objectReference: {fileID: 7503366709453120761, guid: fb8c8a09e834731969ef02a4ce49084b, type: 3}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: EnemyPrefabs.Array.data[0].Weight
-      value: 10
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: EnemyPrefabs.Array.data[1].Weight
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: EnemyPrefabs.Array.data[2].Weight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: EnemyPrefabs.Array.data[3].Weight
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3726457396479981460, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: m_Name
@@ -2136,6 +2232,17 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1771008953 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6432036504935049288, guid: af30da06091277a4e88811447603d094, type: 3}
+  m_PrefabInstance: {fileID: 4545413730765709439}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53254bdac828402d9de4562d056d85f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.LevelUp.UpgradeCardUI
 --- !u!1 &1789167080
 GameObject:
   m_ObjectHideFlags: 0
@@ -2567,9 +2674,25 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2061901203916069280, guid: af30da06091277a4e88811447603d094, type: 3}
+      propertyPath: 'cardsUI.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1771008953}
+    - target: {fileID: 2061901203916069280, guid: af30da06091277a4e88811447603d094, type: 3}
+      propertyPath: 'cardsUI.Array.data[2]'
+      value: 
+      objectReference: {fileID: 605478560}
     - target: {fileID: 2485319202711873336, guid: af30da06091277a4e88811447603d094, type: 3}
       propertyPath: m_Name
       value: Gameplay UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 2751054303357674047, guid: af30da06091277a4e88811447603d094, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2751054303357674047, guid: af30da06091277a4e88811447603d094, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3137606460196493078, guid: af30da06091277a4e88811447603d094, type: 3}
       propertyPath: availableUpgradesPool.Array.size
@@ -2914,3 +3037,4 @@ SceneRoots:
   - {fileID: 1813775070}
   - {fileID: 1789167081}
   - {fileID: 1114772619}
+  - {fileID: 1306491126}

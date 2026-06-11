@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FormigaAllyBaseData
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Ally.AllyBaseData
   DefaultMaxHealth: 400
-  DefaultMoveSpeed: 2
+  DefaultMoveSpeed: 3
   DefaultDamage: 8
-  DefaultAttackRate: 0.8
+  DefaultAttackRate: 0.3
   DefaultArmor: 3

@@ -70,10 +70,94 @@ namespace Sistemata.Enemy
             Health.OnDeath += HandleDeath;
         }
         
+        [Header("Loot")]
+        [SerializeField] protected Collectible xpPrefab;
+        [SerializeField] protected float minXP = 1f;
+        [SerializeField] protected float maxXP = 5f;
+        
+        [Space]
+        [SerializeField] protected Collectible coinPrefab;
+        [Range(0, 1)] [SerializeField] protected float coinDropChance = 0.1f;
+        [SerializeField] protected int minCoin = 1;
+        [SerializeField] protected int maxCoin = 3;
+
         protected virtual void HandleDeath()
         {
             Health.OnDeath -= HandleDeath;
-            Debug.Log($"[{gameObject.name}] HandleDeath executado. Destruindo objeto.");
+            
+            // Contabiliza a morte no GameManager
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.AddKill();
+            }
+
+            // --- Spawn de Loot ---
+            SpawnLoot();
+
+            // --- Trava o personagem ---
+            this.enabled = false; 
+            MovementDirection = Vector3.zero;
+            
+            var anim = GetComponentInChildren<Animator>();
+            if (anim) anim.enabled = false; 
+
+            var collider = GetComponent<Collider>();
+            if (collider) collider.enabled = false; 
+
+            StartCoroutine(DeathSequence());
+        }
+
+        private void SpawnLoot()
+        {
+            if (CollectablePoolManager.Instance == null) return;
+
+            // Spawn sempre de XP com valor aleatório
+            if (xpPrefab != null)
+            {
+                var xpInstance = CollectablePoolManager.Instance.Spawn(xpPrefab, transform.position);
+                if (xpInstance != null)
+                {
+                    float randomXP = UnityEngine.Random.Range(minXP, maxXP);
+                    xpInstance.SetValue(randomXP);
+                }
+            }
+
+            // Spawn de Moeda baseado em chance com valor aleatório
+            if (coinPrefab != null && UnityEngine.Random.value <= coinDropChance)
+            {
+                var coinInstance = CollectablePoolManager.Instance.Spawn(coinPrefab, transform.position);
+                if (coinInstance != null)
+                {
+                    int randomCoin = UnityEngine.Random.Range(minCoin, maxCoin + 1);
+                    coinInstance.SetValue(randomCoin);
+                }
+            }
+        }
+
+        private System.Collections.IEnumerator DeathSequence()
+        {
+            float duration = 0.5f;
+            float elapsed = 0f;
+            Quaternion startRotation = SpriteRenderer ? SpriteRenderer.transform.localRotation : transform.localRotation;
+            // Rotaciona 90 graus no eixo Z para "cair de lado"
+            Quaternion endRotation = startRotation * Quaternion.Euler(0, 0, 90f);
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / duration;
+                
+                if (SpriteRenderer)
+                    SpriteRenderer.transform.localRotation = Quaternion.Slerp(startRotation, endRotation, t);
+                else
+                    transform.localRotation = Quaternion.Slerp(startRotation, endRotation, t);
+                    
+                yield return null;
+            }
+
+            // Espera um pouco antes de sumir
+            yield return new WaitForSeconds(0.5f);
+            
             Destroy(gameObject);
         }
 

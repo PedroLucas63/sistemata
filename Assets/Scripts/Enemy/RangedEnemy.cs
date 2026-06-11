@@ -47,27 +47,34 @@ namespace Sistemata.Enemy
             else if (distanceToTarget <= shootRange)
             {
                 MovementDirection = Vector3.zero;
-                if (toTarget.sqrMagnitude > 0.001f)
+                
+                // Rotação visual baseada na direção do alvo
+                if (toTarget.sqrMagnitude > 0.001f && SpriteRenderer)
                 {
-                    var lookDir = toTarget.normalized;
-                    if (SpriteRenderer)
-                    {
-                        SpriteRenderer.flipX = lookDir.x switch
-                        {
-                            < -0.01f => true,
-                            > 0.01f => false,
-                            _ => SpriteRenderer.flipX
-                        };
-                    }
+                    SpriteRenderer.flipX = toTarget.x < -0.01f;
                 }
 
-                if (!(AttackTimer <= 0f)) return;
-                AttackTimer = AttackCooldown;
-                AttackVisualTimer = Mathf.Min(0.25f, AttackCooldown * 0.5f);
+                if (AttackTimer <= 0f)
+                {
+                    AttackTimer = AttackCooldown;
+                    // Ativa o estado de IsAttacking para o AnimatorController disparar o Trigger de Attack
+                    AttackVisualTimer = Mathf.Min(0.25f, AttackCooldown * 0.5f);
+                }
             }
             else
             {
                 MovementDirection = toTarget.normalized;
+            }
+        }
+
+        /// <summary>
+        /// Chamado via Animation Event na animação de ataque
+        /// </summary>
+        public void OnAnimationAttackEvent()
+        {
+            if (_instantiatedAttack != null)
+            {
+                _instantiatedAttack.TriggerAttack();
             }
         }
     }

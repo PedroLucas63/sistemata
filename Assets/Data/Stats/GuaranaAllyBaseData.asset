@@ -15,5 +15,5 @@ MonoBehaviour:
   DefaultMaxHealth: 300
   DefaultMoveSpeed: 5
   DefaultDamage: 15
-  DefaultAttackRate: 1
+  DefaultAttackRate: 0.6
   DefaultArmor: 1

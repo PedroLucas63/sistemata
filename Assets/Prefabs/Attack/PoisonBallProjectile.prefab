@@ -110,6 +110,8 @@ MonoBehaviour:
   perspectiveYFactor: 0.6
   maxLifetime: 5
   maxRangeFromPlayer: 20
+  allyOutlineMaterial: {fileID: 2100000, guid: 47709a391b3396b37ae9d2a97e7ef420, type: 2}
+  enemyOutlineMaterial: {fileID: 2100000, guid: aad809ad909b10c9f9eb08c7864a9312, type: 2}
 --- !u!54 &8466532948187882965
 Rigidbody:
   m_ObjectHideFlags: 0

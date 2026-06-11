@@ -22,7 +22,7 @@ namespace Sistemata.Common
             get
             {
                 _maxHealthStat ??= _stats.GetStat(StatType.MaxHealth);
-                return _maxHealthStat?.Get() ?? 1f; // Failsafe reduzido para evitar bugs de "imortalidade"
+                return _maxHealthStat?.Get() ?? 1f; 
             } 
         }
 
@@ -35,16 +35,26 @@ namespace Sistemata.Common
             } 
         }
 
+        [Header("Configurações de Dano")]
+        [SerializeField] private float damageCooldown = 0.3f;
+        private float _lastDamageTime;
+        
+        private SpriteRenderer _spriteRenderer;
+        private Color _originalColor = Color.white;
+        private Coroutine _flashCoroutine;
+
         private void Awake()
         {
             if (_stats == null) _stats = GetComponent<EntityStats>();
             if (_stats == null) _stats = GetComponentInParent<EntityStats>();
             if (_stats == null) _stats = GetComponentInChildren<EntityStats>();
+            
+            _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            if (_spriteRenderer != null) _originalColor = _spriteRenderer.color;
         }
 
         private void Start()
         {
-            // Se o CurrentHealth ainda é 0 (ou seja, não foi inicializado por fora), usamos o MaxHealth
             if (CurrentHealth <= 0)
             {
                 CurrentHealth = MaxHealth;
@@ -78,17 +88,37 @@ namespace Sistemata.Common
         {
             if (IsDead) return;
             
+            if (Time.time < _lastDamageTime + damageCooldown) return;
+            _lastDamageTime = Time.time;
+            
             CurrentHealth -= amount;
-            Debug.Log($"[{gameObject.name}] Levando dano: {amount} (HP Restante: {CurrentHealth}/{MaxHealth})");
+
+            // Feedback visual de dano
+            TriggerDamageFlash();
 
             if (CurrentHealth <= 0)
             {
                 CurrentHealth = 0;
-                Debug.Log($"[{gameObject.name}] Morreu!");
                 Die();
             }
 
             OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
+        }
+
+        private void TriggerDamageFlash()
+        {
+            if (_spriteRenderer == null) return;
+            
+            if (_flashCoroutine != null) StopCoroutine(_flashCoroutine);
+            _flashCoroutine = StartCoroutine(FlashRoutine());
+        }
+
+        private System.Collections.IEnumerator FlashRoutine()
+        {
+            _spriteRenderer.color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+            _spriteRenderer.color = _originalColor;
+            _flashCoroutine = null;
         }
 
         public void Heal(float amount)

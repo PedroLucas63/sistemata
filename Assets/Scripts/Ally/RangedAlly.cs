@@ -38,10 +38,33 @@ namespace Sistemata.Ally
             base.Update();
 
             if (!TargetEnemy) return;
+
+            if (AttackTimer <= 0)
+            {
+                AttackTimer = AttackCooldown;
+                AttackVisualTimer = Mathf.Min(0.25f, AttackCooldown * 0.5f);
+            }
+
             var distToEnemy = Vector3.Distance(transform.position, TargetEnemy.transform.position);
 
             if (distToEnemy < minKeepDistance)
                 RecueDoInimigo();
+        }
+
+        /// <summary>
+        /// Chamado via Animation Event na animação de ataque
+        /// </summary>
+        public void OnAnimationAttackEvent()
+        {
+            if (_instantiatedAttack != null)
+            {
+                _instantiatedAttack.TriggerAttack();
+            }
+        }
+
+        protected override void ExecuteAttack()
+        {
+            // O ataque agora é controlado via OnAnimationAttackEvent
         }
 
         private void RecueDoInimigo()
@@ -57,10 +80,6 @@ namespace Sistemata.Ally
             transform.position += retreatDirection * (MoveSpeed * Time.deltaTime);
             
             MovementDirection = retreatDirection;
-        }
-
-        protected override void ExecuteAttack()
-        {
         }
     }
 }

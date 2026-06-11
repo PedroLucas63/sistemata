@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CactiBaseData
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Enemy.EnemyBaseData
   DefaultMaxHealth: 15
-  DefaultMoveSpeed: 1
+  DefaultMoveSpeed: 2
   DefaultDamage: 5
   DefaultAttackRate: 1
   DefaultArmor: 1

@@ -27,14 +27,27 @@ namespace Sistemata.Enemy
             UpdateAnimation();
         }
         
+        private bool _wasAttackingLastFrame;
+
         private void UpdateAnimation()  
         {
+            if (!_animator || !_enemyController) return;
+
             _animator.SetFloat(MoveX, _enemyController.LastMove.x);
             _animator.SetFloat(MoveY, _enemyController.LastMove.y);
             _animator.SetFloat(Speed, _enemyController.MoveSpeed);
             _animator.SetFloat(MoveAnimSpeed, SpeedMultiplier);
+
             if (_enemyController.IsAttacking)
+            {
+                if (_wasAttackingLastFrame) return;
                 _animator.SetTrigger(Attack);
+                _wasAttackingLastFrame = true;
+            }
+            else
+            {
+                _wasAttackingLastFrame = false;
+            }
         }
     }
 }

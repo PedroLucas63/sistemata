@@ -17,9 +17,11 @@ namespace Sistemata.Enemy
                 if (AttackTimer <= 0f)
                 {
                     AttackTimer = AttackCooldown;
+                    // O IsAttacking fica ativo por AttackVisualTimer
                     AttackVisualTimer = Mathf.Min(0.25f, AttackCooldown * 0.5f);
                     
-                    ExecuteMeleeDamage();
+                    // Pequeno atraso para o dano sincronizar com o "swing" da animação
+                    Invoke(nameof(ExecuteMeleeDamage), 0.15f);
                 }
 
                 MovementDirection = Vector3.zero;
@@ -40,13 +42,11 @@ namespace Sistemata.Enemy
             if (health != null)
             {
                 health.TakeDamage(Damage);
-                Debug.Log($"{gameObject.name} atacou {CurrentTarget.name} causando {Damage} de dano!");
             }
             else if (CurrentTarget.CompareTag("Player"))
             {
                 // Fallback para o PlayerManager caso o alvo seja o Player e não encontramos o EntityHealth (segurança)
                 PlayerManager.Instance.TakeDamage(Damage);
-                Debug.Log($"{gameObject.name} atacou o Player via PlayerManager causando {Damage} de dano!");
             }
         }
     }
