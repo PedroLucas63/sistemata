@@ -1,0 +1,611 @@
+fileFormatVersion: 2
+guid: 78a51b1450f3e1e4094b14755fa6a807
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4029555697527122746
+    second: Sistemata Guarana lado E ataque_0
+  - first:
+      213: 4604759010815477214
+    second: Sistemata Guarana lado E ataque_1
+  - first:
+      213: -8279829708865959590
+    second: Sistemata Guarana lado E ataque_2
+  - first:
+      213: 5526585931196085488
+    second: Sistemata Guarana lado E ataque_3
+  - first:
+      213: 7986774514344249326
+    second: Sistemata Guarana lado E ataque_4
+  - first:
+      213: -5009838891844749904
+    second: Sistemata Guarana lado E ataque_5
+  - first:
+      213: -3926538138884961968
+    second: Sistemata Guarana lado E ataque_6
+  - first:
+      213: 8559801588504557403
+    second: Sistemata Guarana lado E ataque_7
+  - first:
+      213: 4845271922722657877
+    second: Sistemata Guarana lado E ataque_8
+  - first:
+      213: -8284649015784715117
+    second: Sistemata Guarana lado E ataque_9
+  - first:
+      213: -4687011300612430841
+    second: Sistemata Guarana lado E ataque_10
+  - first:
+      213: -1803525485623181749
+    second: Sistemata Guarana lado E ataque_11
+  - first:
+      213: 7438768110795752466
+    second: Sistemata Guarana lado E ataque_12
+  - first:
+      213: 8235899982401864664
+    second: Sistemata Guarana lado E ataque_13
+  - first:
+      213: -3457651722215085271
+    second: Sistemata Guarana lado E ataque_14
+  - first:
+      213: -3674081011718435566
+    second: Sistemata Guarana lado E ataque_15
+  - first:
+      213: 8853658313320109979
+    second: Sistemata Guarana lado E ataque_16
+  - first:
+      213: -4479350042046509395
+    second: Sistemata Guarana lado E ataque_17
+  - first:
+      213: 5700742538152993480
+    second: Sistemata Guarana lado E ataque_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_0
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 5
+        width: 48
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3b61c1be8bdbe730800000000000000
+      internalID: 4029555697527122746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_1
+      rect:
+        serializedVersion: 2
+        x: 141
+        y: 7
+        width: 48
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed58feb5ce367ef30800000000000000
+      internalID: 4604759010815477214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_2
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 11
+        width: 49
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a59815a8fb2281d80800000000000000
+      internalID: -8279829708865959590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_3
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 55
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f43d919f9062bc40800000000000000
+      internalID: 5526585931196085488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_4
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 7
+        width: 52
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee7c1a4ea19b6de60800000000000000
+      internalID: 7986774514344249326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_5
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 51
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b538a5321a797ab0800000000000000
+      internalID: -5009838891844749904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_6
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 6
+        width: 53
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0590dbacd522289c0800000000000000
+      internalID: -3926538138884961968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_7
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 51
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5773a661368ac670800000000000000
+      internalID: 8559801588504557403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_8
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 3
+        width: 55
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 556de02742ddd3340800000000000000
+      internalID: 4845271922722657877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_9
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 3
+        width: 46
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 39ccc553d93070d80800000000000000
+      internalID: -8284649015784715117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_10
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 7
+        width: 50
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70421c01e0464feb0800000000000000
+      internalID: -4687011300612430841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_11
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 4
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4ef016502798f6e0800000000000000
+      internalID: -1803525485623181749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_12
+      rect:
+        serializedVersion: 2
+        x: 221
+        y: 7
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2140c7a3f20db3760800000000000000
+      internalID: 7438768110795752466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_13
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 4
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d385b8f56bcb4270800000000000000
+      internalID: 8235899982401864664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_14
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 3
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92b2a5cf314f300d0800000000000000
+      internalID: -3457651722215085271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_15
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 2
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21dc38439ca030dc0800000000000000
+      internalID: -3674081011718435566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_16
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 2
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b971128c3538eda70800000000000000
+      internalID: 8853658313320109979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_17
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 1
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: daecf2f8ed626d1c0800000000000000
+      internalID: -4479350042046509395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana lado E ataque_18
+      rect:
+        serializedVersion: 2
+        x: 434
+        y: 3
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c26196722b1d1f40800000000000000
+      internalID: 5700742538152993480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Sistemata Guarana lado E ataque_0: 4029555697527122746
+      Sistemata Guarana lado E ataque_1: 4604759010815477214
+      Sistemata Guarana lado E ataque_10: -4687011300612430841
+      Sistemata Guarana lado E ataque_11: -1803525485623181749
+      Sistemata Guarana lado E ataque_12: 7438768110795752466
+      Sistemata Guarana lado E ataque_13: 8235899982401864664
+      Sistemata Guarana lado E ataque_14: -3457651722215085271
+      Sistemata Guarana lado E ataque_15: -3674081011718435566
+      Sistemata Guarana lado E ataque_16: 8853658313320109979
+      Sistemata Guarana lado E ataque_17: -4479350042046509395
+      Sistemata Guarana lado E ataque_18: 5700742538152993480
+      Sistemata Guarana lado E ataque_2: -8279829708865959590
+      Sistemata Guarana lado E ataque_3: 5526585931196085488
+      Sistemata Guarana lado E ataque_4: 7986774514344249326
+      Sistemata Guarana lado E ataque_5: -5009838891844749904
+      Sistemata Guarana lado E ataque_6: -3926538138884961968
+      Sistemata Guarana lado E ataque_7: 8559801588504557403
+      Sistemata Guarana lado E ataque_8: 4845271922722657877
+      Sistemata Guarana lado E ataque_9: -8284649015784715117
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

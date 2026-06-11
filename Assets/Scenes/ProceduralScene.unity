@@ -1319,6 +1319,56 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1114772617
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1114772619}
+  - component: {fileID: 1114772618}
+  m_Layer: 0
+  m_Name: AllySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1114772618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114772617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 149ffcfc6b7081d49be4d3f601cc7c24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AllySpawner
+  allyPrefab: {fileID: 1444332622434311970, guid: 35a482998be397a448ede5c5f528264f, type: 3}
+  amountToSpawn: 2
+  spawnRadius: 2
+  allySprites:
+  - {fileID: 1154967298955580547, guid: 03885fd4ebafb524585241478c8a257c, type: 3}
+  - {fileID: 3019155423022939230, guid: 12411599ef0cf554088ed3648fbb4886, type: 3}
+--- !u!4 &1114772619
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114772617}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.344, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1117911769
 GameObject:
   m_ObjectHideFlags: 0
@@ -2672,6 +2722,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1940310457}
     - target: {fileID: 5520307711142703031, guid: 87389200176828f4eadf34d3b91ce710, type: 3}
+      propertyPath: roundMusic
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520307711142703031, guid: 87389200176828f4eadf34d3b91ce710, type: 3}
+      propertyPath: timeUntilBoss
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520307711142703031, guid: 87389200176828f4eadf34d3b91ce710, type: 3}
       propertyPath: ProjectileParent
       value: 
       objectReference: {fileID: 1789167081}
@@ -2799,3 +2857,4 @@ SceneRoots:
   - {fileID: 673128641}
   - {fileID: 1813775070}
   - {fileID: 1789167081}
+  - {fileID: 1114772619}

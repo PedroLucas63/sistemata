@@ -1,0 +1,559 @@
+fileFormatVersion: 2
+guid: e2a7e0bb64106c849907922464d5c783
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8524303288305838048
+    second: Sistemata Guarana frente ataque_0
+  - first:
+      213: -3655780935390758177
+    second: Sistemata Guarana frente ataque_1
+  - first:
+      213: -8652920198368609267
+    second: Sistemata Guarana frente ataque_2
+  - first:
+      213: -5218907811577929374
+    second: Sistemata Guarana frente ataque_3
+  - first:
+      213: 9083020810539779521
+    second: Sistemata Guarana frente ataque_4
+  - first:
+      213: 4763157348850930383
+    second: Sistemata Guarana frente ataque_5
+  - first:
+      213: -4561105314408157818
+    second: Sistemata Guarana frente ataque_6
+  - first:
+      213: -2518223225759277237
+    second: Sistemata Guarana frente ataque_7
+  - first:
+      213: 1011359770344998401
+    second: Sistemata Guarana frente ataque_8
+  - first:
+      213: 2848896073165223413
+    second: Sistemata Guarana frente ataque_9
+  - first:
+      213: 6331827836738317970
+    second: Sistemata Guarana frente ataque_10
+  - first:
+      213: 4890189793141325100
+    second: Sistemata Guarana frente ataque_11
+  - first:
+      213: 567239017556380698
+    second: Sistemata Guarana frente ataque_12
+  - first:
+      213: -1286082546667892732
+    second: Sistemata Guarana frente ataque_13
+  - first:
+      213: 6013064291158427830
+    second: Sistemata Guarana frente ataque_14
+  - first:
+      213: 458339550214815716
+    second: Sistemata Guarana frente ataque_15
+  - first:
+      213: -6333820608209512606
+    second: Sistemata Guarana frente ataque_16
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_0
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 5
+        width: 61
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e7e9215da86c4670800000000000000
+      internalID: 8524303288305838048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_1
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 7
+        width: 60
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fda7361cb9e044dc0800000000000000
+      internalID: -3655780935390758177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_2
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 11
+        width: 61
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0cbf6abce6aae780800000000000000
+      internalID: -8652920198368609267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_3
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 55
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 261e26f0ff6b297b0800000000000000
+      internalID: -5218907811577929374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_4
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 1
+        width: 62
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c544b3ad4f5d0e70800000000000000
+      internalID: 9083020810539779521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_5
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 51
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc21d8b5f522a1240800000000000000
+      internalID: 4763157348850930383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_6
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 6
+        width: 62
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68d2e8fd1e2b3b0c0800000000000000
+      internalID: -4561105314408157818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_7
+      rect:
+        serializedVersion: 2
+        x: 358
+        y: 51
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4fda7b71597d0dd0800000000000000
+      internalID: -2518223225759277237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_8
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 3
+        width: 62
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 106c88b4a52190e00800000000000000
+      internalID: 1011359770344998401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_9
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 3
+        width: 62
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f5b40b62ef498720800000000000000
+      internalID: 2848896073165223413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_10
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 7
+        width: 62
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29ea7bbbedb2fd750800000000000000
+      internalID: 6331827836738317970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_11
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 4
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2dfd6025b17dd340800000000000000
+      internalID: 4890189793141325100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_12
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 4
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1c803091ec3fd700800000000000000
+      internalID: 567239017556380698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_13
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 7
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 400d70edcbae62ee0800000000000000
+      internalID: -1286082546667892732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_14
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 1
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b8851e3d12b27350800000000000000
+      internalID: 6013064291158427830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_15
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 2
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4eff01d74695c5600800000000000000
+      internalID: 458339550214815716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sistemata Guarana frente ataque_16
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 3
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2679f9007bfb918a0800000000000000
+      internalID: -6333820608209512606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Sistemata Guarana frente ataque_0: 8524303288305838048
+      Sistemata Guarana frente ataque_1: -3655780935390758177
+      Sistemata Guarana frente ataque_10: 6331827836738317970
+      Sistemata Guarana frente ataque_11: 4890189793141325100
+      Sistemata Guarana frente ataque_12: 567239017556380698
+      Sistemata Guarana frente ataque_13: -1286082546667892732
+      Sistemata Guarana frente ataque_14: 6013064291158427830
+      Sistemata Guarana frente ataque_15: 458339550214815716
+      Sistemata Guarana frente ataque_16: -6333820608209512606
+      Sistemata Guarana frente ataque_2: -8652920198368609267
+      Sistemata Guarana frente ataque_3: -5218907811577929374
+      Sistemata Guarana frente ataque_4: 9083020810539779521
+      Sistemata Guarana frente ataque_5: 4763157348850930383
+      Sistemata Guarana frente ataque_6: -4561105314408157818
+      Sistemata Guarana frente ataque_7: -2518223225759277237
+      Sistemata Guarana frente ataque_8: 1011359770344998401
+      Sistemata Guarana frente ataque_9: 2848896073165223413
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
