@@ -27,7 +27,8 @@ namespace Sistemata.Player
         public event System.Action<int> OnGoldChanged;
 
         [Header("Referências de Coleta")]
-        [SerializeField] private SphereCollider magnetCollider;
+        [Tooltip("Referência opcional ao script de imã no objeto filho.")]
+        [SerializeField] private CollectibleMagnet magnetScript;
 
         private EntityStats _stats;
         private EntityHealth _playerHealth;
@@ -48,42 +49,6 @@ namespace Sistemata.Player
             _playerMovement = GetComponent<PlayerMovement>();
             _playerHealth = GetComponent<EntityHealth>();
             if (attacksContainer == null) attacksContainer = transform;
-
-            // Configura o colisor de imã se existir
-            if (magnetCollider != null)
-            {
-                magnetCollider.isTrigger = true;
-            }
-        }
-
-        private void Update()
-        {
-            UpdateMagnetRadius();
-        }
-
-        private void UpdateMagnetRadius()
-        {
-            if (magnetCollider == null) return;
-            
-            var radius = GetStat(StatType.PickupRadius)?.Get() ?? 2f;
-            if (!Mathf.Approximately(magnetCollider.radius, radius))
-            {
-                magnetCollider.radius = radius;
-            }
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (magnetCollider == null || !magnetCollider.enabled) return;
-
-            // Se o objeto que entrou no nosso raio de imã for um coletável
-            if (other.CompareTag("Collectible"))
-            {
-                if (other.TryGetComponent<Sistemata.Common.Collectible>(out var collectible))
-                {
-                    collectible.AttractTo(transform);
-                }
-            }
         }
 
         private void Start()
@@ -125,7 +90,7 @@ namespace Sistemata.Player
             Debug.Log($"<color=cyan><b>SUBIU DE NÍVEL!</b></color> Novo nível: {currentLevel}");
             
             // Ativa a tela de upgrades
-            if (UI.LevelUp.LevelUpUIManager.Instance != null)
+            if (UI.LevelUp.LevelUpUIManager.Instance)
             {
                 UI.LevelUp.LevelUpUIManager.Instance.TriggerLevelUp();
             }
@@ -133,7 +98,6 @@ namespace Sistemata.Player
 
         public float GetRequiredXP(int level)
         {
-            // Fórmula simples: 100 no level 1, aumenta 20% por nível
             return Mathf.Floor(20f * Mathf.Pow(1.2f, level - 1));
         }
 
@@ -146,23 +110,20 @@ namespace Sistemata.Player
         {
             _playerHealth.OnDeath -= HandleDeath;
             
-            // --- NOVO: Trava o Player ---
-            this.enabled = false; // Para a lógica do Manager
-            if (_playerMovement != null) _playerMovement.enabled = false; // Para o movimento real
+            this.enabled = false;
+            if (_playerMovement != null) _playerMovement.enabled = false;
             
             var anim = GetComponentInChildren<Animator>();
-            if (anim) anim.enabled = false; // Congela a animação
-            // ----------------------------
+            if (anim) anim.enabled = false;
             
             StartCoroutine(DeathSequence());
         }
 
         private System.Collections.IEnumerator DeathSequence()
         {
-            float duration = 0.8f;
-            float elapsed = 0f;
+            var duration = 0.8f;
+            var elapsed = 0f;
             
-            // Tenta pegar o SpriteRenderer do filho
             var sr = GetComponentInChildren<SpriteRenderer>();
             Quaternion startRotation = sr ? sr.transform.localRotation : transform.localRotation;
             Quaternion endRotation = startRotation * Quaternion.Euler(0, 0, 90f);
@@ -182,7 +143,7 @@ namespace Sistemata.Player
 
             yield return new WaitForSeconds(0.5f);
 
-            if (GameManager.Instance != null)
+            if (GameManager.Instance)
             {
                 GameManager.Instance.PlayerDied();
             }

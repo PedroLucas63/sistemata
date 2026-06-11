@@ -9,7 +9,7 @@ namespace Sistemata.Common
         [Header("Configurações")]
         [SerializeField] private CollectibleType type;
         [SerializeField] private float value = 1f;
-        [SerializeField] private float moveSpeed = 12f;
+        [SerializeField] private float moveSpeed = 4f; // Reduzido para uma atração mais fraca
 
         [Header("Animação Flutuante")]
         [SerializeField] private float floatAmplitude = 0.2f;
@@ -82,9 +82,10 @@ namespace Sistemata.Common
                 return;
             }
 
-            // Aceleração progressiva: fica mais rápido conforme chega perto
-            float speedFactor = Mathf.Clamp(4f / distance, 1f, 5f);
-            float currentSpeed = moveSpeed * speedFactor;
+            // Suavizamos a atração:
+            // Usamos uma velocidade mais baixa que aumenta de forma bem suave conforme chega perto
+            float smoothFactor = Mathf.Clamp(2f / distance, 0.5f, 3f);
+            float currentSpeed = moveSpeed * smoothFactor;
             
             transform.position += direction.normalized * (currentSpeed * Time.deltaTime);
         }

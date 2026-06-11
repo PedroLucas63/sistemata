@@ -25,7 +25,7 @@ namespace UI.LevelUp
 
             nameText.text = data.UpgradeName;
             descriptionText.text = data.Description;
-            if (data.Icon != null) iconImage.sprite = data.Icon;
+            if (data.Icon) iconImage.sprite = data.Icon;
 
             SetQualityColor(data.Quality);
 

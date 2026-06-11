@@ -1680,6 +1680,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1373259480 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 503880142946466914, guid: 4ac543067704fd84a91661077dfb8893, type: 3}
+  m_PrefabInstance: {fileID: 1940310456}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1373259484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373259480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a5be794172a663df95d78fe61a8f2ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Common.CollectibleMagnet
 --- !u!1 &1546842691 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3797970589339536869, guid: af30da06091277a4e88811447603d094, type: 3}
@@ -2391,7 +2408,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 503880142946466914, guid: 4ac543067704fd84a91661077dfb8893, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1373259484}
   m_SourcePrefab: {fileID: 100100000, guid: 4ac543067704fd84a91661077dfb8893, type: 3}
 --- !u!4 &1940310457 stripped
 Transform:
