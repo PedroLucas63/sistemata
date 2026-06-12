@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Upgrades.UpgradeData
   UpgradeName: "Ataque de \xC1cido"
   Description: "Adiciona o ataque de \xE1cido"
-  Icon: {fileID: 0}
+  Icon: {fileID: 6820448604861154448, guid: 35a9a6f0ad20232ca833f8fc06f71911, type: 3}
   Quality: 4
   Type: 1
   AttackPrefab: {fileID: 5732902709889597986, guid: c4ada2620def1fb20b54a2e328ae6e85, type: 3}

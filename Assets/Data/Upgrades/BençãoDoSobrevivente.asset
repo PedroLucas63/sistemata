@@ -14,10 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Upgrades.UpgradeData
   UpgradeName: "Ben\xE7\xE3o do Sobrevivente"
   Description: "Multiplica sua vida m\xE1xima em 50%."
-  Icon: {fileID: 0}
+  Icon: {fileID: 6820448604861154448, guid: 35a9a6f0ad20232ca833f8fc06f71911, type: 3}
   Quality: 5
+  Type: 0
+  AttackPrefab: {fileID: 0}
+  TargetEntity: 0
   TargetStat: 0
   ModType: 2
   Amount: 0.5
+  TargetID: 
   Weight: 3
   IsUnique: 1
+  RequiredTags: []
+  GrantedTags: []

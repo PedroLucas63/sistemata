@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Upgrades.UpgradeData
   UpgradeName: Flecha de Fogo
   Description: Adiciona o ataque de flecha de fogo.
-  Icon: {fileID: 0}
+  Icon: {fileID: 6820448604861154448, guid: 35a9a6f0ad20232ca833f8fc06f71911, type: 3}
   Quality: 3
   Type: 1
   AttackPrefab: {fileID: 8552119123712051953, guid: 1b1e2103ef59e6b3fa7ec0e8cae6d9b2, type: 3}

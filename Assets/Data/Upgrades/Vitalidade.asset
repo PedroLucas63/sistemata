@@ -14,10 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Upgrades.UpgradeData
   UpgradeName: Vitalidade
   Description: "Aumenta sua vida m\xE1xima em 20%."
-  Icon: {fileID: 0}
+  Icon: {fileID: 6820448604861154448, guid: 35a9a6f0ad20232ca833f8fc06f71911, type: 3}
   Quality: 0
+  Type: 0
+  AttackPrefab: {fileID: 0}
+  TargetEntity: 0
   TargetStat: 0
   ModType: 1
   Amount: 0.2
+  TargetID: 
   Weight: 100
   IsUnique: 0
+  RequiredTags: []
+  GrantedTags: []
