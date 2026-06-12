@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5aea4cd28c9443dda20752869d5edba6, type: 3}
-  m_Name: ArqueiroExperiente
+  m_Name: "ArqueiroDeFor\xE7a"
   m_EditorClassIdentifier: Assembly-CSharp::Upgrades.UpgradeData
-  UpgradeName: Arqueiro Experiente
-  Description: "Adiciona um novo proj\xE9til de flecha comum."
+  UpgradeName: "Arqueiro de For\xE7a"
+  Description: Multiplica o dano da flecha simples em 1.2x.
   Icon: {fileID: 0}
-  Quality: 3
+  Quality: 4
   Type: 0
   AttackPrefab: {fileID: 0}
   TargetEntity: 1
-  TargetStat: 9
-  ModType: 0
-  Amount: 1
+  TargetStat: 8
+  ModType: 2
+  Amount: 0.2
   TargetID: Arrow
-  Weight: 30
+  Weight: 15
   IsUnique: 1
   RequiredTags:
   - Has_Arrow

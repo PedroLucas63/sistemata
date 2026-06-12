@@ -117,7 +117,6 @@ namespace Sistemata.Common
 
         private void Collect()
         {
-            Debug.Log($"Collecting {type}");
             if (Sistemata.Player.PlayerManager.Instance)
             {
                 switch (type)

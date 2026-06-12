@@ -10,20 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5aea4cd28c9443dda20752869d5edba6, type: 3}
-  m_Name: ComandanteDeBatalha
+  m_Name: ArqueiroDeSorte
   m_EditorClassIdentifier: Assembly-CSharp::Upgrades.UpgradeData
-  UpgradeName: Comandante de Batalha
-  Description: Permite invocar mais 1 criatura.
+  UpgradeName: Arqueiro de Sorte
+  Description: 'Adiciona um ricocheteamento a mais na flecha comum. '
   Icon: {fileID: 0}
   Quality: 3
   Type: 0
   AttackPrefab: {fileID: 0}
-  TargetEntity: 0
-  TargetStat: 6
+  TargetEntity: 1
+  TargetStat: 8
   ModType: 0
   Amount: 1
-  TargetID: 
-  Weight: 20
-  IsUnique: 1
-  RequiredTags: []
+  TargetID: Arrow
+  Weight: 30
+  IsUnique: 0
+  RequiredTags:
+  - Has_Arrow
   GrantedTags: []

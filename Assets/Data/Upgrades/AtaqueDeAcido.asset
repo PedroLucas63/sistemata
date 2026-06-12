@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5aea4cd28c9443dda20752869d5edba6, type: 3}
-  m_Name: ArqueiroExperiente
+  m_Name: AtaqueDeAcido
   m_EditorClassIdentifier: Assembly-CSharp::Upgrades.UpgradeData
-  UpgradeName: Arqueiro Experiente
-  Description: "Adiciona um novo proj\xE9til de flecha comum."
+  UpgradeName: "Ataque de \xC1cido"
+  Description: "Adiciona o ataque de \xE1cido"
   Icon: {fileID: 0}
-  Quality: 3
-  Type: 0
-  AttackPrefab: {fileID: 0}
-  TargetEntity: 1
-  TargetStat: 9
-  ModType: 0
-  Amount: 1
-  TargetID: Arrow
-  Weight: 30
+  Quality: 4
+  Type: 1
+  AttackPrefab: {fileID: 5732902709889597986, guid: c4ada2620def1fb20b54a2e328ae6e85, type: 3}
+  TargetEntity: 0
+  TargetStat: 6
+  ModType: 2
+  Amount: 0.25
+  TargetID: 
+  Weight: 20
   IsUnique: 1
-  RequiredTags:
-  - Has_Arrow
-  GrantedTags: []
+  RequiredTags: []
+  GrantedTags:
+  - Has_PoisonAttack

@@ -20,7 +20,7 @@ namespace Sistemata.Upgrades
         public static void ApplyUpgradeToAllMatchingAttacks(string targetId, StatType stat, StatModifier modifier)
         {
             var matchingPairs = _attackRegistry
-                .Where(kvp => kvp.Key == targetId || kvp.Key.EndsWith($"_{targetId}"))
+                .Where(kvp => kvp.Key.EndsWith($"_{targetId}"))
                 .ToList();
 
             foreach (var pair in matchingPairs

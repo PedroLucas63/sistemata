@@ -26,4 +26,5 @@ MonoBehaviour:
   Weight: 20
   IsUnique: 1
   RequiredTags: []
-  GrantedTags: []
+  GrantedTags:
+  - Has_FireArrow

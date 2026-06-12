@@ -132,6 +132,7 @@ namespace Sistemata.Upgrades
                 Source = upgrade
             };
             
+            
             switch (upgrade.TargetEntity)
             {
                 case TargetEntityType.Player:
@@ -140,6 +141,7 @@ namespace Sistemata.Upgrades
                     
                 case TargetEntityType.Attack:
                     var playerAttackStats = UpgradeRegistry.GetAttack(upgrade.TargetID);
+                    Debug.Log($"Pegando os Stats: {playerAttackStats}");
                     if (playerAttackStats)
                         playerAttackStats.ApplyUpgrade(upgrade.TargetStat, modifier);
                     UpgradeRegistry.ApplyUpgradeToAllMatchingAttacks(upgrade.TargetID, upgrade.TargetStat, modifier);
