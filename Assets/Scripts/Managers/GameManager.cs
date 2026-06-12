@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Sistemata.Core
 {
-    public enum GameState { Normal, BossTransition, Boss, Chaos, GameOver }
+    public enum GameState { Normal, BossTransition, Boss, ChaosTransition, Chaos, GameOver }
 
     public class GameManager : MonoBehaviour
     {
@@ -27,13 +27,16 @@ namespace Sistemata.Core
         public float totalTimeSurvived { get; private set; }
         public int monstersKilled { get; private set; }
 
+        // Eventos
         public event Action OnBossWarning;
         public event Action OnBossSpawn;
+        public event Action OnChaosWarning;
         public event Action OnChaosStart;
         public event Action<int, float> OnGameOver;
 
-        [Header("Configurações de projéteis")] public Transform ProjectileParent;
-    
+        [Header("Configurações de projéteis")]
+        public Transform ProjectileParent;
+
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -66,7 +69,6 @@ namespace Sistemata.Core
 
             totalTimeSurvived += Time.deltaTime;
 
-            // Fase 1: Timer rolando
             if (currentState == GameState.Normal)
             {
                 phaseTimer -= Time.deltaTime;
@@ -109,9 +111,17 @@ namespace Sistemata.Core
         {
             if (currentState == GameState.Boss)
             {
-                currentState = GameState.Chaos;
-                OnChaosStart?.Invoke();
+                currentState = GameState.ChaosTransition;
+                OnChaosWarning?.Invoke();
+
+                Invoke(nameof(StartChaosPhase), 3f);
             }
+        }
+
+        private void StartChaosPhase()
+        {
+            currentState = GameState.Chaos;
+            OnChaosStart?.Invoke();
         }
 
         public void AddKill()
@@ -127,4 +137,3 @@ namespace Sistemata.Core
         }
     }
 }
-

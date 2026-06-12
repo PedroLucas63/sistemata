@@ -44,7 +44,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64fabce067876384291af208b78a4553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  enemyPrefab: {fileID: 0}
-  bossPrefab: {fileID: 0}
-  normalSpawnDelay: 2
-  chaosSpawnDelay: 0.5
+  EnemyPrefabs:
+  - Enemy: {fileID: 863410815870789386, guid: 0ee131150ee0c504daa4fd15b372931f, type: 3}
+    Weight: 50
+  - Enemy: {fileID: 7503366709453120761, guid: 3d9655f35386188879b67ced66aa2a29, type: 3}
+    Weight: 5
+  - Enemy: {fileID: 863410815870789386, guid: 2e244a1177bf87708b11602ed680240b, type: 3}
+    Weight: 1
+  - Enemy: {fileID: 7503366709453120761, guid: fb8c8a09e834731969ef02a4ce49084b, type: 3}
+    Weight: 1
+  BossPrefabs:
+  - Enemy: {fileID: 7130518854873482354, guid: cfbdf3c8af9cc7e449ac2a91dc672761, type: 3}
+    Weight: 10
+  - Enemy: {fileID: 5066702936169762682, guid: 12fb468be9f6621bcbc1faa9f4bd431e, type: 3}
+    Weight: 10
+  initialSpawnDelay: 5
+  normalSpawnDelay: 1
+  chaosSpawnDelay: 0.2
+  minimumSpawnDelay: 0.4
+  difficultyScaleSpeed: 0.005
+  maxEnemyCount: 200
+  initEnemyCount: 10
+  minSpawnRadius: 20
+  maxSpawnRadius: 30
+  enemyHolder: {fileID: 0}
+  cellSize: 10

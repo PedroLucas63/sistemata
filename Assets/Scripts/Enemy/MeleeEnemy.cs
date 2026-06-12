@@ -1,6 +1,5 @@
 using Sistemata.Common;
 using UnityEngine;
-using Sistemata.Core;
 using Sistemata.Player;
 
 namespace Sistemata.Enemy

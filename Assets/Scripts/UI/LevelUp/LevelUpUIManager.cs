@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Sistemata.Upgrades;
 
-namespace UI.LevelUp
+namespace Sistemata.UI.LevelUp
 {
     public class LevelUpUIManager : MonoBehaviour
     {

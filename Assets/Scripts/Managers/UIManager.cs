@@ -7,15 +7,16 @@ namespace Sistemata.Core
     public class UIManager : MonoBehaviour
     {
         [Header("UI do Gameplay (Durante a partida)")]
-        public TextMeshProUGUI gameplayTimerText;
+        [SerializeField] private TextMeshProUGUI gameplayTimerText;
 
         [Header("Painéis UI")]
-        public GameObject bossWarningPanel;
-        public GameObject gameOverPanel;
+        [SerializeField] private GameObject bossWarningPanel;
+        [SerializeField] private GameObject chaosWarningPanel;
+        [SerializeField] private GameObject gameOverPanel;
 
         [Header("Textos Game Over")]
-        public TextMeshProUGUI killsText;
-        public TextMeshProUGUI timeSurvivedText;
+        [SerializeField] private TextMeshProUGUI killsText;
+        [SerializeField] private TextMeshProUGUI timeSurvivedText;
 
         private void Start()
         {
@@ -23,6 +24,7 @@ namespace Sistemata.Core
             gameOverPanel.SetActive(false);
 
             GameManager.Instance.OnBossWarning += ShowBossWarning;
+            GameManager.Instance.OnChaosWarning += ShowChaosWarning;
             GameManager.Instance.OnGameOver += ShowGameOverScreen;
         }
 
@@ -50,11 +52,22 @@ namespace Sistemata.Core
         {
             bossWarningPanel.SetActive(false);
         }
+        private void ShowChaosWarning()
+        {
+            chaosWarningPanel.SetActive(true);
+            Invoke(nameof(HideChaosWarning), 3f);
+        }
+
+        private void HideChaosWarning()
+        {
+            chaosWarningPanel.SetActive(false);
+        }
+
 
         private void ShowGameOverScreen(int kills, float time)
         {
             gameOverPanel.SetActive(true);
-            killsText.text = "Monstros Abatidos: " + kills;
+            killsText.text = "Monstros Derrotados: " + kills;
 
             int minutes = Mathf.FloorToInt(time / 60F);
             int seconds = Mathf.FloorToInt(time - minutes * 60);
@@ -77,6 +90,7 @@ namespace Sistemata.Core
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.OnBossWarning -= ShowBossWarning;
+                GameManager.Instance.OnChaosWarning -= ShowChaosWarning;
                 GameManager.Instance.OnGameOver -= ShowGameOverScreen;
             }
         }
