@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Upgrades.UpgradeData
   UpgradeName: "Reflexos de Ca\xE7ador"
   Description: Aumenta sua velocidade de ataque em 20%.
-  Icon: {fileID: 0}
+  Icon: {fileID: 6820448604861154448, guid: 35a9a6f0ad20232ca833f8fc06f71911, type: 3}
   Quality: 2
   Type: 0
   AttackPrefab: {fileID: 0}
