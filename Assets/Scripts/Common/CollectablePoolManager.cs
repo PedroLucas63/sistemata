@@ -24,8 +24,7 @@ namespace Sistemata.Common
         {
             if (prefab == null) return null;
 
-            int id = prefab.gameObject.GetInstanceID();
-
+            var id = prefab.gameObject.GetInstanceID();
             if (!_pools.TryGetValue(id, out var pool))
             {
                 pool = new LinkedPool<Collectible>(

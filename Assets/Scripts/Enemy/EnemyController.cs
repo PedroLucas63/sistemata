@@ -3,7 +3,9 @@ using Sistemata.Common;
 using Sistemata.Core;
 using Sistemata.Spawning;
 using Sistemata.Stats;
+using Unity.Mathematics;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Sistemata.Enemy
 {
@@ -110,28 +112,36 @@ namespace Sistemata.Enemy
         private void SpawnLoot()
         {
             if (CollectablePoolManager.Instance == null) return;
-
-            // Spawn sempre de XP com valor aleatório
+            
             if (xpPrefab != null)
             {
-                var xpInstance = CollectablePoolManager.Instance.Spawn(xpPrefab, transform.position);
+                Debug.Log("Spawning XP");
+                if (minXP == 0 && maxXP == 0) return;
+
+                var xpNoise = UnityEngine.Random.insideUnitSphere;
+                xpNoise.y = 0;
+                var xpPosition = transform.position + xpNoise * 0.1f;
+                
+                var xpInstance = CollectablePoolManager.Instance.Spawn(xpPrefab, xpPosition);
                 if (xpInstance != null)
                 {
-                    float randomXP = UnityEngine.Random.Range(minXP, maxXP);
-                    xpInstance.SetValue(randomXP);
+                    var randomXp = UnityEngine.Random.Range(minXP, maxXP);
+                    xpInstance.SetValue(randomXp);
                 }
             }
-
-            // Spawn de Moeda baseado em chance com valor aleatório
-            if (coinPrefab != null && UnityEngine.Random.value <= coinDropChance)
-            {
-                var coinInstance = CollectablePoolManager.Instance.Spawn(coinPrefab, transform.position);
-                if (coinInstance != null)
-                {
-                    int randomCoin = UnityEngine.Random.Range(minCoin, maxCoin + 1);
-                    coinInstance.SetValue(randomCoin);
-                }
-            }
+            
+            var probability = UnityEngine.Random.Range(0f, 1f);
+            if (coinPrefab == null || !(probability <= coinDropChance)) return;
+            
+            var coinNoise = UnityEngine.Random.insideUnitSphere;
+            coinNoise.y = 0;
+            var coinPosition = transform.position + coinNoise * 0.1f;
+            
+            var coinInstance = CollectablePoolManager.Instance.Spawn(coinPrefab, coinPosition);
+            if (coinInstance == null) return;
+                
+            var randomCoin = UnityEngine.Random.Range(minCoin, maxCoin + 1);
+            coinInstance.SetValue(randomCoin);
         }
 
         private System.Collections.IEnumerator DeathSequence()

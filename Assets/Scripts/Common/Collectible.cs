@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Sistemata.Common
@@ -116,15 +117,19 @@ namespace Sistemata.Common
 
         private void Collect()
         {
-            if (Sistemata.Player.PlayerManager.Instance != null)
+            Debug.Log($"Collecting {type}");
+            if (Sistemata.Player.PlayerManager.Instance)
             {
-                if (type == CollectibleType.Coin)
+                switch (type)
                 {
-                    Sistemata.Player.PlayerManager.Instance.AddGold((int)value);
-                }
-                else if (type == CollectibleType.XP)
-                {
-                    Sistemata.Player.PlayerManager.Instance.AddXP(value);
+                    case CollectibleType.Coin:
+                        Sistemata.Player.PlayerManager.Instance.AddGold((int)value);
+                        break;
+                    case CollectibleType.XP:
+                        Sistemata.Player.PlayerManager.Instance.AddXP(value);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
 

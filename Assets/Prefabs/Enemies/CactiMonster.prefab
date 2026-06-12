@@ -239,6 +239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e18d6ccab69e42c1a43615867d0f7f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Common.EntityHealth
+  damageCooldown: 0.3
 --- !u!114 &1067310942408240261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,8 +268,8 @@ MonoBehaviour:
   spatialGroup: {x: 0, y: 0}
   baseData: {fileID: 11400000, guid: d3943c2b6cb00a3799e46e3117e629f9, type: 2}
   xpPrefab: {fileID: 8399440314936118968, guid: a41e6bbfe515b4eaea289575b569459b, type: 3}
-  minXP: 1
-  maxXP: 3
+  minXP: 3
+  maxXP: 6
   coinPrefab: {fileID: 3815465021333323952, guid: 27223886b14987037b5a8c7511d1b77a, type: 3}
   coinDropChance: 0.1
   minCoin: 1

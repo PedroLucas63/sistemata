@@ -51,6 +51,10 @@ namespace Sistemata.Ally
                 RecueDoInimigo();
         }
 
+        protected override void ExecuteAttack()
+        {
+        }
+
         /// <summary>
         /// Chamado via Animation Event na animação de ataque
         /// </summary>
@@ -58,13 +62,9 @@ namespace Sistemata.Ally
         {
             if (_instantiatedAttack != null)
             {
+                Debug.Log("Aliado atacando!");
                 _instantiatedAttack.TriggerAttack();
             }
-        }
-
-        protected override void ExecuteAttack()
-        {
-            // O ataque agora é controlado via OnAnimationAttackEvent
         }
 
         private void RecueDoInimigo()

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1738538540355075417}
   - component: {fileID: 3891630840319251941}
-  - component: {fileID: -2693616469948175407}
+  - component: {fileID: 6623559707085511063}
   m_Layer: 6
   m_Name: EnergyBallAttack
   m_TagString: Projectile
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a6658668ce43528796dd14606b1a23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Stats.EntityStats
---- !u!114 &-2693616469948175407
+--- !u!114 &6623559707085511063
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54,13 +54,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 535354996426229932}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2c994abb6b3e9a458e582d6a0c7e57a, type: 3}
+  m_Script: {fileID: 11500000, guid: 0700bd7cb3f94f6ba00f2bd538171055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Attack.OrbitalSpreadAttack
   attackID: EnergyBall
-  elementalType: 1
+  elementalType: 0
   baseData: {fileID: 11400000, guid: a788f9e2332d8b2d9821ff0a81c0fce0, type: 2}
   belongsToPlayer: 0
-  useManualTrigger: 1
+  useManualTrigger: 0
   projectilePrefab: {fileID: 4654985686313772912, guid: 9374b90d5decc0a72959f6e9788a5b73, type: 3}
-  projectileSpeed: 8
+  projectileSpeed: 12

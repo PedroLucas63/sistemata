@@ -112,6 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e18d6ccab69e42c1a43615867d0f7f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Common.EntityHealth
+  damageCooldown: 0.3
 --- !u!114 &3603237076617942878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,7 +132,7 @@ MonoBehaviour:
   attackRange: 1.5
   detectionRadius: 5
   baseData: {fileID: 11400000, guid: a87ab14f3f1b4352d9718f1ffd88c753, type: 2}
-  attackPrefab: {fileID: -2693616469948175407, guid: cf3c5597ee4bda796a23a2bda5abb5ee, type: 3}
+  attackPrefab: {fileID: 6623559707085511063, guid: cf3c5597ee4bda796a23a2bda5abb5ee, type: 3}
   firePoint: {fileID: 0}
   minKeepDistance: 3.5
 --- !u!114 &-2288753953154076311

@@ -58,7 +58,7 @@ namespace Sistemata.Player
             ConfigurePlayerHealth();
             
             // Inicializa a UI
-            OnXPChanged?.Invoke(currentLevel, currentXP, GetRequiredXP(currentLevel));
+            OnXPChanged?.Invoke(currentLevel, currentXP, GetRequiredXp(currentLevel));
             OnGoldChanged?.Invoke(gold);
         }
 
@@ -71,14 +71,13 @@ namespace Sistemata.Player
         public void AddXP(float amount)
         {
             currentXP += amount;
-            Debug.Log($"XP Coletado: +{amount} | Total: {currentXP}/{GetRequiredXP(currentLevel)}");
-            float targetXP = GetRequiredXP(currentLevel);
+            var targetXP = GetRequiredXp(currentLevel);
 
             while (currentXP >= targetXP)
             {
                 currentXP -= targetXP;
                 LevelUp();
-                targetXP = GetRequiredXP(currentLevel);
+                targetXP = GetRequiredXp(currentLevel);
             }
 
             OnXPChanged?.Invoke(currentLevel, currentXP, targetXP);
@@ -87,16 +86,12 @@ namespace Sistemata.Player
         private void LevelUp()
         {
             currentLevel++;
-            Debug.Log($"<color=cyan><b>SUBIU DE NÍVEL!</b></color> Novo nível: {currentLevel}");
             
-            // Ativa a tela de upgrades
             if (UI.LevelUp.LevelUpUIManager.Instance)
-            {
                 UI.LevelUp.LevelUpUIManager.Instance.TriggerLevelUp();
-            }
         }
 
-        public float GetRequiredXP(int level)
+        public float GetRequiredXp(int level)
         {
             return Mathf.Floor(20f * Mathf.Pow(1.2f, level - 1));
         }
