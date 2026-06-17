@@ -1,4 +1,5 @@
 using Sistemata.Core;
+using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,7 @@ public class PauseMenu : MonoBehaviour
 
     [Header("UI Elements")]
     [SerializeField] private GameObject pausePanel; // Arraste o painel visual do menu para cá no Inspector
+    [SerializeField] private Button quitGame;
 
     private InputSystemActions _input;
 
@@ -23,6 +25,7 @@ public class PauseMenu : MonoBehaviour
         // Garante que o estado inicial esteja correto
         isPaused = false;
         pausePanel.SetActive(false); // Desativa apenas o visual, mantendo o script rodando
+        quitGame.onClick.AddListener(() => Application.Quit());
     }
 
     void OnDestroy()
@@ -33,6 +36,8 @@ public class PauseMenu : MonoBehaviour
             _input.Player.Disable();
             _input = null;
         }
+
+        quitGame.onClick.RemoveAllListeners();
     }
 
     private void OnPause(InputAction.CallbackContext context)
@@ -57,11 +62,5 @@ public class PauseMenu : MonoBehaviour
         pausePanel.SetActive(false);
     }
 
-    //public void Restart()
-    //{
-    //    // Correção vital: Descongela o tempo antes de recarregar a cena!
-    //    Time.timeScale = 1f;
-    //    isPaused = false;
-    //    GameManager.Instance.RestartGame();
-    //}
+    
 }

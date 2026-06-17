@@ -1590,7 +1590,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   gameplayTimerText: {fileID: 5683635989492709718}
   bossWarningPanel: {fileID: 6568532926326164314}
-  chaosWarningPanel: {fileID: 0}
+  chaosWarningPanel: {fileID: 7980343071116532266}
   gameOverPanel: {fileID: 5303287145507936281}
   killsText: {fileID: 6578860794017455754}
   timeSurvivedText: {fileID: 2123385678926125685}
@@ -3848,7 +3848,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5851827911908169351}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3916069299374111763}
+        m_TargetAssemblyTypeName: Sistemata.Core.UIManager, Assembly-CSharp
+        m_MethodName: RestartLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6301892882573779055
 GameObject:
   m_ObjectHideFlags: 0

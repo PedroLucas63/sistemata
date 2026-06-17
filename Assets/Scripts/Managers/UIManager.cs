@@ -76,6 +76,7 @@ namespace Sistemata.Core
 
         public void RestartLevel()
         {
+            Time.timeScale = 1f;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
@@ -84,6 +85,7 @@ namespace Sistemata.Core
             Time.timeScale = 1f;
             SceneManager.LoadScene("MainMenu");
         }
+
 
         private void OnDestroy()
         {
