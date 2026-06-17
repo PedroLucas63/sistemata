@@ -1,5 +1,6 @@
 using System;
 using Sistemata.Stats;
+using Sistemata.Audio; // <-- Adicionado para acessar o AudioManager
 using UnityEngine;
 
 namespace Sistemata.Common
@@ -13,32 +14,38 @@ namespace Sistemata.Common
 
         public event Action<float, float> OnHealthChanged;
         public event Action OnDeath;
-        
+        public event Action OnDamageTaken;
+
         private Stat _maxHealthStat;
         private Stat _healthRegenStat;
-        
-        public float MaxHealth 
-        { 
+
+        public float MaxHealth
+        {
             get
             {
                 _maxHealthStat ??= _stats.GetStat(StatType.MaxHealth);
-                return _maxHealthStat?.Get() ?? 1f; 
-            } 
+                return _maxHealthStat?.Get() ?? 1f;
+            }
         }
 
-        public float HealthRegen 
-        { 
+        public float HealthRegen
+        {
             get
             {
                 _healthRegenStat ??= _stats.GetStat(StatType.HealthRegen);
                 return _healthRegenStat?.Get() ?? 0f;
-            } 
+            }
         }
 
         [Header("Configurações de Dano")]
         [SerializeField] private float damageCooldown = 0.3f;
         private float _lastDamageTime;
-        
+
+        [Header("Áudio de Impacto")]
+        [Tooltip("Lista de sons para quando a entidade toma dano.")]
+        [SerializeField] private AudioClip[] hitSounds;
+        [Range(0f, 1f)][SerializeField] private float hitVolume = 0.8f;
+
         private SpriteRenderer _spriteRenderer;
         private Color _originalColor = Color.white;
         private Coroutine _flashCoroutine;
@@ -48,7 +55,7 @@ namespace Sistemata.Common
             if (_stats == null) _stats = GetComponent<EntityStats>();
             if (_stats == null) _stats = GetComponentInParent<EntityStats>();
             if (_stats == null) _stats = GetComponentInChildren<EntityStats>();
-            
+
             _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             if (_spriteRenderer != null) _originalColor = _spriteRenderer.color;
         }
@@ -87,14 +94,18 @@ namespace Sistemata.Common
         public void TakeDamage(float amount)
         {
             if (IsDead) return;
-            
+
             if (Time.time < _lastDamageTime + damageCooldown) return;
             _lastDamageTime = Time.time;
-            
+
             CurrentHealth -= amount;
 
-            // Feedback visual de dano
+            // Feedback visual e sonoro
             TriggerDamageFlash();
+            PlayHitSound();
+
+            // Dispara o evento para quem quiser escutar (ex: PlayerManager)
+            OnDamageTaken?.Invoke();
 
             if (CurrentHealth <= 0)
             {
@@ -105,10 +116,28 @@ namespace Sistemata.Common
             OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
         }
 
+        private void PlayHitSound()
+        {
+            if (hitSounds == null || hitSounds.Length == 0 || AudioManager.Instance == null) return;
+
+            int randomIndex = UnityEngine.Random.Range(0, hitSounds.Length);
+            AudioClip clip = hitSounds[randomIndex];
+
+            // O script decide sozinho se deve tocar 2D ou 3D baseado na Tag!
+            if (gameObject.CompareTag("Player"))
+            {
+                AudioManager.Instance.PlaySFX2D(clip, hitVolume);
+            }
+            else
+            {
+                AudioManager.Instance.PlaySFX3D(clip, transform.position, hitVolume);
+            }
+        }
+
         private void TriggerDamageFlash()
         {
             if (_spriteRenderer == null) return;
-            
+
             if (_flashCoroutine != null) StopCoroutine(_flashCoroutine);
             _flashCoroutine = StartCoroutine(FlashRoutine());
         }

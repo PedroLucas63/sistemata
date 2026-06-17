@@ -38,17 +38,18 @@ namespace Sistemata.Audio
 
         private void Start()
         {
-            // Inicia uma rotina para esperar a Unity carregar o Mixer completamente
             StartCoroutine(LoadVolumesNextFrame());
         }
 
         private IEnumerator LoadVolumesNextFrame()
         {
-            yield return null; // Espera 1 frame
+            yield return null;
 
-            float masterVol = PlayerPrefs.GetFloat("MasterVol");
-            float bgmVol = PlayerPrefs.GetFloat("BGMVol");
-            float sfxVol = PlayerPrefs.GetFloat("SFXVol");
+            // Se não houver valor salvo, o PlayerPrefs.GetFloat retorna 0 por padrão.
+            // Para não começar mudo na primeira vez, podemos passar um valor padrão (ex: 0.75f)
+            float masterVol = PlayerPrefs.GetFloat("MasterVol", 0.75f);
+            float bgmVol = PlayerPrefs.GetFloat("BGMVol", 0.45f);
+            float sfxVol = PlayerPrefs.GetFloat("SFXVol", 0.75f);
 
             ApplyVolumeToMixer("MasterVol", masterVol);
             ApplyVolumeToMixer("BGMVol", bgmVol);
@@ -57,24 +58,18 @@ namespace Sistemata.Audio
 
         private void ApplyVolumeToMixer(string parameterName, float linearValue)
         {
-            // Mesma fórmula logarítmica que usamos nos Sliders
             float decibelValue = Mathf.Log10(Mathf.Clamp(linearValue, 0.0001f, 1f)) * 20;
-
-            if (parameterName == "BGMVol")
-                decibelValue -= 30f;
 
             mainMixer.SetFloat(parameterName, decibelValue);
         }
 
         private void SetupAudioSources()
         {
-            // Configura o AudioSource dedicado para Música
             bgmSource = gameObject.AddComponent<AudioSource>();
             bgmSource.outputAudioMixerGroup = bgmGroup;
             bgmSource.loop = true;
             bgmSource.playOnAwake = false;
 
-            // Cria o Pool inicial de SFX para evitar Instantiate em tempo de execução
             GameObject poolHolder = new GameObject("SFX_Pool");
             poolHolder.transform.SetParent(transform);
 
@@ -97,9 +92,85 @@ namespace Sistemata.Audio
             return source;
         }
 
+        // ===================================================================================
+        // NOVOS MÉTODOS DE SFX AQUI
+        // ===================================================================================
+
+        /// <summary>
+        /// Procura um AudioSource livre no pool. Se todos estiverem ocupados, cria um novo.
+        /// </summary>
+        private AudioSource GetAvailableSFXSource()
+        {
+            for (int i = 0; i < sfxPool.Count; i++)
+            {
+                if (!sfxPool[i].isPlaying)
+                {
+                    return sfxPool[i];
+                }
+            }
+
+            // Pool cheio! Expande dinamicamente.
+            return CreateNewPoolSource(sfxPool[0].transform.parent.gameObject);
+        }
+
+        /// <summary>
+        /// Toca um som Espacial (3D) no mundo. Útil para monstros, tiros e impactos.
+        /// </summary>
+        public void PlaySFX3D(AudioClip clip, Vector3 position, float volume = 1f)
+        {
+            if (clip == null) return;
+            AudioSource source = GetAvailableSFXSource();
+
+            source.outputAudioMixerGroup = sfxGroup; // Garante que está no grupo de Efeitos
+            source.transform.position = position;
+            source.spatialBlend = 1f; // Transforma em som 3D
+            source.minDistance = 5f;  // Distância onde o som começa a perder força
+            source.maxDistance = 40f; // Distância máxima para ouvir
+            source.pitch = Random.Range(0.9f, 1.1f); // Adiciona variação de +-10% para não enjoar!
+            source.volume = volume;
+            source.clip = clip;
+            source.Play();
+        }
+
+        /// <summary>
+        /// Toca um efeito sonoro 2D (Centralizado).
+        /// </summary>
+        public void PlaySFX2D(AudioClip clip, float volume = 1f)
+        {
+            if (clip == null) return;
+            AudioSource source = GetAvailableSFXSource();
+
+            source.outputAudioMixerGroup = sfxGroup; // Vai para o Mixer de SFX!
+            source.spatialBlend = 0f; // 2D puro, som focado no meio da cabeça
+            source.pitch = Random.Range(0.9f, 1.1f);
+            source.volume = volume;
+            source.clip = clip;
+            source.Play();
+        }
+
+        /// <summary>
+        /// Toca um som Plano (2D) para a Interface. Independe da câmera.
+        /// </summary>
+        public void PlayUISFX(AudioClip clip, float volume = 1f)
+        {
+            if (clip == null) return;
+            AudioSource source = GetAvailableSFXSource();
+
+            source.outputAudioMixerGroup = uiGroup; // Joga para o grupo de UI!
+            source.spatialBlend = 0f; // Som 2D puro
+            source.pitch = 1f; // Sem variação na UI
+            source.volume = volume;
+            source.clip = clip;
+            source.Play();
+        }
+
+        // ===================================================================================
+        // MÚSICA DE FUNDO
+        // ===================================================================================
+
         public void ChangeBGM(AudioClip newTrack, float fadeDuration = 1.5f)
         {
-            if (bgmSource.clip == newTrack) return; // Já está tocando esta música
+            if (bgmSource.clip == newTrack) return;
 
             if (bgmFadeCoroutine != null) StopCoroutine(bgmFadeCoroutine);
             bgmFadeCoroutine = StartCoroutine(FadeBGMTurn(newTrack, fadeDuration));
@@ -110,7 +181,6 @@ namespace Sistemata.Audio
             float currentTime = 0;
             float startVolume = bgmSource.volume;
 
-            // Fade Out
             while (currentTime < duration)
             {
                 currentTime += Time.deltaTime;
@@ -126,7 +196,6 @@ namespace Sistemata.Audio
                 bgmSource.Play();
                 currentTime = 0;
 
-                // Fade In
                 while (currentTime < duration)
                 {
                     currentTime += Time.deltaTime;

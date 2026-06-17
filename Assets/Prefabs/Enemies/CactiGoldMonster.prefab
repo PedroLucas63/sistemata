@@ -239,6 +239,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e18d6ccab69e42c1a43615867d0f7f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Common.EntityHealth
+  damageCooldown: 0.3
+  hitSounds:
+  - {fileID: 8300000, guid: 62f93815e286e594096a293961a3b949, type: 3}
+  - {fileID: 8300000, guid: f614cf807ad9f3a4585e5d954843c800, type: 3}
+  - {fileID: 8300000, guid: 691b15fa16cd6e44c9263a349ae4feda, type: 3}
+  - {fileID: 8300000, guid: c98906b47e2a7a14ab25069dae5bd460, type: 3}
+  - {fileID: 8300000, guid: 70f35c8d75e30894f9372aa505d84443, type: 3}
+  hitVolume: 0.8
 --- !u!114 &1067310942408240261
 MonoBehaviour:
   m_ObjectHideFlags: 0

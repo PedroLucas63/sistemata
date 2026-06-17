@@ -35,6 +35,7 @@ namespace Sistemata.Common
 
         private void OnEnable()
         {
+            transform.rotation = Quaternion.Euler(45f, 0f, 0f);
             _isBeingAttracted = false;
             _targetPlayer = null;
             _floatTimer = UnityEngine.Random.Range(0f, 5f);

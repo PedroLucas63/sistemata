@@ -5,6 +5,7 @@ using Sistemata.Stats;
 using Sistemata.Enemy;
 using Sistemata.Ally;
 using UnityEngine;
+using Sistemata.Audio;
 
 namespace Sistemata.Attack
 {
@@ -14,6 +15,7 @@ namespace Sistemata.Attack
         [SerializeField] private Projectile arrowPrefab;
         [SerializeField] private float arrowSpeed = 12f;
         [SerializeField] private float fanAngleSpread = 15f;
+        [SerializeField] private AudioClip shootSound;
         
         private Ally.Ally _cachedAllyOwner;
         private EnemyController _cachedEnemyOwner;
@@ -51,6 +53,18 @@ namespace Sistemata.Attack
                 
                 if (proj)
                     proj.Setup(spawnDirection, arrowSpeed, damage, ricochet, size, targetTag);
+
+                if (shootSound != null)
+                {
+                    if (belongsToPlayer)
+                    {
+                        AudioManager.Instance.PlaySFX2D(shootSound);
+                    }
+                    else
+                    {
+                        AudioManager.Instance.PlaySFX3D(shootSound, transform.position);
+                    }
+                }
             }
         }
 

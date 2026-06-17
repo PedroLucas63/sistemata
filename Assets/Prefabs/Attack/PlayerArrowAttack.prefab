@@ -61,7 +61,8 @@ MonoBehaviour:
   elementalType: 0
   baseData: {fileID: 11400000, guid: cbd7c83734a9a6871b400426b6b51a95, type: 2}
   belongsToPlayer: 1
-  belongsToPlayer: 1
+  useManualTrigger: 0
   arrowPrefab: {fileID: 4654985686313772912, guid: e0cad7e6b1c616471b6354ba0e75aeb8, type: 3}
   arrowSpeed: 8
   fanAngleSpread: 15
+  shootSound: {fileID: 8300000, guid: c3659bf7aa046b9479b19e4e8bbea915, type: 3}

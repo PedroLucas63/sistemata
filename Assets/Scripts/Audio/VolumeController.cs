@@ -9,6 +9,9 @@ namespace Sistemata.Audio
         [SerializeField] private AudioMixer audioMixer;
         [SerializeField] private string mixerParameterName; // Ex: MasterVol, BGMVol, SFXVol
 
+        [Tooltip("Valor inicial caso o jogador nunca tenha salvo (De 0.0001 a 1)")]
+        [SerializeField] private float defaultValue = 0.75f;
+
         private Slider slider;
 
         private void Awake()
@@ -25,8 +28,8 @@ namespace Sistemata.Audio
             // Desliga o listener temporariamente para não acionar o salvamento sem querer
             slider.onValueChanged.RemoveListener(SetVolume);
 
-            // Pega o valor salvo na memória (ou 0.75 se for a primeira vez)
-            float savedValue = PlayerPrefs.GetFloat(mixerParameterName, 0.75f);
+            // Pega o valor salvo na memória (ou defaultValue se for a primeira vez)
+            float savedValue = PlayerPrefs.GetFloat(mixerParameterName, defaultValue);
             slider.value = savedValue;
 
             // Liga o listener de volta
