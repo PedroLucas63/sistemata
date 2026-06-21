@@ -40,7 +40,7 @@ namespace Sistemata.Ally
         public float MoveSpeed => Stats.GetStat(StatType.MoveSpeed).Get();
         public float BaseMoveSpeed => Stats.GetStat(StatType.MoveSpeed).BaseValue;
         
-        public Vector2 LastMove => new(MovementDirection.x, MovementDirection.z);
+        public Vector2 LastMove { get; protected set; }
         public float AttackCooldown => 1 / Stats.GetStat(StatType.AttackRate).Get();
         public float Damage => Stats.GetStat(StatType.Damage).Get();
         
@@ -62,6 +62,8 @@ namespace Sistemata.Ally
             if (Health != null) ConfigureEntityHealth();
             
             InitializeAllBaseStats();
+
+            LastMove = Vector2.down;
         }
         
         private void ConfigureEntityHealth()
@@ -200,6 +202,13 @@ namespace Sistemata.Ally
         {
             var direction = (targetPosition - transform.position);
             direction.y = 0;
+
+            if (direction.sqrMagnitude < 0.01f)
+            {
+                ApplyIdleRepulsion();
+                return;
+            }
+
             direction.Normalize();
 
             direction += GetAllyRepulsion();
@@ -207,19 +216,25 @@ namespace Sistemata.Ally
 
             transform.position += direction * (MoveSpeed * Time.deltaTime);
             MovementDirection = direction;
+
+            if (direction.sqrMagnitude > 0.001f) 
+            {
+                LastMove = new Vector2(direction.x, direction.z);
+            }
         }
 
         private void ApplyIdleRepulsion()
         {
             var repulsion = GetAllyRepulsion();
-            if (repulsion != Vector3.zero)
+    
+            if (repulsion.sqrMagnitude > 0.001f)
             {
                 transform.position += repulsion * (MoveSpeed * 0.5f * Time.deltaTime);
                 MovementDirection = repulsion;
             }
             else
             {
-                MovementDirection = new Vector3(MovementDirection.x * 0.001f, 0, MovementDirection.z * 0.001f);
+                MovementDirection = Vector3.zero;
             }
         }
 
@@ -231,15 +246,24 @@ namespace Sistemata.Ally
             foreach (var otherAlly in ActiveAllies)
             {
                 if (!otherAlly || otherAlly == this) continue;
-
-                var distance = Mathf.Abs(transform.position.x - otherAlly.transform.position.x) +
-                               Mathf.Abs(transform.position.z - otherAlly.transform.position.z);
-
-                if (distance >= allyRepulsionRadius || distance <= 0.001f) continue;
                 
-                var pushDir = transform.position - otherAlly.transform.position;
-                pushDir.y = 0;
-                separationVector += pushDir.normalized;
+                var offset = transform.position - otherAlly.transform.position;
+                offset.y = 0;
+                
+                var sqrDistance = offset.sqrMagnitude;
+                var sqrRadius = allyRepulsionRadius * allyRepulsionRadius;
+                
+                if (sqrDistance >= sqrRadius) continue;
+
+                if (sqrDistance <= 0.0001f)
+                {
+                    offset = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * 0.01f;
+                    sqrDistance = offset.sqrMagnitude;
+                }
+
+                var distance = Mathf.Sqrt(sqrDistance);
+                var forceStrength = 1f - (distance / allyRepulsionRadius);
+                separationVector += offset.normalized * forceStrength;
                 pushCount++;
             }
 

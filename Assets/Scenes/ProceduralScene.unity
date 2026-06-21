@@ -723,6 +723,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy Spawner
       objectReference: {fileID: 0}
+    - target: {fileID: 3726457396479981460, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1077,6 +1081,10 @@ PrefabInstance:
     - target: {fileID: 2485319202711873336, guid: af30da06091277a4e88811447603d094, type: 3}
       propertyPath: m_Name
       value: Gameplay UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 2485319202711873336, guid: af30da06091277a4e88811447603d094, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2898656483492466943, guid: af30da06091277a4e88811447603d094, type: 3}
       propertyPath: m_AnchorMax.y

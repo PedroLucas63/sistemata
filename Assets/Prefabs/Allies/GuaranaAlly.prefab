@@ -113,6 +113,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Common.EntityHealth
   damageCooldown: 0.3
+  hitSounds: []
+  hitVolume: 0.8
 --- !u!114 &3603237076617942878
 MonoBehaviour:
   m_ObjectHideFlags: 0
