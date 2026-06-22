@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Formiga
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   cardName: Tanajura
-  cardImage: {fileID: 0}
+  cardImage: {fileID: 3019155423022939230, guid: 12411599ef0cf554088ed3648fbb4886, type: 3}
   category: 1
   description: Formiga que atira esferas de poder.
   allyPrefab: {fileID: 1444332622434311970, guid: e0615e46b787de165af68df7356ae4ed, type: 3}

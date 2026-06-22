@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Guarana
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   cardName: "Guaran\xE1"
-  cardImage: {fileID: 0}
+  cardImage: {fileID: 21300000, guid: 5161b5a4eb306579eb1c55ff69fbf877, type: 3}
   category: 1
   description: "Guaran\xE1 que atira esferas de poder."
   allyPrefab: {fileID: 1444332622434311970, guid: d1ee5b2f5768c4143b3b979722b715d5, type: 3}
