@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 namespace Sistemata.UI.MainMenu
@@ -9,29 +10,42 @@ namespace Sistemata.UI.MainMenu
         [Header("Panels")] 
         [SerializeField] private GameObject statsPanel;
         [SerializeField] private GameObject mainMenu;
-
-        [Header("Stats Texts")] 
-        [SerializeField] private TextMeshProUGUI txtMaxDeaths;
-        [SerializeField] private TextMeshProUGUI txtMaxTime;
+        
+        [Header("Focus Elements")]
+        [SerializeField] private GameObject statsBackButton; 
+        [SerializeField] private GameObject mainMenuDefaultButton;
 
         public void Play()
         {
-            SceneManager.LoadScene("ProceduralScene");
+            SceneManager.LoadScene("Scenes/ProceduralScene");
         }
 
         public void OpenStatsPanel()
         {
-            txtMaxDeaths.text = "45";
-            txtMaxTime.text = "24:12";
+            if (mainMenu.TryGetComponent<CanvasGroup>(out var canvasGroup))
+            {
+                canvasGroup.interactable = false;
+                canvasGroup.blocksRaycasts = false;
+            }
 
             statsPanel.SetActive(true);
-            mainMenu.SetActive(false);
+            
+            EventSystem.current.firstSelectedGameObject = statsBackButton;
+            EventSystem.current.SetSelectedGameObject(statsBackButton);
         }
 
         public void CloseStatsPanel()
         {
             statsPanel.SetActive(false);
-            mainMenu.SetActive(true);
+
+            if (mainMenu.TryGetComponent<CanvasGroup>(out var canvasGroup))
+            {
+                canvasGroup.interactable = true;
+                canvasGroup.blocksRaycasts = true;
+            }
+
+            EventSystem.current.firstSelectedGameObject = mainMenuDefaultButton;
+            EventSystem.current.SetSelectedGameObject(mainMenuDefaultButton);
         }
 
         public void ExitGame()

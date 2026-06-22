@@ -1073,6 +1073,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
   pausePanel: {fileID: 1546842691}
   quitGame: {fileID: 478815483}
+--- !u!114 &1969851434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969851432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2148aa8decdd4922b38265ba8630a2e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Save.SaveManager
+  data:
+    generalStatistics:
+      timeSurvived: 0
+      roundsPlayed: 0
+      roundsSurvived: 0
+      monstersKilled: 0
+      xpCollected: 0
+      goldCollected: 0
+    recordStatistics:
+      timeSurvived: 0
+      monstersKilled: 0
+      level: 0
+      difficultyMultiplier: 0
+    availableGold: 0
 --- !u!1 &2092597411 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1798192137038000196, guid: 4ac543067704fd84a91661077dfb8893, type: 3}
@@ -1169,6 +1195,10 @@ PrefabInstance:
     - target: {fileID: 3459669938464701015, guid: af30da06091277a4e88811447603d094, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480934890989398559, guid: af30da06091277a4e88811447603d094, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4174332215618213649, guid: af30da06091277a4e88811447603d094, type: 3}
       propertyPath: m_Pivot.x
@@ -1314,6 +1344,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5303287145507936281, guid: af30da06091277a4e88811447603d094, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5362273367240725221, guid: af30da06091277a4e88811447603d094, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1329,6 +1363,34 @@ PrefabInstance:
     - target: {fileID: 5362273367240725221, guid: af30da06091277a4e88811447603d094, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629619024516530531, guid: af30da06091277a4e88811447603d094, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629619024516530531, guid: af30da06091277a4e88811447603d094, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629619024516530531, guid: af30da06091277a4e88811447603d094, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4545413730765709441}
+    - target: {fileID: 5629619024516530531, guid: af30da06091277a4e88811447603d094, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629619024516530531, guid: af30da06091277a4e88811447603d094, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: GoToMainMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629619024516530531, guid: af30da06091277a4e88811447603d094, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Sistemata.Core.UIManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629619024516530531, guid: af30da06091277a4e88811447603d094, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6849077522090990021, guid: af30da06091277a4e88811447603d094, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1360,6 +1422,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 51719889677892527, guid: af30da06091277a4e88811447603d094, type: 3}
   m_PrefabInstance: {fileID: 4545413730765709439}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4545413730765709441 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3916069299374111763, guid: af30da06091277a4e88811447603d094, type: 3}
+  m_PrefabInstance: {fileID: 4545413730765709439}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f5ef893c7ba2fe41a7fab12bbb27dd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!224 &4545413730765709442 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1571177179922704173, guid: af30da06091277a4e88811447603d094, type: 3}
@@ -1445,6 +1518,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5163970751170214866, guid: 87389200176828f4eadf34d3b91ce710, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1969851433}
+    - targetCorrespondingSourceObject: {fileID: 5163970751170214866, guid: 87389200176828f4eadf34d3b91ce710, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1969851434}
   m_SourcePrefab: {fileID: 100100000, guid: 87389200176828f4eadf34d3b91ce710, type: 3}
 --- !u!1001 &8921612695256833761
 PrefabInstance:

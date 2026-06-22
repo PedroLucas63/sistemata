@@ -31,6 +31,8 @@ namespace Sistemata.UI.MainMenu
         {
             var activatePlayer = _playerAInUse ? playerA : playerB;
 
+            if (!activatePlayer) return;
+
             if (activatePlayer.isPlaying && activatePlayer.time >= activatePlayer.length - transitionTime)
             {
                 PlayNextVideo();

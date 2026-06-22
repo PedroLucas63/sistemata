@@ -83,7 +83,7 @@ namespace Sistemata.Core
         public void GoToMainMenu()
         {
             Time.timeScale = 1f;
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadScene("MainMenuScene");
         }
 
 

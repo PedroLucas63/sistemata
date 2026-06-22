@@ -1,5 +1,7 @@
 using Sistemata.Audio;
 using System;
+using Sistemata.Common;
+using Sistemata.Save;
 using UnityEngine;
 
 namespace Sistemata.Core
@@ -26,7 +28,7 @@ namespace Sistemata.Core
 
         public float totalTimeSurvived { get; private set; }
         public int monstersKilled { get; private set; }
-
+        
         // Eventos
         public event Action OnBossWarning;
         public event Action OnBossSpawn;
@@ -36,11 +38,22 @@ namespace Sistemata.Core
 
         [Header("Configurações de projéteis")]
         public Transform ProjectileParent;
+        
+        private RoundData _roundData;
 
         private void Awake()
         {
-            if (Instance == null) Instance = this;
-            else Destroy(gameObject);
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+    
+            Instance = this;
+            _roundData = new RoundData();
+            currentState = GameState.Normal;
+            phaseTimer = timeUntilBoss;
+            Time.timeScale = 1f;
         }
 
         private void Start()
@@ -54,10 +67,6 @@ namespace Sistemata.Core
                 Debug.LogWarning("AudioManager não encontrado na cena ou roundMusic está vazio!");
             }
 
-            currentState = GameState.Normal;
-            phaseTimer = timeUntilBoss;
-            Time.timeScale = 1f;
-
             if (player != null)
                 playerScript = player.GetComponent<CharacterController>();
 
@@ -68,6 +77,7 @@ namespace Sistemata.Core
             if (currentState == GameState.GameOver) return;
 
             totalTimeSurvived += Time.deltaTime;
+            _roundData.TimeSurvived += Time.deltaTime;;
 
             if (currentState == GameState.Normal)
             {
@@ -111,6 +121,7 @@ namespace Sistemata.Core
         {
             if (currentState == GameState.Boss)
             {
+                _roundData.Completed = true;
                 currentState = GameState.ChaosTransition;
                 OnChaosWarning?.Invoke();
 
@@ -127,6 +138,20 @@ namespace Sistemata.Core
         public void AddKill()
         {
             monstersKilled++;
+            _roundData.MonstersKilled++;
+        }
+        
+        public void AddCollectible(CollectibleType type, float amount)
+        {
+            if (type == CollectibleType.XP)
+                _roundData.XpCollected += amount;
+            else
+                _roundData.GoldCollected += amount;
+        }
+        
+        public void AddLevel()
+        {
+            _roundData.Level++;
         }
 
         public void PlayerDied()
@@ -134,6 +159,7 @@ namespace Sistemata.Core
             currentState = GameState.GameOver;
             Time.timeScale = 0f;
             OnGameOver?.Invoke(monstersKilled, totalTimeSurvived);
+            SaveManager.Instance.UpdateSave(_roundData);
         }
     }
 }

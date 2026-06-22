@@ -112,6 +112,8 @@ namespace Sistemata.Player
             // Som de Level Up
             if (levelUpSfx != null && AudioManager.Instance != null)
                 AudioManager.Instance.PlaySFX2D(levelUpSfx);
+            
+            if (GameManager.Instance) GameManager.Instance.AddLevel();
 
             // Ativa a tela de upgrades
             if (UI.LevelUp.LevelUpUIManager.Instance)

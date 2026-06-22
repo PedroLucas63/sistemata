@@ -1,4 +1,5 @@
 using System;
+using Sistemata.Core;
 using UnityEngine;
 
 namespace Sistemata.Common
@@ -118,20 +119,22 @@ namespace Sistemata.Common
 
         private void Collect()
         {
-            if (Sistemata.Player.PlayerManager.Instance)
+            if (Player.PlayerManager.Instance)
             {
                 switch (type)
                 {
                     case CollectibleType.Coin:
-                        Sistemata.Player.PlayerManager.Instance.AddGold((int)value);
+                        Player.PlayerManager.Instance.AddGold((int)value);
                         break;
                     case CollectibleType.XP:
-                        Sistemata.Player.PlayerManager.Instance.AddXP(value);
+                        Player.PlayerManager.Instance.AddXP(value);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
+            
+            if (GameManager.Instance) GameManager.Instance.AddCollectible(type, value);
 
             if (ManagedPool != null)
             {
