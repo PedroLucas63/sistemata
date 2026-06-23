@@ -13,13 +13,36 @@ namespace Sistemata.Save
 
         private void Awake()
         {
+            if (gameObject.name == "SaveManager")
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+                _saveFilePath = Application.persistentDataPath + "/gamesave.sav";
+                LoadGame();
+                return;
+            }
+
             if (Instance != null && Instance != this)
             {
-                Destroy(gameObject);
+                Destroy(this);
                 return;
             }
             
             Instance = this;
+
+            // Se este script estiver anexado a um GameObject com outros componentes (como MenuManager ou Game Manager),
+            // não podemos aplicar DontDestroyOnLoad no GameObject inteiro, pois isso faria persistir outros gerenciadores
+            // ou destruiria outros gerenciadores se destruíssemos o GameObject duplicado.
+            // Em vez disso, criamos um GameObject dedicado para a persistência em runtime.
+            if (GetComponents<Component>().Length > 2 || transform.parent != null)
+            {
+                Instance = null; // Evita que a nova instância se detecte como duplicada no Awake
+                var saveManagerGo = new GameObject("SaveManager (Persistent)");
+                saveManagerGo.AddComponent<SaveManager>();
+                Destroy(this);
+                return;
+            }
+
             DontDestroyOnLoad(gameObject);
 
             _saveFilePath = Application.persistentDataPath + "/gamesave.sav";

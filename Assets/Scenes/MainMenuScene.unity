@@ -1793,7 +1793,6 @@ GameObject:
   - component: {fileID: 469093115}
   - component: {fileID: 469093114}
   - component: {fileID: 469093116}
-  - component: {fileID: 469093117}
   m_Layer: 0
   m_Name: MenuManager
   m_TagString: Untagged
@@ -1858,32 +1857,6 @@ MonoBehaviour:
   statsBackButton: {fileID: 1229743391}
   aboutBackButton: {fileID: 9465259}
   loadingSlider: {fileID: 1767315713}
---- !u!114 &469093117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 469093113}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2148aa8decdd4922b38265ba8630a2e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Save.SaveManager
-  data:
-    generalStatistics:
-      timeSurvived: 0
-      roundsPlayed: 0
-      roundsSurvived: 0
-      monstersKilled: 0
-      xpCollected: 0
-      goldCollected: 0
-    recordStatistics:
-      timeSurvived: 0
-      monstersKilled: 0
-      level: 0
-      difficultyMultiplier: 0
-    availableGold: 0
 --- !u!1 &473374819
 GameObject:
   m_ObjectHideFlags: 0
@@ -2422,6 +2395,64 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 651809386}
   m_CullTransparentMesh: 1
+--- !u!1 &709313027
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 709313029}
+  - component: {fileID: 709313028}
+  m_Layer: 0
+  m_Name: SaveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &709313028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 709313027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2148aa8decdd4922b38265ba8630a2e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Save.SaveManager
+  data:
+    generalStatistics:
+      timeSurvived: 0
+      roundsPlayed: 0
+      roundsSurvived: 0
+      monstersKilled: 0
+      xpCollected: 0
+      goldCollected: 0
+    recordStatistics:
+      timeSurvived: 0
+      monstersKilled: 0
+      level: 0
+      difficultyMultiplier: 0
+    availableGold: 0
+--- !u!4 &709313029
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 709313027}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 717.4422, y: 0, z: 1684.909}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &712334423
 GameObject:
   m_ObjectHideFlags: 0
@@ -6766,3 +6797,4 @@ SceneRoots:
   - {fileID: 175481314}
   - {fileID: 199846607}
   - {fileID: 469093115}
+  - {fileID: 709313029}
