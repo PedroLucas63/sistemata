@@ -145,7 +145,7 @@ namespace Sistemata.Core
         {
             if (type == CollectibleType.XP)
                 _roundData.XpCollected += amount;
-            else
+            else if (type == CollectibleType.Coin)
                 _roundData.GoldCollected += amount;
         }
         

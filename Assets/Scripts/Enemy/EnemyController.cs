@@ -111,11 +111,11 @@ namespace Sistemata.Enemy
             StartCoroutine(DeathSequence());
         }
 
-        private void SpawnLoot()
+        protected virtual void SpawnLoot()
         {
-            if (CollectablePoolManager.Instance == null) return;
+            if (!CollectablePoolManager.Instance) return;
             
-            if (xpPrefab != null)
+            if (xpPrefab)
             {
                 if (minXP == 0 && maxXP == 0) return;
 
@@ -124,7 +124,7 @@ namespace Sistemata.Enemy
                 var xpPosition = transform.position + xpNoise * 0.1f;
                 
                 var xpInstance = CollectablePoolManager.Instance.Spawn(xpPrefab, xpPosition);
-                if (xpInstance != null)
+                if (xpInstance)
                 {
                     var randomXp = UnityEngine.Random.Range(minXP, maxXP);
                     xpInstance.SetValue(randomXp);
@@ -132,14 +132,14 @@ namespace Sistemata.Enemy
             }
             
             var probability = UnityEngine.Random.Range(0f, 1f);
-            if (coinPrefab == null || !(probability <= coinDropChance)) return;
+            if (!coinPrefab || !(probability <= coinDropChance)) return;
             
             var coinNoise = UnityEngine.Random.insideUnitSphere;
             coinNoise.y = 0;
             var coinPosition = transform.position + coinNoise * 0.1f;
             
             var coinInstance = CollectablePoolManager.Instance.Spawn(coinPrefab, coinPosition);
-            if (coinInstance == null) return;
+            if (!coinInstance) return;
                 
             var randomCoin = UnityEngine.Random.Range(minCoin, maxCoin + 1);
             coinInstance.SetValue(randomCoin);
@@ -268,7 +268,7 @@ namespace Sistemata.Enemy
             EnemySpawner.Instance.UpdateBatchOnUnitDeath("enemy", BatchID);
         }
 
-        public void RunLogic()
+        public virtual void RunLogic()
         {
             CurrentTarget = FindNearestTarget();
 
@@ -341,7 +341,7 @@ namespace Sistemata.Enemy
             return closest;
         }
 
-        private void PushNearbyEnemies()
+        protected virtual void PushNearbyEnemies()
         {
             var separationVector = Vector3.zero;
             var pushCount = 0;

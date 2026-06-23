@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Sistemata.Common
 {
-    public enum CollectibleType { Coin, XP }
+    public enum CollectibleType { Coin, XP, Magnet, Bomb }
 
     public class Collectible : MonoBehaviour
     {
         [Header("Configurações")]
-        [SerializeField] private CollectibleType type;
+        [SerializeField] protected CollectibleType type;
         [SerializeField] private float value = 1f;
         [SerializeField] private float moveSpeed = 4f; // Reduzido para uma atração mais fraca
 
@@ -21,11 +21,12 @@ namespace Sistemata.Common
         private Vector3 _visualBasePosition;
         private Transform _targetPlayer;
         private bool _isBeingAttracted;
+        private bool _attractedByMagnet;
         private float _floatTimer;
         
         public UnityEngine.Pool.IObjectPool<Collectible> ManagedPool { get; set; }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             if (transform.childCount > 0)
                 _visualChild = transform.GetChild(0);
@@ -38,6 +39,7 @@ namespace Sistemata.Common
         {
             transform.rotation = Quaternion.Euler(45f, 0f, 0f);
             _isBeingAttracted = false;
+            _attractedByMagnet = false;
             _targetPlayer = null;
             _floatTimer = UnityEngine.Random.Range(0f, 5f);
             
@@ -49,10 +51,17 @@ namespace Sistemata.Common
         {
             HandleFloatingAnimation();
 
-            if (_isBeingAttracted && _targetPlayer)
+            if (!_isBeingAttracted && Player.PlayerManager.Instance && Player.PlayerManager.Instance.IsMagnetActive)
             {
-                MoveTowardsPlayer();
+                if (type is CollectibleType.XP or CollectibleType.Coin)
+                {
+                    _attractedByMagnet = true;
+                    AttractTo(Player.PlayerManager.Instance.transform);
+                }
             }
+
+            if (_isBeingAttracted && _targetPlayer)
+                MoveTowardsPlayer();
         }
 
         private void HandleFloatingAnimation()
@@ -70,13 +79,26 @@ namespace Sistemata.Common
 
             // Tentamos pegar o centro real do Player (CharacterController)
             Vector3 targetCenter = _targetPlayer.position;
-            if (Sistemata.Player.PlayerManager.Instance != null && Sistemata.Player.PlayerManager.Instance.PlayerScript != null)
+            if (Sistemata.Player.PlayerManager.Instance && Sistemata.Player.PlayerManager.Instance.PlayerScript != null)
             {
                 targetCenter = Sistemata.Player.PlayerManager.Instance.PlayerScript.bounds.center;
             }
 
             Vector3 direction = targetCenter - transform.position;
             float distance = direction.magnitude;
+
+            // Se o imã global não está ativo e o item está fora do raio de coleta, desativa a atração
+            if (Player.PlayerManager.Instance && !Player.PlayerManager.Instance.IsMagnetActive)
+            {
+                float normalRadius = Player.PlayerManager.Instance.GetStat(Stats.StatType.PickupRadius)?.Get() ?? 2f;
+                if (distance > normalRadius + 0.5f)
+                {
+                    _isBeingAttracted = false;
+                    _attractedByMagnet = false;
+                    _targetPlayer = null;
+                    return;
+                }
+            }
             
             // Se estiver muito perto do centro, coleta
             if (distance < 0.5f)
@@ -85,10 +107,18 @@ namespace Sistemata.Common
                 return;
             }
 
-            // Suavizamos a atração:
-            // Usamos uma velocidade mais baixa que aumenta de forma bem suave conforme chega perto
+            // Aceleração/velocidade da atração
+            float speedMultiplier = 1f;
+            float magnetMinSpeed = 0f;
+
+            if (Player.PlayerManager.Instance && Player.PlayerManager.Instance.IsMagnetActive)
+            {
+                speedMultiplier = 3.5f; // Aumenta a velocidade
+                magnetMinSpeed = 12f;   // Velocidade mínima rápida para longo alcance
+            }
+
             float smoothFactor = Mathf.Clamp(2f / distance, 0.5f, 3f);
-            float currentSpeed = moveSpeed * smoothFactor;
+            float currentSpeed = Mathf.Max(moveSpeed * smoothFactor * speedMultiplier, magnetMinSpeed);
             
             transform.position += direction.normalized * (currentSpeed * Time.deltaTime);
         }
@@ -102,11 +132,8 @@ namespace Sistemata.Common
 
         private void OnTriggerEnter(Collider collision)
         {
-            // Se colidir com o Player (o corpo real, não o imã), coleta
             if (collision.CompareTag("Player"))
-            {
                 Collect();
-            }
         }
 
         /// <summary>
@@ -117,7 +144,7 @@ namespace Sistemata.Common
             value = newValue;
         }
 
-        private void Collect()
+        protected virtual void Collect()
         {
             if (Player.PlayerManager.Instance)
             {
@@ -130,7 +157,8 @@ namespace Sistemata.Common
                         Player.PlayerManager.Instance.AddXP(value);
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        // Magnet and Bomb are handled in their own subclass override of Collect()
+                        break;
                 }
             }
             

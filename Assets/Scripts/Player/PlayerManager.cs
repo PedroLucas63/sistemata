@@ -29,7 +29,7 @@ namespace Sistemata.Player
 
         [Header("Referências de Coleta")]
         [Tooltip("Referência opcional ao script de imã no objeto filho.")]
-        [SerializeField] private CollectibleMagnet magnetScript;
+        [SerializeField] private MagnetSphere magnetScript;
 
         // ==========================================
         // BLOCO DE ÁUDIO
@@ -129,6 +129,7 @@ namespace Sistemata.Player
         private void ConfigurePlayerHealth()
         {
             _playerHealth.OnDeath += HandleDeath;
+            _playerHealth.Heal(_playerHealth.MaxHealth);
         }
 
         private void HandleDeath()
@@ -236,6 +237,27 @@ namespace Sistemata.Player
             );
 
             return dir.normalized;
+        }
+
+        // ==========================================
+        // SISTEMA DE ÍMÃ TEMPORÁRIO
+        // ==========================================
+        public bool IsMagnetActive { get; private set; }
+        private Coroutine _magnetCoroutine;
+
+        public void ActivateMagnet(float duration)
+        {
+            if (_magnetCoroutine != null)
+                StopCoroutine(_magnetCoroutine);
+            _magnetCoroutine = StartCoroutine(MagnetRoutine(duration));
+        }
+
+        private System.Collections.IEnumerator MagnetRoutine(float duration)
+        {
+            IsMagnetActive = true;
+            yield return new WaitForSeconds(duration);
+            IsMagnetActive = false;
+            _magnetCoroutine = null;
         }
 
         /// <summary>
