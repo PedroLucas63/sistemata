@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 2639814325685152492}
   - component: {fileID: 5066702936169762682}
   - component: {fileID: 8317220108195937634}
-  - component: {fileID: 2595654772663478877}
+  - component: {fileID: 5179214168108140858}
   m_Layer: 3
   m_Name: FormigaBoss
   m_TagString: Enemy
@@ -259,8 +259,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!136 &2595654772663478877
-CapsuleCollider:
+--- !u!65 &5179214168108140858
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -274,11 +274,9 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 3
+  m_Size: {x: 0.7, y: 1, z: 1.2}
+  m_Center: {x: 0, y: 0.6, z: 0.5}
