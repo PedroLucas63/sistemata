@@ -20,8 +20,8 @@ MonoBehaviour:
   AttackPrefab: {fileID: 0}
   TargetEntity: 1
   TargetStat: 10
-  ModType: 2
-  Amount: 0.4
+  ModType: 0
+  Amount: 1
   TargetID: ArrowFire
   Weight: 10
   IsUnique: 1

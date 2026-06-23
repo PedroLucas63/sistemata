@@ -1,27 +1,49 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Sistemata.Save;
 using UnityEngine;
-using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 namespace Sistemata.Map
 {
     public class WorldManager : MonoBehaviour
     {
-        private const int GRID_SIZE = 3;
+        private const int GridSize = 3;
         
         [SerializeField] private Chunk chunkPrefab;
-        [SerializeField] private CharacterController _player;
-        [SerializeField] private int WorldSeed = 12345;
+        [SerializeField] private CharacterController player;
         
-        private Dictionary<Vector2Int, Chunk> _chunks = new();
+        private const int WorldSeedBase = 12345;
+        
+        private readonly Dictionary<Vector2Int, Chunk> _chunks = new();
         private Vector2Int _currentChunk;
         private GameObject _grid;
         private Coroutine _chunkGenerationProcess;
+        private int _worldSeed = 0;
         
         private void Awake()
         {
             _grid = transform.Find("Grid").gameObject;
+            CalculateWorldSeed();
+        }
+
+        private void CalculateWorldSeed()
+        {
+            var matchesPlayed = SaveManager.Instance?.data.generalStatistics.roundsPlayed ?? 0;
+            if (matchesPlayed == 0)
+            {
+                _worldSeed = WorldSeedBase;
+            }
+            else
+            {
+                var safeN = Mathf.Min(matchesPlayed, 30);
+                var maxRandom = (int) Mathf.Pow(2, safeN);
+                _worldSeed = WorldSeedBase + Random.Range(0, maxRandom);
+            }
+            
+            Debug.Log($"World seed: {_worldSeed}");
         }
 
         private void Start()
@@ -31,11 +53,11 @@ namespace Sistemata.Map
 
         private void Update()
         {
-            if (_player == null) return;
+            if (!player) return;
 
-            var playerPos = _player.transform.position;
+            var playerPos = player.transform.position;
             var chunkId = GetChunkIdByPosition(playerPos);
-
+            
             if (_currentChunk.x == chunkId.x && _currentChunk.y == chunkId.y) return;
             if (_chunkGenerationProcess != null)
             {
@@ -51,7 +73,7 @@ namespace Sistemata.Map
                 for (var z = -1; z <= 1; z++)
                 {
                     var chunk = SpawnChunk();
-                    chunk.Initialize(WorldSeed, x, z);
+                    chunk.Initialize(_worldSeed, x, z);
                     _chunks.Add(new Vector2Int(x, z), chunk);
                 }
             }
@@ -104,7 +126,7 @@ namespace Sistemata.Map
                 _chunks.Add(newId, chunk);
 
                 chunk.Initialize(
-                    WorldSeed,
+                    _worldSeed,
                     newId.x,
                     newId.y
                 );

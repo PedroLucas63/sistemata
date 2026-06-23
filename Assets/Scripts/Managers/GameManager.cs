@@ -26,8 +26,8 @@ namespace Sistemata.Core
         public float timeUntilBoss = 300f;
         private float phaseTimer;
 
-        public float totalTimeSurvived { get; private set; }
-        public int monstersKilled { get; private set; }
+        public float TotalTimeSurvived { get; private set; }
+        public int MonstersKilled { get; private set; }
         
         // Eventos
         public event Action OnBossWarning;
@@ -76,7 +76,7 @@ namespace Sistemata.Core
         {
             if (currentState == GameState.GameOver) return;
 
-            totalTimeSurvived += Time.deltaTime;
+            TotalTimeSurvived += Time.deltaTime;
             _roundData.TimeSurvived += Time.deltaTime;;
 
             if (currentState == GameState.Normal)
@@ -137,7 +137,7 @@ namespace Sistemata.Core
 
         public void AddKill()
         {
-            monstersKilled++;
+            MonstersKilled++;
             _roundData.MonstersKilled++;
         }
         
@@ -158,7 +158,7 @@ namespace Sistemata.Core
         {
             currentState = GameState.GameOver;
             Time.timeScale = 0f;
-            OnGameOver?.Invoke(monstersKilled, totalTimeSurvived);
+            OnGameOver?.Invoke(MonstersKilled, TotalTimeSurvived);
             SaveManager.Instance.UpdateSave(_roundData);
         }
     }

@@ -1,11 +1,8 @@
-﻿using System;
-using Sistemata.Common;
+﻿using Sistemata.Common;
 using Sistemata.Core;
 using Sistemata.Spawning;
 using Sistemata.Stats;
-using Unity.Mathematics;
 using UnityEngine;
-using Random = System.Random;
 
 namespace Sistemata.Enemy
 {
@@ -18,9 +15,10 @@ namespace Sistemata.Enemy
             get => batchId;
             set => batchId = value;
         }
-        
-        [Header("Despawn")] 
-        public float despawnDistance = 55f;
+
+        [Header("Reposition Transform")] 
+        [SerializeField] private float repositionDistance = 20f;
+        [SerializeField] private float repositionTime = 10f;
         
         protected SpriteRenderer SpriteRenderer;
         protected Vector3 MovementDirection;
@@ -36,6 +34,8 @@ namespace Sistemata.Enemy
         protected float AttackVisualTimer;
 
         protected Transform CurrentTarget;
+
+        protected float RepositionTimer;
 
         public float MoveSpeed => Stats.GetStat(StatType.MoveSpeed).Get();
         public float BaseMoveSpeed => Stats.GetStat(StatType.MoveSpeed).BaseValue;
@@ -54,6 +54,8 @@ namespace Sistemata.Enemy
             if (Health == null) Health = GetComponentInChildren<EntityHealth>();
             
             if (Health != null) ConfigureEntityHealth();
+
+            RepositionTimer = repositionTime;
             
             InitializeAllBaseStats();
             OnAwake();
@@ -115,7 +117,6 @@ namespace Sistemata.Enemy
             
             if (xpPrefab != null)
             {
-                Debug.Log("Spawning XP");
                 if (minXP == 0 && maxXP == 0) return;
 
                 var xpNoise = UnityEngine.Random.insideUnitSphere;
@@ -142,6 +143,58 @@ namespace Sistemata.Enemy
                 
             var randomCoin = UnityEngine.Random.Range(minCoin, maxCoin + 1);
             coinInstance.SetValue(randomCoin);
+        }
+
+        public void DefineLevel(int level)
+        {
+            var eligibleStats = new StatType[]
+            {
+                StatType.MaxHealth,
+                StatType.Damage,
+                StatType.Armor,
+                StatType.MoveSpeed,
+                StatType.AttackRate
+            };
+
+            for (var i = 1; i < level; i++)
+            {
+                var randomStat = eligibleStats[Random.Range(0, eligibleStats.Length)];
+                var upgrade = GenerateUpgradeForStat(randomStat);
+                Stats.ApplyUpgrade(randomStat, upgrade);
+            }
+            
+            if (Health)
+            {
+                Health.Heal(Health.MaxHealth); 
+            }
+        }
+
+        /// <summary>
+        /// Cria um modificador do tipo 'Increased' (porcentagem) calibrado para não quebrar a física ou animações do jogo.
+        /// </summary>
+        private StatModifier GenerateUpgradeForStat(StatType stat)
+        {
+            var percentageBonus = stat switch
+            {
+                StatType.MaxHealth => 0.02f // +20% de Vida por upgrade
+                ,
+                StatType.Damage => 0.015f // +15% de Dano por upgrade
+                ,
+                StatType.Armor => 0.10f // +10% de Armadura por upgrade
+                ,
+                StatType.MoveSpeed => 0.01f // +4% de Velocidade (Mantém o controle do NavMesh/Transform)
+                ,
+                StatType.AttackRate => 0.01f // +5% de Velocidade de Ataque
+                ,
+                _ => 0f
+            };
+
+            return new StatModifier
+            {
+                Type = ModifierType.Increased,
+                Value = percentageBonus,
+                Source = "EnemyLevelUpScaling"
+            };
         }
 
         private System.Collections.IEnumerator DeathSequence()
@@ -189,12 +242,12 @@ namespace Sistemata.Enemy
 
         public virtual void TakeDamage(float damage)
         {
-            if (Health == null) Health = GetComponent<EntityHealth>();
-            if (Health == null) return;
+            if (!Health) Health = GetComponent<EntityHealth>();
+            if (!Health) return;
 
             var armor = Stats.GetStat(StatType.Armor)?.Get() ?? 0f;
             damage -= armor;
-            damage = Mathf.Max(0f, damage);
+            damage = Mathf.Max(1f, damage);
             
             Health.TakeDamage(damage);
         }
@@ -227,14 +280,22 @@ namespace Sistemata.Enemy
 
             MovementDirection = CurrentTarget.position - transform.position;
             MovementDirection.y = 0;
+            
+            var distanceToTarget = MovementDirection.magnitude;
+            if (distanceToTarget > repositionDistance)
+                RepositionTimer -= 1f;
+            else
+                RepositionTimer = repositionTime;
 
-            if (MovementDirection.sqrMagnitude > despawnDistance * despawnDistance)
+            if (RepositionTimer < 0)
             {
+                // EnemySpawner.Instance.RepositionEnemy(this);
+                // RepositionTimer = repositionTime;
                 Destroy(gameObject); 
+                EnemySpawner.Instance.Spawn();
                 return;
             }
 
-            var distanceToTarget = MovementDirection.magnitude;
             UpdateCombatBehavior(distanceToTarget);
             PushNearbyEnemies();
             
@@ -289,21 +350,28 @@ namespace Sistemata.Enemy
             {
                 if (!otherEnemy || otherEnemy == this) continue;
 
-                var distance = Mathf.Abs(transform.position.x - otherEnemy.transform.position.x) +
-                               Mathf.Abs(transform.position.z - otherEnemy.transform.position.z);
-
-                if (!(distance < 0.2f) || !(distance > 0.001f)) continue;
-                
                 var pushDir = transform.position - otherEnemy.transform.position;
                 pushDir.y = 0;
+        
+                var distSqr = pushDir.sqrMagnitude;
+
+                switch (distSqr)
+                {
+                    case > 0.04f:
+                        continue;
+                    case < 0.0001f:
+                        pushDir = new Vector3(UnityEngine.Random.Range(-0.1f, 0.1f), 0, UnityEngine.Random.Range(-0.1f, 0.1f));
+                        break;
+                }
 
                 separationVector += pushDir.normalized;
                 pushCount++;
             }
 
             if (pushCount <= 0) return;
+    
             separationVector /= pushCount;
-            
+    
             MovementDirection += separationVector * 1.5f;
             MovementDirection.Normalize();
         }

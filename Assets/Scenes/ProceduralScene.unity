@@ -787,6 +787,38 @@ PrefabInstance:
       propertyPath: enemyHolder
       value: 
       objectReference: {fileID: 673128641}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: maxEnemyCount
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: initEnemyCount
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: minSpawnRadius
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: chaosSpawnDelay
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: minRespawnRadius
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: normalSpawnDelay
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: minimumSpawnDelay
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: difficultyScaleSpeed
+      value: 0.008
+      objectReference: {fileID: 0}
     - target: {fileID: 3726457396479981460, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: m_Name
       value: Enemy Spawner
@@ -928,6 +960,10 @@ PrefabInstance:
     - target: {fileID: 1798192137038000196, guid: 4ac543067704fd84a91661077dfb8893, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2105190835070906337, guid: 4ac543067704fd84a91661077dfb8893, type: 3}
+      propertyPath: damageCooldown
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 2105190835070906337, guid: 4ac543067704fd84a91661077dfb8893, type: 3}
       propertyPath: hitSounds.Array.size
@@ -1574,6 +1610,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7248550945514110104, guid: 5923f908762301540a073432aa1ccbc3, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1940310458}
     - target: {fileID: 7248550945514110104, guid: 5923f908762301540a073432aa1ccbc3, type: 3}
       propertyPath: _player
       value: 

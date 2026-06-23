@@ -70,6 +70,8 @@ namespace Sistemata.UI.MainMenu
         {
             var elapsedTime = 0f;
 
+            if (!current || !next) yield break;
+
             while (elapsedTime < transitionTime)
             {
                 elapsedTime += Time.deltaTime;

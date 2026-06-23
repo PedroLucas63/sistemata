@@ -19,7 +19,7 @@ MonoBehaviour:
   Type: 0
   AttackPrefab: {fileID: 0}
   TargetEntity: 1
-  TargetStat: 8
+  TargetStat: 10
   ModType: 0
   Amount: 1
   TargetID: Arrow

@@ -87,7 +87,6 @@ namespace Sistemata.Player
         public void AddXP(float amount)
         {
             currentXP += amount;
-            Debug.Log($"XP Coletado: +{amount} | Total: {currentXP}/{GetRequiredXP(currentLevel)}");
             float targetXP = GetRequiredXP(currentLevel);
 
             // Som de Coleta de XP
@@ -118,7 +117,7 @@ namespace Sistemata.Player
             // Ativa a tela de upgrades
             if (UI.LevelUp.LevelUpUIManager.Instance)
             {
-                UI.LevelUp.LevelUpUIManager.Instance.TriggerLevelUp();
+                UI.LevelUp.LevelUpUIManager.Instance.QueueLevelUp();
             }
         }
 

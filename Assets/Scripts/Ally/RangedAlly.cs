@@ -62,7 +62,6 @@ namespace Sistemata.Ally
         {
             if (_instantiatedAttack != null)
             {
-                Debug.Log("Aliado atacando!");
                 _instantiatedAttack.TriggerAttack();
             }
         }

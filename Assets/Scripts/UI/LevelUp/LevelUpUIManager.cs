@@ -23,13 +23,23 @@ namespace Sistemata.UI.LevelUp
         private float _currentTime;
         private bool _isChoosing;
         private List<UpgradeData> _currentOptions;
+        private int _pendingLevelUps = 0;
         
         private void Awake()
         {
             if (Instance == null) Instance = this;
             else Destroy(gameObject);
         }
-
+        
+        public void QueueLevelUp()
+        {
+            _pendingLevelUps++;
+            
+            if (!levelUpPanel.activeSelf)
+            {
+                TriggerLevelUp();
+            }
+        }
 
         private void Start()
         {
@@ -48,13 +58,15 @@ namespace Sistemata.UI.LevelUp
                 AutoSelectRandom();
         }
 
-        public void TriggerLevelUp()
+        private void TriggerLevelUp()
         {
+            _pendingLevelUps--;
             _currentOptions = UpgradePoolManager.Instance.GetRandomUpgrades(3);
             
             if (_currentOptions == null || _currentOptions.Count == 0)
             {
                 Debug.LogWarning("Nenhum upgrade disponível na Pool!");
+                StartCoroutine(UnpauseRoutine());
                 return;
             }
 
@@ -74,12 +86,9 @@ namespace Sistemata.UI.LevelUp
                 }
                 else
                 {
-                    // Desativa os cards que não têm dados (caso venham menos de 3)
                     cardsUI[i].gameObject.SetActive(false);
                 }
             }
-            
-            Debug.Log($"Tela de Level Up aberta com {_currentOptions.Count} opções.");
         }
 
         private void OnUpgradeSelected(UpgradeData selectedData)
@@ -88,10 +97,12 @@ namespace Sistemata.UI.LevelUp
             _isChoosing = false;
             
             levelUpPanel.SetActive(false);
-            
             UpgradePoolManager.Instance.OnUpgradeChosen(selectedData);
-
-            StartCoroutine(UnpauseRoutine());
+            
+            if (_pendingLevelUps > 0)
+                TriggerLevelUp();
+            else
+                StartCoroutine(UnpauseRoutine());
         }
 
         private void AutoSelectRandom()

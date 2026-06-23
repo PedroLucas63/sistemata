@@ -29,12 +29,15 @@ namespace Sistemata.Spawning
         public float chaosSpawnDelay = 0.5f;
         [Tooltip("O menor atraso possível que o spawn normal pode atingir ao acelerar.")]
         public float minimumSpawnDelay = 0.4f; 
+        public int initialLevel = 1;
+        public int maxLevel = 15;
         [Tooltip("Quão rápido a dificuldade cresce. Valores maiores aceleram o spawn mais cedo.")]
         public float difficultyScaleSpeed = 0.005f; 
         
         public int maxEnemyCount = 100;
         public int initEnemyCount = 20;
         public float minSpawnRadius = 25f;
+        public float minRespawnRadius = 15f;
         public float maxSpawnRadius = 35f;
         public Transform enemyHolder;
 
@@ -110,16 +113,18 @@ namespace Sistemata.Spawning
             if (state != GameState.Normal && state != GameState.Chaos) return;
             
             currentSpawnTimer -= Time.deltaTime;
-            if (currentSpawnTimer <= 0 && enemyHolder.childCount < maxEnemyCount)
+            if (!(currentSpawnTimer <= 0) || enemyHolder.childCount >= maxEnemyCount) return;
+
+            Spawn();
+            currentSpawnTimer = CalculateDynamicSpawnDelay(state);
+        }
+
+        public void Spawn()
+        {
+            var chosenEnemy = SelectRandomEnemy();
+            if (chosenEnemy)
             {
-                EnemyController chosenEnemy = SelectRandomEnemy();
-                if (chosenEnemy != null)
-                {
-                    SpawnEnemy(chosenEnemy);
-                }
-                
-                // Calcula a frequência dinâmica de spawn baseada no tempo de sobrevivência
-                currentSpawnTimer = CalculateDynamicSpawnDelay(state);
+                SpawnEnemy(chosenEnemy);
             }
         }
 
@@ -130,7 +135,7 @@ namespace Sistemata.Spawning
         {
             if (state == GameState.Chaos) return chaosSpawnDelay;
 
-            float timeSurvived = GameManager.Instance.totalTimeSurvived;
+            float timeSurvived = GameManager.Instance.TotalTimeSurvived;
             
             // Aplica uma curva decrescente baseada no tempo. 
             // Quanto maior o totalTimeSurvived, menor e mais frequente o delay se tornará.
@@ -188,7 +193,7 @@ namespace Sistemata.Spawning
             for (var i = 0; i < initEnemyCount; i++)
             {
                 var enemyToSpawn = SelectRandomEnemy();
-                if (enemyToSpawn != null) SpawnEnemy(enemyToSpawn);
+                if (enemyToSpawn) SpawnEnemy(enemyToSpawn);
             }
             _firstSpawn = true;
             currentSpawnTimer = normalSpawnDelay;
@@ -197,7 +202,7 @@ namespace Sistemata.Spawning
         private void SpawnTheBoss()
         {
             var bossToSpawn = SelectRandomBoss();
-            if (bossToSpawn != null) SpawnEnemy(bossToSpawn);
+            if (bossToSpawn != null) SpawnEnemy(bossToSpawn, true);
         }
 
         private void FixedUpdate()
@@ -225,22 +230,23 @@ namespace Sistemata.Spawning
             currentSpawnTimer = chaosSpawnDelay;
         }
 
-        void SpawnEnemy(EnemyController enemy)
+        private void SpawnEnemy(EnemyController enemy, bool isBoss = false)
         {
-            if (enemy == null) return;
+            if (!enemy) return;
 
-            int batchToBeAdded = GetBestBatch("enemy");
+            var batchToBeAdded = GetBestBatch("enemy");
 
-            Vector2 randomDir = Random.insideUnitCircle.normalized;
-            float randomDistance = Random.Range(minSpawnRadius, maxSpawnRadius);
+            var randomDir = Random.insideUnitCircle.normalized;
+            var randomDistance = Random.Range(minSpawnRadius, maxSpawnRadius);
 
-            float xVal = GameManager.Instance.player.position.x + (randomDir.x * randomDistance);
-            float zVal = GameManager.Instance.player.position.z + (randomDir.y * randomDistance);
+            var xVal = GameManager.Instance.player.position.x + (randomDir.x * randomDistance);
+            var zVal = GameManager.Instance.player.position.z + (randomDir.y * randomDistance);
 
-            Vector2Int spawnCell = GetSpatialGroup(xVal, zVal);
+            var spawnCell = GetSpatialGroup(xVal, zVal);
 
             var obj = Instantiate(enemy, new Vector3(xVal, enemy.transform.position.y, zVal), Quaternion.Euler(45f, 0f, 0f), enemyHolder);
-
+            if (!isBoss)
+                obj.DefineLevel(GetCurrentRandomLevel());
             obj.spatialGroup = spawnCell;
             AddToSpatialGroup(spawnCell, obj);
 
@@ -248,6 +254,56 @@ namespace Sistemata.Spawning
             AddToEnemyBatch(batchToBeAdded, obj);
         }
 
+        private int GetCurrentRandomLevel()
+        {
+            var survivedTime = GameManager.Instance.TotalTimeSurvived;
+            var totalTime  = GameManager.Instance.TotalTimeSurvived;
+
+            if (survivedTime > totalTime) return maxLevel;
+
+            var timeToIncrement = (totalTime - 20) / (maxLevel - initialLevel + 1);
+            var incrementLevels = Mathf.RoundToInt(survivedTime / timeToIncrement);
+
+            var max = Mathf.Max(maxLevel, initialLevel + incrementLevels);
+            var min = Mathf.Max(initialLevel, max - 5);
+            return Random.Range(min, max + 1);
+        }
+
+        public void RepositionEnemy(EnemyController enemy)
+        {
+            if (!enemy) return;
+
+            enemy.gameObject.SetActive(false);
+
+            var randomDir = Random.insideUnitCircle.normalized;
+            var randomDistance = Random.Range(minRespawnRadius, minSpawnRadius);
+
+            var playerPos = GameManager.Instance.player.position;
+            var xVal = playerPos.x + (randomDir.x * randomDistance);
+            var zVal = playerPos.z + (randomDir.y * randomDistance);
+
+            var newPosition = new Vector3(xVal, enemy.transform.position.y, zVal);
+
+            var newCell = GetSpatialGroup(xVal, zVal);
+
+            if (enemy.spatialGroup != newCell) 
+            {
+                RemoveFromSpatialGroup(enemy.spatialGroup, enemy); 
+                enemy.spatialGroup = newCell;
+                AddToSpatialGroup(newCell, enemy);
+            }
+
+            enemy.transform.position = newPosition;
+
+            var trails = enemy.GetComponentsInChildren<TrailRenderer>();
+            foreach (var trail in trails)
+            {
+                trail.Clear();
+            }
+
+            enemy.gameObject.SetActive(true);
+        }
+        
         public class BatchScore : IComparable<BatchScore>
         {
             public int BatchId { get; }
