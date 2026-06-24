@@ -4,6 +4,7 @@ using Sistemata.Spawning;
 using System.Collections.Generic;
 using Sistemata.Common;
 using Sistemata.Stats;
+using Sistemata.Upgrades;
 using UnityEngine;
 
 namespace Sistemata.Ally
@@ -12,6 +13,9 @@ namespace Sistemata.Ally
     {
         public static readonly List<Ally> ActiveAllies = new List<Ally>();
 
+        [Header("Configurações Básicas do Aliado")] 
+        [SerializeField] protected string allyID;
+        
         [Header("Configurações de Movimento")]
         public float followDistance = 2f;
         public float maxDistance = 6f;
@@ -70,6 +74,13 @@ namespace Sistemata.Ally
         {
             Health.OnDeath += HandleDeath;
         }
+        
+        protected virtual void RegisterTag()
+        {
+            UpgradeRegistry.RegisterAlly(allyID, Stats);
+            if (UpgradePoolManager.Instance != null)
+                UpgradePoolManager.Instance.AddUnlockedTag($"Has_{allyID}");
+        }
             
         protected virtual void HandleDeath()
         {
@@ -116,6 +127,7 @@ namespace Sistemata.Ally
         private void InitializeAllBaseStats()
         {
             Stats.InitializeStat(StatType.MaxHealth, baseData.DefaultMaxHealth);
+            Stats.InitializeStat(StatType.HealthRegen, baseData.DefaultHealthRegen);
             Stats.InitializeStat(StatType.MoveSpeed, baseData.DefaultMoveSpeed);
             Stats.InitializeStat(StatType.Damage, baseData.DefaultDamage);
             Stats.InitializeStat(StatType.AttackRate, baseData.DefaultAttackRate);
@@ -131,6 +143,7 @@ namespace Sistemata.Ally
         {
             if (GameManager.Instance != null && GameManager.Instance.player != null)
                 Player = GameManager.Instance.player;
+            RegisterTag();
         }
 
         protected virtual void Update()

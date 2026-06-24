@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aea4cd28c9443dda20752869d5edba6, type: 3}
+  m_Name: "Dose de Cafe\xEDna"
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Upgrades.UpgradeData
+  UpgradeName: "Dose de Cafe\xEDna"
+  Description: "Aumente a cad\xEAncia de ataque do Guaran\xE1 em 10%."
+  Icon: {fileID: 0}
+  Quality: 2
+  Type: 0
+  AttackPrefab: {fileID: 0}
+  TargetEntity: 2
+  TargetStat: 5
+  ModType: 1
+  Amount: 0.1
+  TargetID: Guarana
+  Weight: 30
+  AutoWeight: 1
+  IsUnique: 0
+  RequiredTags:
+  - Has_Guarana
+  GrantedTags: []

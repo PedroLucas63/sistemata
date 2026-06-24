@@ -203,6 +203,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
   gravity: 0
+  footstepSounds: []
+  stepInterval: 0.35
+  stepVolume: 0.35
 --- !u!114 &4771361802369038586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,6 +243,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Common.EntityHealth
   damageCooldown: 0.3
+  hitSounds: []
+  hitVolume: 0.8
 --- !u!114 &4980836720501141198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +264,11 @@ MonoBehaviour:
   currentXP: 0
   gold: 0
   magnetScript: {fileID: 0}
+  xpSfx: {fileID: 0}
+  goldSfx: {fileID: 0}
+  levelUpSfx: {fileID: 0}
+  upgradeSfx: []
+  deathSfx: {fileID: 0}
 --- !u!1 &7058808293835032316
 GameObject:
   m_ObjectHideFlags: 0

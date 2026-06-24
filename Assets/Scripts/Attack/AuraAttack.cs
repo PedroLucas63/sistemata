@@ -12,12 +12,12 @@ namespace Sistemata.Attack
         
         [Tooltip("Layer que identifica os inimigos.")]
         [SerializeField] private LayerMask enemyLayer;
+        
 
         protected override void Start()
         {
             base.Start();
             
-            // Se o visual não foi atribuído, tenta buscar nos filhos
             if (auraVisual == null)
             {
                 auraVisual = transform.Find("AuraVisual")?.gameObject;
@@ -27,23 +27,18 @@ namespace Sistemata.Attack
             UpdateVisualScale();
         }
 
-        private void Update()
-        {
-            UpdateVisualScale();
-        }
-
-        private void UpdateVisualScale()
+        public void UpdateVisualScale()
         {
             if (!auraVisual) return;
             
-            var areaSize = AttackStats.GetStat(StatType.AreaSize).Get();
+            var areaSize = AreaSize;
             var finalScale = areaSize * 2f;
             auraVisual.transform.localScale = new Vector3(finalScale, finalScale, finalScale);
         }
 
         protected override void ExecuteAttack()
         {
-            var radius = AttackStats.GetStat(StatType.AreaSize).Get();
+            var radius = AreaSize;
             var damage = Damage;
 
             var hits = Physics.OverlapSphere(transform.position, radius, enemyLayer);

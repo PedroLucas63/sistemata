@@ -22,5 +22,8 @@ namespace Sistemata.Ally
         
         [Tooltip("Defesa básica do aliado.")]
         public float DefaultArmor = 1f;
+        
+        [Tooltip("Recuperação de vida básica do aliado.")]
+        public float DefaultHealthRegen = 0.5f;
     }
 }

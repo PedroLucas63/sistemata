@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4027116009161299648
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5528735173925459219}
+  - component: {fileID: 1149777745514628625}
+  - component: {fileID: 3286258338004417654}
+  m_Layer: 7
+  m_Name: SwordOrbitalAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5528735173925459219
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4027116009161299648}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1149777745514628625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4027116009161299648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89a6658668ce43528796dd14606b1a23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Stats.EntityStats
+--- !u!114 &3286258338004417654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4027116009161299648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37f45106b6f04a129fbaf6825e5927ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Attack.OrbitalAttack
+  attackID: SwordOrbit
+  elementalType: 0
+  baseData: {fileID: 11400000, guid: 7b626092c64d1b158a7fd7a239253a30, type: 2}
+  belongsToPlayer: 1
+  useManualTrigger: 0
+  hitboxPrefab: {fileID: 5941790898442486012, guid: 5d40dadd48265eb1183ce1393addddc7, type: 3}
+  orbitSpeed: 180
+  spriteRotationOffset: 45
+  perspectiveXTilt: 45

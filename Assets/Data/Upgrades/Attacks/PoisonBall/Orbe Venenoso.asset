@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aea4cd28c9443dda20752869d5edba6, type: 3}
+  m_Name: Orbe Venenoso
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Upgrades.UpgradeData
+  UpgradeName: Orbe Venenoso
+  Description: Desbloqueia o disparo de esferas de veneno.
+  Icon: {fileID: 0}
+  Quality: 3
+  Type: 1
+  AttackPrefab: {fileID: 5732902709889597986, guid: c4ada2620def1fb20b54a2e328ae6e85, type: 3}
+  TargetEntity: 0
+  TargetStat: 0
+  ModType: 0
+  Amount: 0
+  TargetID: 
+  Weight: 15
+  AutoWeight: 1
+  IsUnique: 1
+  RequiredTags: []
+  GrantedTags:
+  - Has_PoisonBall

@@ -31,13 +31,33 @@ namespace Sistemata.Upgrades
         public string TargetID;
         
         [Header("Regras de Sorteio")]
-        [Tooltip("Quanto maior o peso, maior a chance de aparecer.")]
-        public int Weight = 100; 
+        [Tooltip("Quanto maior o peso, maior a chance de aparecer")]
+        public int Weight = -1;
+        [Tooltip("Ativa o Weight automático baseado na qualidade")]
+        public bool AutoWeight = true;
         [Tooltip("Se for verdadeiro, esse upgrade sai da pool geral assim que for escolhido.")]
         public bool IsUnique = false;
         [Tooltip("Tags que o jogador DEVE TER para este upgrade aparecer na tela (ex: 'Has_Fireball')")]
         public List<string> RequiredTags = new();
         [Tooltip("Tags que o jogador GANHA ao pegar este upgrade (ex: desbloquear a 'Has_Fireball')")]
         public List<string> GrantedTags = new();
+        
+        private void OnValidate()
+        {
+            if (AutoWeight)
+                Weight = DefaultWeightToUpgradeQuality();
+        }
+        
+        private int DefaultWeightToUpgradeQuality() =>
+            Quality switch
+            {
+                UpgradeQuality.Normal => 200,
+                UpgradeQuality.Uncommon => 60,
+                UpgradeQuality.Rare => 30,
+                UpgradeQuality.SuperRare => 15,
+                UpgradeQuality.Epic => 5,
+                UpgradeQuality.Legendary => 1,
+                _ => 0
+            };
     }
 }

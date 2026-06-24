@@ -56,7 +56,9 @@ namespace Sistemata.Upgrades
         
         private static UpgradeData DrawSingleUpgrade(List<UpgradeData> poolToDrawFrom)
         {
-            var totalWeight = poolToDrawFrom.Sum(upgrade => upgrade.Weight);
+            var totalWeight = poolToDrawFrom.Sum(
+                upgrade => upgrade.Weight
+            );
             var randomValue = Random.Range(0, totalWeight);
             var accumulatedWeight = 0;
 

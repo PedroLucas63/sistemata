@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac4f1e589314a968d054c0f72068302, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Attack.RandomDirectionAttack
-  attackID: PosionBall
+  attackID: PoisonBall
   elementalType: 3
   baseData: {fileID: 11400000, guid: 0364ad0e9b8cce59a886af498bacb444, type: 2}
   belongsToPlayer: 0

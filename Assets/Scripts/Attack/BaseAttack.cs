@@ -65,7 +65,7 @@ namespace Sistemata.Attack
             AttackStats.InitializeStat(StatType.AreaSize, baseData.DefaultAreaSize);
         }
         
-        private void Update()
+        protected virtual void Update()
         {
             _attackTimer -= Time.deltaTime;
 
@@ -95,8 +95,7 @@ namespace Sistemata.Attack
 
         private void ResetTimer()
         {
-            var finalRate = Rate;
-            _attackTimer = finalRate > 0 ? (1f / finalRate) : 1f;
+            _attackTimer = AttackTime;
         }
 
         protected abstract void ExecuteAttack();
@@ -114,7 +113,7 @@ namespace Sistemata.Attack
             }
         }
 
-        protected float Damage
+        public float Damage
         {
             get
             {
@@ -131,7 +130,7 @@ namespace Sistemata.Attack
             }
         }
         
-        protected float Rate
+        public float Rate
         {
             get
             {
@@ -147,6 +146,12 @@ namespace Sistemata.Attack
                 return weaponRate * playerRate;
             }
         }
+
+        public float AttackTime => Rate > 0 ? (1f / Rate) : 0f;
+        public float Amount => AttackStats.GetStat(StatType.Amount).Get();
+        public float AreaSize => AttackStats.GetStat(StatType.AreaSize).Get();
+        public int AmountInt => Mathf.FloorToInt(Amount);
+
 
         public string AttackId => attackID;
     }

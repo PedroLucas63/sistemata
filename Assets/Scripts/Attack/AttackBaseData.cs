@@ -22,5 +22,9 @@ namespace Sistemata.Attack
         [Header("Área de Efeito")]
         [Tooltip("O raio da aura, tamanho do projétil ou modificador de escala física do ataque.")]
         public float DefaultAreaSize = 1f;
+        
+        [Header("Empurrão")]
+        [Tooltip("Força do empurrão aplicado após o dano.")]
+        public float Knockback = 0f;
     }
 }

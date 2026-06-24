@@ -125,6 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e941de80753459484cc4e3b79bd016e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Ally.RangedAlly
+  allyID: Guarana
   followDistance: 2
   maxDistance: 6
   teleportDistance: 15
