@@ -17,7 +17,7 @@ namespace Sistemata.Common
             type = CollectibleType.Magnet;
         }
 
-        protected override void Collect()
+        protected override void Collect(Collider collision)
         {
             if (PlayerManager.Instance != null)
                 PlayerManager.Instance.ActivateMagnet(magnetDuration);

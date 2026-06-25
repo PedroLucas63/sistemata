@@ -20,7 +20,7 @@ namespace Sistemata.Common
             type = CollectibleType.Bomb;
         }
 
-        protected override void Collect()
+        protected override void Collect(Collider collision)
         {
             Explode();
 

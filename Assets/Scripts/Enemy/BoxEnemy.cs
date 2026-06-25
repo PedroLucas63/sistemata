@@ -8,21 +8,6 @@ namespace Sistemata.Enemy
 {
     public class BoxEnemy : EnemyController
     {
-        [Serializable]
-        public class CollectibleWeight
-        {
-            public Collectible collectible;
-            public int weight;
-        }
-        
-        [SerializeField] private CollectibleWeight[]  collectibleWeights;
-        private int _weightSum;
-
-        protected override void OnAwake()
-        {
-            _weightSum = collectibleWeights.Sum(x => x.weight);
-        }
-
         protected override void UpdateCombatBehavior(float distanceToTarget)
         {
             // Box is not a combatant.
@@ -45,17 +30,25 @@ namespace Sistemata.Enemy
         
         protected override void SpawnLoot()
         {
-            if (!CollectablePoolManager.Instance) return;
-            var value = Random.Range(0, _weightSum);
-            foreach (var collectibleWeight in collectibleWeights)    
+            if (!CollectablePoolManager.Instance || lootTable == null || lootTable.Count == 0) return;
+
+            var totalWeight = lootTable.Where(loot => loot.prefab).Sum(loot => loot.dropChance);
+            if (totalWeight <= 0f) return;
+
+            var randomValue = Random.Range(0f, totalWeight);
+            var currentWeightSum = 0f;
+
+            foreach (var loot in lootTable.Where(loot => loot.prefab))
             {
-                if (value < collectibleWeight.weight)
-                {
-                    CollectablePoolManager.Instance.Spawn(collectibleWeight.collectible, transform.position);
-                    return;
-                }
+                currentWeightSum += loot.dropChance;
+                if (randomValue > currentWeightSum) continue;
                 
-                value -= collectibleWeight.weight; 
+                var instance = CollectablePoolManager.Instance.Spawn(loot.prefab, transform.position);
+                if (!instance) return;
+                
+                var randomVal = Random.Range(loot.minValue, loot.maxValue);
+                instance.SetValue(randomVal);
+                return;
             }
         }
     }

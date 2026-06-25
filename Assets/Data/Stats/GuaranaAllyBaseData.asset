@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ccc59e1dba4c93b72333db85791cfb, type: 3}
   m_Name: GuaranaAllyBaseData
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Ally.AllyBaseData
-  DefaultMaxHealth: 300
+  DefaultMaxHealth: 400
   DefaultMoveSpeed: 5
   DefaultDamage: 15
   DefaultAttackRate: 0.6
   DefaultArmor: 1
-  DefaultHealthRegen: 1.5
+  DefaultHealthRegen: 1.75

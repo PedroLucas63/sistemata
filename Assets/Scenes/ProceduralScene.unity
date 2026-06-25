@@ -851,7 +851,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: initEnemyCount
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: minSpawnRadius
@@ -859,7 +859,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: chaosSpawnDelay
-      value: 0.1
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: minRespawnRadius
@@ -867,11 +867,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: normalSpawnDelay
-      value: 0.7
+      value: 1.1
       objectReference: {fileID: 0}
     - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: minimumSpawnDelay
-      value: 0.2
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
+      propertyPath: invasionSpawnDelay
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1023663695621055152, guid: c80882e62dc267446bef641a40ebd6d4, type: 3}
       propertyPath: difficultyScaleSpeed
