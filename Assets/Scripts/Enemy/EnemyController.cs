@@ -9,15 +9,13 @@ namespace Sistemata.Enemy
 {
     public abstract class EnemyController : MonoBehaviour
     {
-        private int batchId;
+        [Header("AI Configs")]
+        [SerializeField] protected float aiTickRate = 0.2f;
+
         private float _targetChanceRoll = -1f;
         private float _predictionFactor = 0f;
-
-        public int BatchID
-        {
-            get => batchId;
-            set => batchId = value;
-        }
+        private float _aiTickTimer;
+        private float _lastLogicTime;
 
         [Header("Reposition Transform")] 
         [SerializeField] private float repositionDistance = 20f;
@@ -62,6 +60,7 @@ namespace Sistemata.Enemy
             if (Health != null) ConfigureEntityHealth();
 
             RepositionTimer = repositionTime;
+            _aiTickTimer = UnityEngine.Random.Range(0f, aiTickRate);
             
             InitializeAllBaseStats();
             OnAwake();
@@ -75,6 +74,7 @@ namespace Sistemata.Enemy
                 SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
             _predictionFactor = Random.value < 0.5f ? UnityEngine.Random.Range(0.3f, 1.0f) : 0f;
+            _lastLogicTime = Time.time;
         }
 
         private void ConfigureEntityHealth()
@@ -188,13 +188,13 @@ namespace Sistemata.Enemy
         {
             var percentageBonus = stat switch
             {
-                StatType.MaxHealth => 0.02f // +2% de Vida por upgrade
+                StatType.MaxHealth => 0.04f // +4% de Vida por upgrade
                 ,
-                StatType.Damage => 0.015f // +1.5% de Dano por upgrade
+                StatType.Damage => 0.02f // +2% de Dano por upgrade
                 ,
                 StatType.Armor => 0.10f // +10% de Armadura por upgrade
                 ,
-                StatType.MoveSpeed => 0.01f // +1% de Velocidade (Mantém o controle do NavMesh/Transform)
+                StatType.MoveSpeed => 0.03f // +3% de Velocidade (Mantém o controle do NavMesh/Transform)
                 ,
                 StatType.AttackRate => 0.01f // +1% de Velocidade de Ataque
                 ,
@@ -269,6 +269,20 @@ namespace Sistemata.Enemy
             if (AttackTimer > 0) AttackTimer -= Time.deltaTime;
             if (AttackVisualTimer > 0) AttackVisualTimer -= Time.deltaTime;
 
+            if (aiTickRate <= 0f)
+            {
+                RunLogic();
+            }
+            else
+            {
+                _aiTickTimer -= Time.deltaTime;
+                if (_aiTickTimer <= 0f)
+                {
+                    RunLogic();
+                    _aiTickTimer = aiTickRate;
+                }
+            }
+
             if (!IsAttacking)
                 transform.position += MovementDirection * (Time.deltaTime * MoveSpeed);
         }
@@ -277,7 +291,6 @@ namespace Sistemata.Enemy
         {
             if (EnemySpawner.Instance == null) return;
             EnemySpawner.Instance.RemoveFromSpatialGroup(spatialGroup, this);
-            EnemySpawner.Instance.UpdateBatchOnUnitDeath("enemy", BatchID);
         }
 
         public virtual void RunLogic()
@@ -301,16 +314,17 @@ namespace Sistemata.Enemy
             MovementDirection = targetPosition - transform.position;
             MovementDirection.y = 0;
             
+            float elapsed = Time.time - _lastLogicTime;
+            _lastLogicTime = Time.time;
+
             var distanceToTarget = MovementDirection.magnitude;
             if (distanceToTarget > repositionDistance)
-                RepositionTimer -= 1f;
+                RepositionTimer -= elapsed;
             else
                 RepositionTimer = repositionTime;
 
             if (RepositionTimer < 0)
             {
-                // EnemySpawner.Instance.RepositionEnemy(this);
-                // RepositionTimer = repositionTime;
                 Destroy(gameObject); 
                 EnemySpawner.Instance.Spawn();
                 return;

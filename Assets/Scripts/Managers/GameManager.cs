@@ -95,7 +95,7 @@ namespace Sistemata.Core
             TotalTimeSurvived += Time.deltaTime;
             _roundData.TimeSurvived += Time.deltaTime;;
 
-            if (currentState != GameState.Normal && currentState != GameState.Invasion) return;
+            if (currentState != GameState.Normal && currentState != GameState.Invasion && currentState != GameState.InvasionTransition) return;
             
             _phaseTimer -= Time.deltaTime;
 
@@ -113,7 +113,9 @@ namespace Sistemata.Core
 
         public string GetTimerText()
         {
-            if (currentState != GameState.Normal)
+            if (currentState != GameState.Normal && 
+                currentState != GameState.Invasion && 
+                currentState != GameState.InvasionTransition)
             {
                 return "00:00";
             }

@@ -91,8 +91,6 @@ namespace Sistemata.Player
             currentXp += amount;
             var targetXP = GetRequiredXp();
             
-            Debug.Log($"COLETA DE XP: {amount}");
-
             // Som de Coleta de XP
             if (xpSfx && AudioManager.Instance)
                 AudioManager.Instance.PlaySFX2D(xpSfx, 0.6f);
@@ -102,7 +100,6 @@ namespace Sistemata.Player
                 currentXp -= targetXP;
                 LevelUp();
                 targetXP = GetRequiredXp();
-                Debug.Log($"LEVEL UP ({currentLevel}): {currentXp}/{targetXP}");
             }
 
             OnXPChanged?.Invoke(currentLevel, currentXp, targetXP);
@@ -127,7 +124,7 @@ namespace Sistemata.Player
 
         private float GetRequiredXp()
         {
-            return Mathf.Floor(50f * Mathf.Pow(1.2f, currentLevel - 1));
+            return Mathf.Floor(20f * Mathf.Pow(1.2f, currentLevel - 1));
         }
 
         private void ConfigurePlayerHealth()

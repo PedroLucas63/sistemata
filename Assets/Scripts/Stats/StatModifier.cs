@@ -6,6 +6,5 @@ namespace Sistemata.Stats
         public ModifierType Type;
         public float Value;
         public object Source;
-        
     }
 }

@@ -16,11 +16,7 @@ namespace Sistemata.Enemy
                 if (AttackTimer <= 0f)
                 {
                     AttackTimer = AttackCooldown;
-                    // O IsAttacking fica ativo por AttackVisualTimer
                     AttackVisualTimer = Mathf.Min(0.25f, AttackCooldown * 0.5f);
-                    
-                    // Pequeno atraso para o dano sincronizar com o "swing" da animação
-                    Invoke(nameof(ExecuteMeleeDamage), 0.15f);
                 }
 
                 MovementDirection = Vector3.zero;
@@ -29,6 +25,11 @@ namespace Sistemata.Enemy
             {
                 MovementDirection.Normalize();
             }
+        }
+
+        public void OnAnimationAttackEvent()
+        {
+            ExecuteMeleeDamage();
         }
 
         private void ExecuteMeleeDamage()

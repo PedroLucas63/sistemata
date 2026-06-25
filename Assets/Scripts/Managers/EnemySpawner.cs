@@ -48,11 +48,6 @@ namespace Sistemata.Spawning
 
         private float currentSpawnTimer;
 
-        [Header("Lógica de Lotes (Batches)")]
-        private Dictionary<int, List<EnemyController>> enemyBatches = new Dictionary<int, List<EnemyController>>();
-        private float runLogicTimer = 0f;
-        private float runLogicTimerCD = 1f;
-
         [Header("Particionamento Espacial Infinito")]
         public float cellSize = 20f;
 
@@ -65,14 +60,10 @@ namespace Sistemata.Spawning
         private int _bossWeightSum = 0;
 
         // Coleções devidamente inicializadas direto na declaração para evitar falhas de ciclo de vida
-        private SortedSet<BatchScore> batchQueue_Enemy = new SortedSet<BatchScore>();
-        private Dictionary<int, BatchScore> batchScoreMap_Enemy = new Dictionary<int, BatchScore>();
-        
         private void Awake()
         {
             if (Instance == null) {
                 Instance = this;
-                InitializeBatches(); // Garante que as estruturas do Batch existam antes de qualquer Start
             }
             else {
                 Destroy(gameObject);
@@ -259,19 +250,7 @@ namespace Sistemata.Spawning
             if (bossToSpawn != null) SpawnEnemy(bossToSpawn, true);
         }
 
-        private void FixedUpdate()
-        {
-            runLogicTimer += Time.fixedDeltaTime;
 
-            if (runLogicTimer >= runLogicTimerCD)
-            {
-                runLogicTimer = 0f;
-            }
-
-            // Clampa a conversão matemática para travar estritamente entre os indexes válidos (0 a 49)
-            int targetBatch = Mathf.Clamp((int)(runLogicTimer * 50), 0, 49);
-            RunBatchLogic(targetBatch);
-        }
 
         private void StopSpawning()
         {
@@ -287,8 +266,6 @@ namespace Sistemata.Spawning
         private void SpawnEnemy(EnemyController enemy, bool isBoss = false)
         {
             if (!enemy) return;
-            
-            var batchToBeAdded = GetBestBatch("enemy");
             
             Vector2 spawnDir;
             var moveDir = Vector3.zero;
@@ -329,22 +306,19 @@ namespace Sistemata.Spawning
                 obj.DefineLevel(GetCurrentRandomLevel());
             obj.spatialGroup = spawnCell;
             AddToSpatialGroup(spawnCell, obj);
-
-            obj.BatchID = batchToBeAdded;
-            AddToEnemyBatch(batchToBeAdded, obj);
         }
 
         private int GetCurrentRandomLevel()
         {
             var survivedTime = GameManager.Instance.TotalTimeSurvived;
-            var totalTime  = GameManager.Instance.TotalTimeSurvived;
+            var totalTime = GameManager.Instance.timeUntilBoss;
 
             if (survivedTime > totalTime) return maxLevel;
 
-            var timeToIncrement = (totalTime - 20) / (maxLevel - initialLevel + 1);
+            var timeToIncrement = (totalTime - 20f) / (maxLevel - initialLevel + 1);
             var incrementLevels = Mathf.RoundToInt(survivedTime / timeToIncrement);
 
-            var max = Mathf.Max(maxLevel, initialLevel + incrementLevels);
+            var max = Mathf.Min(maxLevel, initialLevel + incrementLevels);
             var min = Mathf.Max(initialLevel, max - 5);
             return Random.Range(min, max + 1);
         }
@@ -407,108 +381,7 @@ namespace Sistemata.Spawning
             enemy.gameObject.SetActive(true);
         }
         
-        public class BatchScore : IComparable<BatchScore>
-        {
-            public int BatchId { get; }
-            public int Score { get; private set; }
 
-            public BatchScore(int batchId, int score)
-            {
-                BatchId = batchId;
-                Score = score;
-            }
-
-            public void UpdateScore(int delta)
-            {
-                Score += delta;
-            }
-
-            public int CompareTo(BatchScore other)
-            {
-                if (other == null) return 1;
-                int scoreComparison = Score.CompareTo(other.Score);
-                if (scoreComparison == 0)
-                {
-                    return BatchId.CompareTo(other.BatchId);
-                }
-                return scoreComparison;
-            }
-        }
-
-        // ==========================================
-        // GERENCIAMENTO DE LOTES (BATCHES)
-        // ==========================================
-        void InitializeBatches()
-        {
-            enemyBatches.Clear();
-            batchScoreMap_Enemy.Clear();
-            batchQueue_Enemy.Clear();
-
-            for (int i = 0; i < 50; i++)
-            {
-                BatchScore batchScore = new BatchScore(i, 0);
-                enemyBatches.Add(i, new List<EnemyController>());
-                batchScoreMap_Enemy.Add(i, batchScore);
-                batchQueue_Enemy.Add(batchScore);
-            }
-        }
-
-        public void AddToEnemyBatch(int batchId, EnemyController enemy)
-        {
-            if (enemyBatches.ContainsKey(batchId))
-            {
-                enemyBatches[batchId].Add(enemy);
-            }
-        }
-
-        public void UpdateBatchOnUnitDeath(string option, int batchId)
-        {
-            if (option == "enemy") UpdateBatchOnEnemyDeathRaw(batchQueue_Enemy, batchScoreMap_Enemy, batchId);
-        }
-
-        void UpdateBatchOnEnemyDeathRaw(SortedSet<BatchScore> batchQueue, Dictionary<int, BatchScore> batchScoreMap, int batchId)
-        {
-            if (batchScoreMap.TryGetValue(batchId, out BatchScore batchScore))
-            {
-                batchQueue.Remove(batchScore);
-                batchScore.UpdateScore(-1);
-                batchQueue.Add(batchScore);
-            }
-        }
-
-        public int GetBestBatch(string option)
-        {
-            if (option == "enemy" && batchQueue_Enemy.Count > 0) return GetBestBatchRaw(batchQueue_Enemy);
-            return 0;
-        }
-
-        int GetBestBatchRaw(SortedSet<BatchScore> batchQueue)
-        {
-            if (batchQueue == null || batchQueue.Count == 0) return 0;
-
-            BatchScore leastLoadedBatch = batchQueue.Min;
-
-            if (leastLoadedBatch == null) return 0;
-
-            batchQueue.Remove(leastLoadedBatch);
-            leastLoadedBatch.UpdateScore(1);
-            batchQueue.Add(leastLoadedBatch);
-
-            return leastLoadedBatch.BatchId;
-        }
-
-        void RunBatchLogic(int batchID)
-        {
-            if (enemyBatches.TryGetValue(batchID, out List<EnemyController> batchList))
-            {
-                // Cria uma cópia rasa temporária para evitar erros de modificação concorrente se monstros morrerem no loop
-                var currentActiveEnemies = batchList.Where(e => e != null).ToList();
-                foreach (EnemyController enemy in currentActiveEnemies)
-                {
-                    enemy.RunLogic();
-                }
-            }
-        }
 
         // ==========================================
         // SISTEMA DE HASH ESPACIAL (GRID INFINITA)

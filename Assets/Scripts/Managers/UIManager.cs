@@ -71,6 +71,17 @@ namespace Sistemata.Core
             }
         }
 
+        private void UpdateTimerText()
+        {
+            if (!gameplayTimerText) return;
+            if (GameManager.Instance.currentState != GameState.Normal)
+                if (GameManager.Instance.currentState != GameState.InvasionTransition)
+                    if (GameManager.Instance.currentState != GameState.InvasionTransition)
+                        return;
+            
+            gameplayTimerText.text = GameManager.Instance.GetTimerText();
+        }
+
         private void ShowBossWarning()
         {
             bossWarningPanel.SetActive(true);

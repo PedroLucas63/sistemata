@@ -1533,7 +1533,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 8848056daa3d6444492bc3b0ef511707, type: 3}
     - target: {fileID: 5520307711142703031, guid: 87389200176828f4eadf34d3b91ce710, type: 3}
       propertyPath: timeUntilBoss
-      value: 100
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 5520307711142703031, guid: 87389200176828f4eadf34d3b91ce710, type: 3}
       propertyPath: ProjectileParent
@@ -1541,7 +1541,7 @@ PrefabInstance:
       objectReference: {fileID: 1789167081}
     - target: {fileID: 5520307711142703031, guid: 87389200176828f4eadf34d3b91ce710, type: 3}
       propertyPath: timeUntilInvasion
-      value: 50
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 6152642441628424104, guid: 87389200176828f4eadf34d3b91ce710, type: 3}
       propertyPath: m_LocalPosition.x
