@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Sistemata.Enemy;
+using Sistemata.Player;
 using Random = UnityEngine.Random;
 
 namespace Sistemata.Spawning
@@ -27,6 +28,10 @@ namespace Sistemata.Spawning
         public float initialSpawnDelay = 8f;
         public float normalSpawnDelay = 2f;
         public float chaosSpawnDelay = 0.5f;
+        public int chaosSpawnModifier = 1;
+        public float invasionSpawnDelay = 0.5f;
+        public int invasionSpawnCount = 4;
+        public float playerPositionPrediction = 1f;
         [Tooltip("O menor atraso possível que o spawn normal pode atingir ao acelerar.")]
         public float minimumSpawnDelay = 0.4f; 
         public int initialLevel = 1;
@@ -62,7 +67,7 @@ namespace Sistemata.Spawning
         // Coleções devidamente inicializadas direto na declaração para evitar falhas de ciclo de vida
         private SortedSet<BatchScore> batchQueue_Enemy = new SortedSet<BatchScore>();
         private Dictionary<int, BatchScore> batchScoreMap_Enemy = new Dictionary<int, BatchScore>();
-
+        
         private void Awake()
         {
             if (Instance == null) {
@@ -110,13 +115,48 @@ namespace Sistemata.Spawning
             }
             
             var state = GameManager.Instance.currentState;
-            if (state != GameState.Normal && state != GameState.Chaos) return;
-            
-            currentSpawnTimer -= Time.deltaTime;
-            if (!(currentSpawnTimer <= 0) || enemyHolder.childCount >= maxEnemyCount) return;
+            if (SpawnStateBased(state))
+                UpdateSpawnDelay(state);
+        }
 
-            Spawn();
-            currentSpawnTimer = CalculateDynamicSpawnDelay(state);
+        private bool SpawnStateBased(GameState state)
+        {
+            currentSpawnTimer -= Time.deltaTime;
+            if (!(currentSpawnTimer <= 0) || enemyHolder.childCount >= maxEnemyCount) return false;
+            
+            switch (state)
+            {
+                case GameState.Normal:
+                    Spawn();
+                    break;
+                case GameState.Invasion:
+                {
+                    for (var i = 0; i < invasionSpawnCount; i++)
+                        Spawn();
+                    break;
+                }
+                case GameState.Chaos:
+                {
+                    var timeSurvived = GameManager.Instance.TotalTimeSurvived;
+                    var bossTime = GameManager.Instance.timeUntilBoss;
+                    var count = Mathf.FloorToInt((timeSurvived - bossTime) / 60) * chaosSpawnModifier;
+                    count = Mathf.Max(1, count);
+
+                    for (var i = 0; i < count; i++)
+                        Spawn();
+                    break;
+                }
+                case GameState.InvasionTransition:
+                case GameState.BossTransition:
+                case GameState.Boss:
+                case GameState.ChaosTransition:
+                case GameState.GameOver:
+                    return false;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
+            }
+            
+            return true;
         }
 
         public void Spawn()
@@ -131,18 +171,32 @@ namespace Sistemata.Spawning
         /// <summary>
         /// Calcula o tempo de espera do spawn reduzindo o delay progressivamente com o tempo
         /// </summary>
-        private float CalculateDynamicSpawnDelay(GameState state)
+        private void UpdateSpawnDelay(GameState state)
         {
-            if (state == GameState.Chaos) return chaosSpawnDelay;
-
-            float timeSurvived = GameManager.Instance.TotalTimeSurvived;
-            
-            // Aplica uma curva decrescente baseada no tempo. 
-            // Quanto maior o totalTimeSurvived, menor e mais frequente o delay se tornará.
-            float dynamicDelay = normalSpawnDelay / (1f + (timeSurvived * difficultyScaleSpeed));
-
-            // Impele que o spawn fique rápido demais a ponto de quebrar a CPU
-            return Mathf.Max(dynamicDelay, minimumSpawnDelay);
+            switch (state)
+            {
+                case GameState.Chaos:
+                    currentSpawnTimer = chaosSpawnDelay;
+                    break;
+                case GameState.Invasion:
+                    currentSpawnTimer = invasionSpawnDelay;
+                    break;
+                case GameState.Normal:
+                {
+                    var timeSurvived = GameManager.Instance.TotalTimeSurvived;
+                    var dynamicDelay = normalSpawnDelay / (1f + (timeSurvived * difficultyScaleSpeed));
+                    currentSpawnTimer = Mathf.Max(dynamicDelay, minimumSpawnDelay);
+                    break;
+                }
+                case GameState.InvasionTransition:
+                case GameState.BossTransition:
+                case GameState.Boss:
+                case GameState.ChaosTransition:
+                case GameState.GameOver:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
+            }
         }
         
         private EnemyController SelectRandomEnemy()
@@ -233,14 +287,40 @@ namespace Sistemata.Spawning
         private void SpawnEnemy(EnemyController enemy, bool isBoss = false)
         {
             if (!enemy) return;
-
+            
             var batchToBeAdded = GetBestBatch("enemy");
+            
+            Vector2 spawnDir;
+            var moveDir = Vector3.zero;
+            var player = PlayerManager.Instance;
+            if (player)
+            {
+                var controller = player.PlayerScript;
+                if (controller && controller.velocity.sqrMagnitude > 0.01f)
+                    moveDir = controller.velocity.normalized;
+                else
+                    moveDir = player.GetDirection();
+            }
 
-            var randomDir = Random.insideUnitCircle.normalized;
+            if (moveDir.sqrMagnitude > 0.001f && Random.value < 0.8f)
+            {
+                var angle = Random.Range(-60f, 60f);
+                var spawnDir3D = Quaternion.Euler(0f, angle, 0f) * moveDir;
+                spawnDir = new Vector2(spawnDir3D.x, spawnDir3D.z).normalized;
+            }
+            else
+            {
+                spawnDir = Random.insideUnitCircle.normalized;
+            }
+
             var randomDistance = Random.Range(minSpawnRadius, maxSpawnRadius);
 
-            var xVal = GameManager.Instance.player.position.x + (randomDir.x * randomDistance);
-            var zVal = GameManager.Instance.player.position.z + (randomDir.y * randomDistance);
+            var playerDir = player ? player.GetDirection() * playerPositionPrediction : Vector3.zero;
+            var playerPosition = player ? player.transform.position : GameManager.Instance.player.position;
+            playerPosition += playerDir;
+
+            var xVal = playerPosition.x + (spawnDir.x * randomDistance);
+            var zVal = playerPosition.z + (spawnDir.y * randomDistance);
 
             var spawnCell = GetSpatialGroup(xVal, zVal);
 
@@ -275,12 +355,35 @@ namespace Sistemata.Spawning
 
             enemy.gameObject.SetActive(false);
 
-            var randomDir = Random.insideUnitCircle.normalized;
+            Vector2 spawnDir;
+            Vector3 moveDir = Vector3.zero;
+            if (Sistemata.Player.PlayerManager.Instance)
+            {
+                var controller = Sistemata.Player.PlayerManager.Instance.PlayerScript;
+                if (controller != null && controller.velocity.sqrMagnitude > 0.01f)
+                    moveDir = controller.velocity.normalized;
+                else
+                    moveDir = Sistemata.Player.PlayerManager.Instance.GetDirection();
+            }
+
+            // Se o player estiver se movendo, 80% de chance de spawnar no cone de 120º à sua frente
+            if (moveDir.sqrMagnitude > 0.001f && Random.value < 0.8f)
+            {
+                float angle = Random.Range(-60f, 60f); // Cone de 120 graus à frente
+                Vector3 spawnDir3D = Quaternion.Euler(0f, angle, 0f) * moveDir;
+                spawnDir = new Vector2(spawnDir3D.x, spawnDir3D.z).normalized;
+            }
+            else
+            {
+                // Caso contrário (ou 20% das vezes), spawn aleatório ao redor
+                spawnDir = Random.insideUnitCircle.normalized;
+            }
+
             var randomDistance = Random.Range(minRespawnRadius, minSpawnRadius);
 
             var playerPos = GameManager.Instance.player.position;
-            var xVal = playerPos.x + (randomDir.x * randomDistance);
-            var zVal = playerPos.z + (randomDir.y * randomDistance);
+            var xVal = playerPos.x + (spawnDir.x * randomDistance);
+            var zVal = playerPos.z + (spawnDir.y * randomDistance);
 
             var newPosition = new Vector3(xVal, enemy.transform.position.y, zVal);
 

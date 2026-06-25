@@ -109,8 +109,15 @@ namespace Sistemata.Attack
             }
             else if (_cachedEnemyOwner)
             {
-                forwardVector = transform.parent ? transform.parent.forward :
-                    transform.right;
+                var target = _cachedEnemyOwner.Target;
+                if (target != null)
+                {
+                    forwardVector = target.position - transform.position;
+                }
+                else
+                {
+                    forwardVector = transform.parent ? transform.parent.forward : transform.right;
+                }
             }
 
             // Garante que a flecha não vai atirar para o céu nem para o subsolo

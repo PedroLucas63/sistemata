@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2354925101310146598}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 5630230597822843266}
   - component: {fileID: 3093871989446160206}
   - component: {fileID: 8450855095640123612}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 5095534256470213968}
   - component: {fileID: 5559425480479991523}
   - component: {fileID: 490677792900902422}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,7 +198,7 @@ GameObject:
   - component: {fileID: 2461966067287372290}
   - component: {fileID: 7942587071976936013}
   - component: {fileID: 6636220306747042990}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Lifebar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -303,4 +303,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3041f4710c8d43fe81e154e6a9a509f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.UI.PlayerLife.HealthBarUI
-  fillImage: {fileID: 490677792900902422}

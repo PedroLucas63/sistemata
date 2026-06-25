@@ -6,7 +6,17 @@ using UnityEngine;
 
 namespace Sistemata.Core
 {
-    public enum GameState { Normal, BossTransition, Boss, ChaosTransition, Chaos, GameOver }
+    public enum GameState
+    {
+        Normal, 
+        InvasionTransition,
+        Invasion,
+        BossTransition, 
+        Boss, 
+        ChaosTransition, 
+        Chaos, 
+        GameOver
+    }
 
     public class GameManager : MonoBehaviour
     {
@@ -19,17 +29,23 @@ namespace Sistemata.Core
 
         [Header("Áudio")]
         public AudioClip roundMusic;
-
+        
         public GameState currentState;
 
         [Header("Configurações de Tempo")]
         public float timeUntilBoss = 300f;
-        private float phaseTimer;
+        public float timeUntilInvasion = 150f;
+        public float invasionTime = 15f;
+        private float _phaseTimer;
+        private bool _invasionStarted = false;
 
         public float TotalTimeSurvived { get; private set; }
         public int MonstersKilled { get; private set; }
         
         // Eventos
+        public event Action OnInvasionWarning;
+        public event Action OnInvasionStart;
+        public event Action OnInvasionEnd;
         public event Action OnBossWarning;
         public event Action OnBossSpawn;
         public event Action OnChaosWarning;
@@ -52,7 +68,7 @@ namespace Sistemata.Core
             Instance = this;
             _roundData = new RoundData();
             currentState = GameState.Normal;
-            phaseTimer = timeUntilBoss;
+            _phaseTimer = timeUntilBoss;
             Time.timeScale = 1f;
         }
 
@@ -79,15 +95,20 @@ namespace Sistemata.Core
             TotalTimeSurvived += Time.deltaTime;
             _roundData.TimeSurvived += Time.deltaTime;;
 
-            if (currentState == GameState.Normal)
+            if (currentState != GameState.Normal && currentState != GameState.Invasion) return;
+            
+            _phaseTimer -= Time.deltaTime;
+
+            if (timeUntilBoss - _phaseTimer >= timeUntilInvasion && !_invasionStarted)
             {
-                phaseTimer -= Time.deltaTime;
-                if (phaseTimer <= 0)
-                {
-                    phaseTimer = 0;
-                    StartBossPhase();
-                }
+                StartInvasionPhase();
+                return;
             }
+            
+            if (!(_phaseTimer <= 0)) return;
+            
+            _phaseTimer = 0;
+            StartBossPhase();
         }
 
         public string GetTimerText()
@@ -97,8 +118,8 @@ namespace Sistemata.Core
                 return "00:00";
             }
 
-            int minutes = Mathf.FloorToInt(phaseTimer / 60f);
-            int seconds = Mathf.FloorToInt(phaseTimer % 60f);
+            int minutes = Mathf.FloorToInt(_phaseTimer / 60f);
+            int seconds = Mathf.FloorToInt(_phaseTimer % 60f);
 
             return string.Format("{0:00}:{1:00}", minutes, seconds);
         }
@@ -127,6 +148,27 @@ namespace Sistemata.Core
 
                 Invoke(nameof(StartChaosPhase), 3f);
             }
+        }
+
+        private void StartInvasionPhase()
+        {
+            _invasionStarted = true;
+            currentState = GameState.InvasionTransition;
+            OnInvasionWarning?.Invoke();
+            Invoke(nameof(InvasionPhase), 5f);
+        }
+        
+        private void InvasionPhase()
+        {
+            currentState = GameState.Invasion;
+            OnInvasionStart?.Invoke();
+            Invoke(nameof(EndInvasionPhase), invasionTime);
+        }
+        
+        private void EndInvasionPhase()
+        {
+            currentState = GameState.Normal;
+            OnInvasionEnd?.Invoke();
         }
 
         private void StartChaosPhase()

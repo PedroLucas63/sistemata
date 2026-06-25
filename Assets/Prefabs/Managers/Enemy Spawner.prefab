@@ -63,6 +63,10 @@ MonoBehaviour:
   initialSpawnDelay: 5
   normalSpawnDelay: 1
   chaosSpawnDelay: 0.2
+  chaosSpawnModifier: 5
+  invasionSpawnDelay: 0.5
+  invasionSpawnCount: 5
+  playerPositionPrediction: 1
   minimumSpawnDelay: 0.4
   initialLevel: 1
   maxLevel: 15

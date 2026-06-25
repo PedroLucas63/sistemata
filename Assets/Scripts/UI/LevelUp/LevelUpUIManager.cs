@@ -35,7 +35,7 @@ namespace Sistemata.UI.LevelUp
         {
             _pendingLevelUps++;
             
-            if (!levelUpPanel.activeSelf)
+            if (!levelUpPanel.activeSelf && !PlayerManager.Instance.IsDead)
             {
                 TriggerLevelUp();
             }
@@ -99,7 +99,7 @@ namespace Sistemata.UI.LevelUp
             levelUpPanel.SetActive(false);
             UpgradePoolManager.Instance.OnUpgradeChosen(selectedData);
             
-            if (_pendingLevelUps > 0)
+            if (_pendingLevelUps > 0 && !PlayerManager.Instance.IsDead)
                 TriggerLevelUp();
             else
                 StartCoroutine(UnpauseRoutine());

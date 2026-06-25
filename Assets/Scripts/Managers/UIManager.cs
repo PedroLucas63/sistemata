@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Sistemata.Core
 {
@@ -12,6 +13,7 @@ namespace Sistemata.Core
         [Header("Painéis UI")]
         [SerializeField] private GameObject bossWarningPanel;
         [SerializeField] private GameObject chaosWarningPanel;
+        [SerializeField] private GameObject invasionPanel;
         [SerializeField] private GameObject gameOverPanel;
 
         [Header("Textos Game Over")]
@@ -25,12 +27,45 @@ namespace Sistemata.Core
 
             GameManager.Instance.OnBossWarning += ShowBossWarning;
             GameManager.Instance.OnChaosWarning += ShowChaosWarning;
+            GameManager.Instance.OnInvasionWarning += ShowInvasionWarning;
+            GameManager.Instance.OnInvasionStart += ShowInvasionStart;
+            GameManager.Instance.OnInvasionEnd += ShowInvasionEnd;
             GameManager.Instance.OnGameOver += ShowGameOverScreen;
+        }
+
+        private void ShowInvasionWarning()
+        {
+            invasionPanel.SetActive(true);
+            invasionPanel.GetComponentInChildren<TextMeshProUGUI>().text = "Uma invasão vai começar em breve, se prepare!";
+            invasionPanel.GetComponent<Image>().color = Color.yellow;
+            Invoke(nameof(HideInvasionPanel), 3f);
+        }
+        
+        private void ShowInvasionStart()
+        {
+            invasionPanel.SetActive(true);
+            invasionPanel.GetComponentInChildren<TextMeshProUGUI>().text = "A invasão iniciou!";
+            invasionPanel.GetComponent<Image>().color = Color.yellow;
+            Invoke(nameof(HideInvasionPanel), 3f);
+        }
+        
+        private void ShowInvasionEnd()
+        {
+            invasionPanel.GetComponentInChildren<TextMeshProUGUI>().text = "A calmaria foi restabelecida!";
+            invasionPanel.GetComponent<Image>().color = Color.deepSkyBlue;
+            invasionPanel.SetActive(true);
+            Invoke(nameof(HideInvasionPanel), 3f);
+        }
+        
+        private void HideInvasionPanel()
+        {
+            invasionPanel.SetActive(false);
         }
 
         private void Update()
         {
-            if (GameManager.Instance.currentState == GameState.Normal && gameplayTimerText != null)
+            if ((GameManager.Instance.currentState == GameState.Normal ||
+                 GameManager.Instance.currentState == GameState.Invasion) && gameplayTimerText)
             {
                 gameplayTimerText.text = GameManager.Instance.GetTimerText();
             }
@@ -40,10 +75,8 @@ namespace Sistemata.Core
         {
             bossWarningPanel.SetActive(true);
 
-            if (gameplayTimerText != null)
-            {
+            if (gameplayTimerText)
                 gameplayTimerText.gameObject.SetActive(false);
-            }
 
             Invoke(nameof(HideBossWarning), 3f);
         }

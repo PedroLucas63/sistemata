@@ -50,11 +50,11 @@ namespace Sistemata.Attack
             transform.localScale = Vector3.one * size;
             
             // Busca robusta pelo SpriteRenderer
-            if (_spriteRenderer == null)
+            if (!_spriteRenderer)
             {
-                if (visualChild != null) _spriteRenderer = visualChild.GetComponent<SpriteRenderer>();
-                if (_spriteRenderer == null) _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-                if (_spriteRenderer == null) _spriteRenderer = GetComponent<SpriteRenderer>();
+                if (visualChild) _spriteRenderer = visualChild.GetComponent<SpriteRenderer>();
+                if (!_spriteRenderer) _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+                if (!_spriteRenderer) _spriteRenderer = GetComponent<SpriteRenderer>();
             }
 
             if (visualChild)
@@ -62,7 +62,7 @@ namespace Sistemata.Attack
                 visualChild.localScale = new Vector3(1f, 1f * perspectiveYFactor, 1f);
             }
 
-            if (_spriteRenderer != null)
+            if (_spriteRenderer)
             {
                 ApplyOutlineMaterial(targetTag);
             }
@@ -75,7 +75,7 @@ namespace Sistemata.Attack
             // Se o alvo for "Enemy", o projétil é do Jogador/Aliado -> Branco
             if (target == "Enemy")
             {
-                if (allyOutlineMaterial != null)
+                if (allyOutlineMaterial)
                 {
                     _spriteRenderer.material = allyOutlineMaterial;
                 }
@@ -83,7 +83,7 @@ namespace Sistemata.Attack
             // Se o alvo for "Player", o projétil é do Inimigo -> Vermelho
             else
             {
-                if (enemyOutlineMaterial != null)
+                if (enemyOutlineMaterial)
                 {
                     _spriteRenderer.material = enemyOutlineMaterial;
                 }
@@ -103,7 +103,7 @@ namespace Sistemata.Attack
             if (_direction == Vector3.zero) return;
 
             // Calcula o ângulo contínuo exato baseado no mouse (-180 a 180 graus)
-            float angle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg;
+            var angle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg;
 
             // X (45f) -> Mantém o sprite tombado na ilusão de profundidade da câmera.
             // Z (-angle) -> Gira o sprite como se fosse um ponteiro de relógio na direção exata do mouse.
@@ -131,7 +131,7 @@ namespace Sistemata.Attack
         
         private void OnTriggerEnter(Collider collision)
         {
-            if (!collision.CompareTag(_targetTag)) return;
+            if (!collision.CompareTag(_targetTag) && !(_targetTag == "Player" && collision.CompareTag("Ally"))) return;
             
             if (_targetTag == "Enemy")
             {

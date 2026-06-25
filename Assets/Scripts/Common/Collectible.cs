@@ -154,7 +154,7 @@ namespace Sistemata.Common
                         Player.PlayerManager.Instance.AddGold((int)value);
                         break;
                     case CollectibleType.XP:
-                        Player.PlayerManager.Instance.AddXP(value);
+                        Player.PlayerManager.Instance.AddXp(value);
                         break;
                     default:
                         // Magnet and Bomb are handled in their own subclass override of Collect()

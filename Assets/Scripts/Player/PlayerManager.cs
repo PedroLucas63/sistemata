@@ -4,7 +4,8 @@ using Sistemata.Core;
 using Sistemata.Stats;
 using UnityEngine;
 using Sistemata.Upgrades;
-using Sistemata.Audio; // <-- Adicionado para acessar o AudioManager
+using Sistemata.Audio;
+using UnityEngine.Serialization; // <-- Adicionado para acessar o AudioManager
 
 namespace Sistemata.Player
 {
@@ -21,7 +22,7 @@ namespace Sistemata.Player
 
         [Header("Progressão")]
         public int currentLevel = 1;
-        public float currentXP = 0;
+        public float currentXp = 0;
         public int gold = 0;
 
         public event System.Action<int, float, float> OnXPChanged; // level, current, target
@@ -44,10 +45,11 @@ namespace Sistemata.Player
         private EntityStats _stats;
         private EntityHealth _playerHealth;
         private PlayerMovement _playerMovement;
-        private int currentAttacks = 0;
+        private int _currentAttacks = 0;
 
         public static PlayerManager Instance { get; private set; }
         public CharacterController PlayerScript => _playerMovement != null ? _playerMovement.GetComponent<CharacterController>() : null;
+        public bool IsDead  => _playerHealth.IsDead;
 
         private void Awake()
         {
@@ -69,7 +71,7 @@ namespace Sistemata.Player
             ConfigurePlayerHealth();
 
             // Inicializa a UI
-            OnXPChanged?.Invoke(currentLevel, currentXP, GetRequiredXP(currentLevel));
+            OnXPChanged?.Invoke(currentLevel, currentXp, GetRequiredXp());
             OnGoldChanged?.Invoke(gold);
         }
 
@@ -84,32 +86,34 @@ namespace Sistemata.Player
             OnGoldChanged?.Invoke(gold);
         }
 
-        public void AddXP(float amount)
+        public void AddXp(float amount)
         {
-            currentXP += amount;
-            float targetXP = GetRequiredXP(currentLevel);
+            currentXp += amount;
+            var targetXP = GetRequiredXp();
+            
+            Debug.Log($"COLETA DE XP: {amount}");
 
             // Som de Coleta de XP
-            if (xpSfx != null && AudioManager.Instance != null)
+            if (xpSfx && AudioManager.Instance)
                 AudioManager.Instance.PlaySFX2D(xpSfx, 0.6f);
 
-            while (currentXP >= targetXP)
+            while (currentXp >= targetXP)
             {
-                currentXP -= targetXP;
+                currentXp -= targetXP;
                 LevelUp();
-                targetXP = GetRequiredXP(currentLevel);
+                targetXP = GetRequiredXp();
+                Debug.Log($"LEVEL UP ({currentLevel}): {currentXp}/{targetXP}");
             }
 
-            OnXPChanged?.Invoke(currentLevel, currentXP, targetXP);
+            OnXPChanged?.Invoke(currentLevel, currentXp, targetXP);
         }
 
         private void LevelUp()
         {
             currentLevel++;
-            Debug.Log($"<color=cyan><b>SUBIU DE NÍVEL!</b></color> Novo nível: {currentLevel}");
-
+            
             // Som de Level Up
-            if (levelUpSfx != null && AudioManager.Instance != null)
+            if (levelUpSfx && AudioManager.Instance != null)
                 AudioManager.Instance.PlaySFX2D(levelUpSfx);
             
             if (GameManager.Instance) GameManager.Instance.AddLevel();
@@ -121,9 +125,9 @@ namespace Sistemata.Player
             }
         }
 
-        public float GetRequiredXP(int level)
+        private float GetRequiredXp()
         {
-            return Mathf.Floor(20f * Mathf.Pow(1.2f, level - 1));
+            return Mathf.Floor(50f * Mathf.Pow(1.2f, currentLevel - 1));
         }
 
         private void ConfigurePlayerHealth()
@@ -137,7 +141,7 @@ namespace Sistemata.Player
             _playerHealth.OnDeath -= HandleDeath;
 
             // Som de Morte
-            if (deathSfx != null && AudioManager.Instance != null)
+            if (deathSfx && AudioManager.Instance)
                 AudioManager.Instance.PlaySFX2D(deathSfx);
 
             this.enabled = false;
@@ -223,6 +227,7 @@ namespace Sistemata.Player
         public void UnlockNewAttack(BaseAttack attackPrefab)
         {
             if (!attackPrefab) return;
+            _currentAttacks++;
             Instantiate(attackPrefab, attacksContainer.position, Quaternion.identity, attacksContainer);
         }
 
@@ -244,6 +249,16 @@ namespace Sistemata.Player
         // ==========================================
         public bool IsMagnetActive { get; private set; }
         private Coroutine _magnetCoroutine;
+
+        public PlayerManager()
+        {
+            _currentAttacks = 0;
+        }
+
+        public PlayerManager(int currentAttacks)
+        {
+            _currentAttacks = currentAttacks;
+        }
 
         public void ActivateMagnet(float duration)
         {

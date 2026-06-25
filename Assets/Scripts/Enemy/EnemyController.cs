@@ -1,4 +1,5 @@
-﻿using Sistemata.Common;
+using System.Linq;
+using Sistemata.Common;
 using Sistemata.Core;
 using Sistemata.Spawning;
 using Sistemata.Stats;
@@ -9,6 +10,8 @@ namespace Sistemata.Enemy
     public abstract class EnemyController : MonoBehaviour
     {
         private int batchId;
+        private float _targetChanceRoll = -1f;
+        private float _predictionFactor = 0f;
 
         public int BatchID
         {
@@ -34,6 +37,7 @@ namespace Sistemata.Enemy
         protected float AttackVisualTimer;
 
         protected Transform CurrentTarget;
+        public Transform Target => CurrentTarget;
 
         protected float RepositionTimer;
 
@@ -69,6 +73,8 @@ namespace Sistemata.Enemy
         {
             if (SpriteRenderer == null)
                 SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+            _predictionFactor = Random.value < 0.5f ? UnityEngine.Random.Range(0.3f, 1.0f) : 0f;
         }
 
         private void ConfigureEntityHealth()
@@ -276,7 +282,7 @@ namespace Sistemata.Enemy
 
         public virtual void RunLogic()
         {
-            CurrentTarget = FindNearestTarget();
+            CurrentTarget = FindTarget();
 
             if (!CurrentTarget)
             {
@@ -284,7 +290,15 @@ namespace Sistemata.Enemy
                 return;
             }
 
-            MovementDirection = CurrentTarget.position - transform.position;
+            var targetPosition = CurrentTarget.position;
+            if (_predictionFactor > 0f && CurrentTarget.CompareTag("Player") && Player.PlayerManager.Instance)
+            {
+                var controller = Player.PlayerManager.Instance.PlayerScript;
+                if (controller)
+                    targetPosition += controller.velocity * _predictionFactor;
+            }
+
+            MovementDirection = targetPosition - transform.position;
             MovementDirection.y = 0;
             
             var distanceToTarget = MovementDirection.magnitude;
@@ -319,6 +333,41 @@ namespace Sistemata.Enemy
         /// </summary>
         protected abstract void UpdateCombatBehavior(float distanceToTarget);
 
+        private Transform FindTarget()
+        {
+            if (_targetChanceRoll < 0f)
+                _targetChanceRoll = Random.value;
+
+            Transform player = null;
+            if (GameManager.Instance && GameManager.Instance.player)
+                player = GameManager.Instance.player;
+
+            var allies = Ally.Ally.ActiveAllies
+                .Where(a => a)
+                .Select(a => a.transform)
+                .ToList();
+
+            if (!player && allies.Count == 0)
+                return null;
+
+            if (!player)
+            {
+                var allyIndex = Mathf.FloorToInt(Random.value * allies.Count);
+                allyIndex = Mathf.Clamp(allyIndex, 0, allies.Count - 1);
+                return allies[allyIndex];
+            }
+
+            if (allies.Count == 0  || _targetChanceRoll < 0.5f)
+                return player;
+
+            {
+                var relativeRoll = _targetChanceRoll - 0.5f;
+                var allyIndex = Mathf.FloorToInt((relativeRoll / 0.5f) * allies.Count);
+                allyIndex = Mathf.Clamp(allyIndex, 0, allies.Count - 1);
+                return allies[allyIndex];
+            }
+        }
+        
         /// <summary>
         /// Varre o jogador e a lista estática de aliados ativos para eleger o alvo mais próximo
         /// </summary>
