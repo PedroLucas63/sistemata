@@ -35,18 +35,14 @@ namespace Sistemata.Enemy
         {
             if (!CurrentTarget) return;
 
-            // Tentamos obter o componente de saúde diretamente do alvo ou de seus pais
+            if (MovementDirection.magnitude > meleeAttackRange) return;
+
             var health = CurrentTarget.GetComponentInParent<EntityHealth>();
             
             if (health != null)
-            {
                 health.TakeDamage(Damage);
-            }
             else if (CurrentTarget.CompareTag("Player"))
-            {
-                // Fallback para o PlayerManager caso o alvo seja o Player e não encontramos o EntityHealth (segurança)
                 PlayerManager.Instance.TakeDamage(Damage);
-            }
         }
     }
 }

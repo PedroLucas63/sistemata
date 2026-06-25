@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 5058919909206142929}
   - component: {fileID: 3603237076617942878}
   - component: {fileID: -2288753953154076311}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: GuaranaAlly
-  m_TagString: Player
+  m_TagString: Ally
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -133,6 +133,7 @@ MonoBehaviour:
   attackRange: 1.5
   detectionRadius: 5
   baseData: {fileID: 11400000, guid: a87ab14f3f1b4352d9718f1ffd88c753, type: 2}
+  healthBarPrefab: {fileID: 7963448281076923515, guid: 0f2e0b1603ede51a4bef3d076b479675, type: 3}
   attackPrefab: {fileID: 6623559707085511063, guid: cf3c5597ee4bda796a23a2bda5abb5ee, type: 3}
   firePoint: {fileID: 0}
   minKeepDistance: 3.5
@@ -160,7 +161,7 @@ GameObject:
   - component: {fileID: 3488524344273535385}
   - component: {fileID: 7560403787720093855}
   - component: {fileID: 7649160015478655306}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}

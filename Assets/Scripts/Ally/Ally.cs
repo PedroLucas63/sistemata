@@ -4,7 +4,9 @@ using Sistemata.Spawning;
 using System.Collections.Generic;
 using Sistemata.Common;
 using Sistemata.Stats;
+using Sistemata.UI.PlayerLife;
 using Sistemata.Upgrades;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Sistemata.Ally
@@ -28,6 +30,10 @@ namespace Sistemata.Ally
         
         [Header("Stats")] 
         [SerializeField] protected AllyBaseData baseData;
+
+        [Header("Lifebar")] 
+        [SerializeField] protected Object healthBarPrefab;
+        protected HealthBarUI HealthBarUI;
 
         protected Transform Player;
         protected float AttackTimer;
@@ -85,6 +91,7 @@ namespace Sistemata.Ally
         protected virtual void HandleDeath()
         {
             Health.OnDeath -= HandleDeath;
+            Health.OnHealthChanged -= UpdateHealthBar;
             
             // --- NOVO: Trava o aliado ---
             this.enabled = false; 
@@ -144,6 +151,29 @@ namespace Sistemata.Ally
             if (GameManager.Instance != null && GameManager.Instance.player != null)
                 Player = GameManager.Instance.player;
             RegisterTag();
+            ConfigureLifebar();
+        }
+
+        protected virtual void ConfigureLifebar()
+        {
+            if (!healthBarPrefab) return;
+            
+            var mainCanvas = FindAnyObjectByType<Canvas>();
+            var healthBarObj = Instantiate(healthBarPrefab, mainCanvas.transform);
+            
+            var followerScript = healthBarObj.GetComponent<HealthBarFollower>();
+            if (followerScript != null)
+                followerScript.target = this.transform;
+            
+            HealthBarUI = healthBarObj.GetComponent<HealthBarUI>();
+            HealthBarUI.UpdatePercentage(1f);
+            Health.OnHealthChanged += UpdateHealthBar;
+        }
+        
+        private void UpdateHealthBar(float current, float max)
+        {
+            if (HealthBarUI)
+                HealthBarUI.UpdatePercentage(current / max);
         }
 
         protected virtual void Update()

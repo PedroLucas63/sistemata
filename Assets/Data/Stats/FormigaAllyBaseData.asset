@@ -17,3 +17,4 @@ MonoBehaviour:
   DefaultDamage: 8
   DefaultAttackRate: 0.3
   DefaultArmor: 3
+  DefaultHealthRegen: 2

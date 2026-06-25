@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: -8829104927322385552}
   - component: {fileID: 1136727074548248329}
   - component: {fileID: 3387392168198416968}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: FormigaAlly
-  m_TagString: Player
+  m_TagString: Ally
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -133,6 +133,7 @@ MonoBehaviour:
   attackRange: 1.5
   detectionRadius: 5
   baseData: {fileID: 11400000, guid: 19aa1af64a76f2975a03f38150c6a189, type: 2}
+  healthBarPrefab: {fileID: 7963448281076923515, guid: 0f2e0b1603ede51a4bef3d076b479675, type: 3}
   attackPrefab: {fileID: 5732902709889597986, guid: ee9bb49a5feb5c1678a66b7405071391, type: 3}
   firePoint: {fileID: 0}
   minKeepDistance: 3.5
@@ -160,7 +161,7 @@ GameObject:
   - component: {fileID: 3488524344273535385}
   - component: {fileID: 7560403787720093855}
   - component: {fileID: 4483251156718363984}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}

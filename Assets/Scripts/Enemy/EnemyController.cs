@@ -42,6 +42,8 @@ namespace Sistemata.Enemy
         public Vector2 LastMove => new(MovementDirection.x, MovementDirection.z);
         public float AttackCooldown => 1f / Stats.GetStat(StatType.AttackRate).Get();
         public float Damage => Stats.GetStat(StatType.Damage).Get();
+
+        protected int Level;
         
         public bool IsAttacking => AttackVisualTimer > 0f;
 
@@ -119,35 +121,37 @@ namespace Sistemata.Enemy
             {
                 if (minXP == 0 && maxXP == 0) return;
 
-                var xpNoise = UnityEngine.Random.insideUnitSphere;
+                var xpNoise = Random.insideUnitSphere;
                 xpNoise.y = 0;
                 var xpPosition = transform.position + xpNoise * 0.1f;
                 
                 var xpInstance = CollectablePoolManager.Instance.Spawn(xpPrefab, xpPosition);
                 if (xpInstance)
                 {
-                    var randomXp = UnityEngine.Random.Range(minXP, maxXP);
+                    var multiplier = Mathf.Max(1f, Level / 2f);
+                    var max = maxXP * multiplier;
+                    var randomXp = Random.Range(minXP, max);
                     xpInstance.SetValue(randomXp);
                 }
             }
             
-            var probability = UnityEngine.Random.Range(0f, 1f);
+            var probability = Random.Range(0f, 1f);
             if (!coinPrefab || !(probability <= coinDropChance)) return;
             
-            var coinNoise = UnityEngine.Random.insideUnitSphere;
+            var coinNoise = Random.insideUnitSphere;
             coinNoise.y = 0;
             var coinPosition = transform.position + coinNoise * 0.1f;
             
             var coinInstance = CollectablePoolManager.Instance.Spawn(coinPrefab, coinPosition);
             if (!coinInstance) return;
                 
-            var randomCoin = UnityEngine.Random.Range(minCoin, maxCoin + 1);
+            var randomCoin = Random.Range(minCoin, maxCoin + 1);
             coinInstance.SetValue(randomCoin);
         }
 
         public void DefineLevel(int level)
         {
-            var eligibleStats = new StatType[]
+            var eligibleStats = new[]
             {
                 StatType.MaxHealth,
                 StatType.Damage,
@@ -167,6 +171,8 @@ namespace Sistemata.Enemy
             {
                 Health.Heal(Health.MaxHealth); 
             }
+
+            Level = level;
         }
 
         /// <summary>
@@ -176,15 +182,15 @@ namespace Sistemata.Enemy
         {
             var percentageBonus = stat switch
             {
-                StatType.MaxHealth => 0.02f // +20% de Vida por upgrade
+                StatType.MaxHealth => 0.02f // +2% de Vida por upgrade
                 ,
-                StatType.Damage => 0.015f // +15% de Dano por upgrade
+                StatType.Damage => 0.015f // +1.5% de Dano por upgrade
                 ,
                 StatType.Armor => 0.10f // +10% de Armadura por upgrade
                 ,
-                StatType.MoveSpeed => 0.01f // +4% de Velocidade (Mantém o controle do NavMesh/Transform)
+                StatType.MoveSpeed => 0.01f // +1% de Velocidade (Mantém o controle do NavMesh/Transform)
                 ,
-                StatType.AttackRate => 0.01f // +5% de Velocidade de Ataque
+                StatType.AttackRate => 0.01f // +1% de Velocidade de Ataque
                 ,
                 _ => 0f
             };
