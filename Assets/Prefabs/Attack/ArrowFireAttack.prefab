@@ -65,3 +65,4 @@ MonoBehaviour:
   arrowPrefab: {fileID: 4654985686313772912, guid: 0a3bbd15c7e02a526b8368fd02e433bc, type: 3}
   arrowSpeed: 10
   fanAngleSpread: 15
+  shootSound: {fileID: 8300000, guid: a31a1a08d7735184a8079f23a5a06106, type: 3}

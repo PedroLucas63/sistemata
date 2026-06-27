@@ -134,4 +134,4 @@ MonoBehaviour:
   explosionRadius: 6
   explosionDamage: 30
   explosionEffectPrefab: {fileID: 0}
-  explosionSfx: {fileID: 0}
+  explosionSfx: {fileID: 8300000, guid: f75164715ea1a3944b2cfc8be50a2710, type: 3}

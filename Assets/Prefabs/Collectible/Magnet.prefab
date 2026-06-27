@@ -132,4 +132,4 @@ MonoBehaviour:
   floatAmplitude: 0.2
   floatFrequency: 2
   magnetDuration: 8
-  magnetSfx: {fileID: 0}
+  magnetSfx: {fileID: 8300000, guid: c1b6047cfd5825c46b11cb4e8d421644, type: 3}
