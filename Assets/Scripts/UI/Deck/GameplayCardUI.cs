@@ -81,7 +81,7 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     {
         if (!IsCardReady()) return;
 
-        GameObject allyObj = Instantiate(cardData.allyPrefab, spawnPosition, Quaternion.identity);
+        GameObject allyObj = Instantiate(cardData.allyPrefab, spawnPosition, Quaternion.Euler(45f, 0f, 0f));
         EntityHealth ally = allyObj.GetComponent<EntityHealth>();
 
         isAllyAlive = true;
@@ -121,7 +121,7 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
         if (!isDragging && IsCardReady())
         {
             Vector2 randomOffset = Random.insideUnitCircle * 2f;
-            Vector3 spawnPos = playerTransform.position + new Vector3(randomOffset.x, randomOffset.y, 0);
+            Vector3 spawnPos = playerTransform.position + new Vector3(randomOffset.x,0f, randomOffset.y);
             UseCard(spawnPos);
         }
     }
@@ -152,7 +152,7 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
 
         Vector2 mousePos = Mouse.current.position.ReadValue();
         Vector3 worldSpawnPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, Camera.main.nearClipPlane));
-        worldSpawnPosition.z = 0;
+        worldSpawnPosition.y = 0;
 
         UseCard(worldSpawnPosition);
     }
