@@ -12,9 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ccc59e1dba4c93b72333db85791cfb, type: 3}
   m_Name: FormigaAllyBaseData
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Ally.AllyBaseData
-  DefaultMaxHealth: 400
+  DefaultMaxHealth: 450
   DefaultMoveSpeed: 3
   DefaultDamage: 8
   DefaultAttackRate: 0.3
   DefaultArmor: 3
-  DefaultHealthRegen: 2
+  DefaultHealthRegen: 2.5
+  cardName: Tanajura
+  cardImage: {fileID: 3019155423022939230, guid: 12411599ef0cf554088ed3648fbb4886, type: 3}
+  category: 1
+  description: 
+  allyPrefab: {fileID: 1444332622434311970, guid: e0615e46b787de165af68df7356ae4ed, type: 3}
+  specificCooldown: 45

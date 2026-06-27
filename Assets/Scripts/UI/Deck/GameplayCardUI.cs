@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Sistemata.Common;
+using Sistemata.Ally;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,7 +14,7 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     public Transform visualTransform;
     public Image cardImage;
 
-    [HideInInspector] public CardData cardData;
+    [HideInInspector] public AllyBaseData cardData;
 
     // Variáveis de Estado
     private bool isAllyAlive = false;
@@ -22,14 +23,14 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     private Vector2 originalPosition;
 
     //Juice
-    private Vector3 gameplayScale = new Vector3(0.7f, 0.7f, 0.7f); //Cartas ficam 30% menores no deck de jogo
+    private Vector3 gameplayScale = new Vector3(0.5f, 0.5f, 0.5f); //Cartas ficam 30% menores no deck de jogo
     private float originalY;
     private bool isHovered = false;
 
     public static event Action OnAnyCardUsed;
     private Transform playerTransform;
 
-    public void SetupCard(CardData data, Transform player)
+    public void SetupCard(AllyBaseData data, Transform player)
     {
         cardData = data;
         playerTransform = player;
@@ -80,7 +81,7 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     {
         if (!IsCardReady()) return;
 
-        GameObject allyObj = Instantiate(cardData.allyPrefab, spawnPosition, Quaternion.identity);
+        GameObject allyObj = Instantiate(cardData.allyPrefab, spawnPosition, Quaternion.Euler(45f, 0f, 0f));
         EntityHealth ally = allyObj.GetComponent<EntityHealth>();
 
         isAllyAlive = true;
@@ -120,7 +121,7 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
         if (!isDragging && IsCardReady())
         {
             Vector2 randomOffset = Random.insideUnitCircle * 2f;
-            Vector3 spawnPos = playerTransform.position + new Vector3(randomOffset.x, randomOffset.y, 0);
+            Vector3 spawnPos = playerTransform.position + new Vector3(randomOffset.x,0f, randomOffset.y);
             UseCard(spawnPos);
         }
     }
@@ -151,7 +152,7 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
 
         Vector2 mousePos = Mouse.current.position.ReadValue();
         Vector3 worldSpawnPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, Camera.main.nearClipPlane));
-        worldSpawnPosition.z = 0;
+        worldSpawnPosition.y = 0;
 
         UseCard(worldSpawnPosition);
     }

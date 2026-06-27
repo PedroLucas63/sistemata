@@ -251,19 +251,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc6a2fe957cf40c599f8da1b932c59fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Enemy.BoxEnemy
+  aiTickRate: 0.2
   repositionDistance: 20
   repositionTime: 10
   spatialGroup: {x: 0, y: 0}
   baseData: {fileID: 11400000, guid: 6e66b4c6d1808e054ae0d168b4a5e670, type: 2}
-  xpPrefab: {fileID: 0}
-  minXP: 1
-  maxXP: 5
-  coinPrefab: {fileID: 0}
-  coinDropChance: 0.1
-  minCoin: 1
-  maxCoin: 3
-  collectibleWeights:
-  - collectible: {fileID: 4837998407425108017, guid: bdb36bc7ef526eae48d2a856408c9371, type: 3}
-    weight: 1
-  - collectible: {fileID: 1386080096084714854, guid: 2f335f8fa61eee9a3adad4585c22984f, type: 3}
-    weight: 1
+  lootTable:
+  - prefab: {fileID: 4837998407425108017, guid: bdb36bc7ef526eae48d2a856408c9371, type: 3}
+    dropChance: 1
+    minValue: 0
+    maxValue: 0
+    scaleWithLevel: 0
+  - prefab: {fileID: 1386080096084714854, guid: 2f335f8fa61eee9a3adad4585c22984f, type: 3}
+    dropChance: 1
+    minValue: 0
+    maxValue: 0
+    scaleWithLevel: 0
+  - prefab: {fileID: 1761818554127655782, guid: 99dbc580d7a466b3e8fa8489391af817, type: 3}
+    dropChance: 1
+    minValue: 100
+    maxValue: 100
+    scaleWithLevel: 0

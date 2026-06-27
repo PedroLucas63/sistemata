@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace Sistemata.Common
 {
-    public enum CollectibleType { Coin, XP, Magnet, Bomb }
+    public enum CollectibleType { Coin, Xp, Magnet, Bomb, Life }
 
     public class Collectible : MonoBehaviour
     {
         [Header("Configurações")]
         [SerializeField] protected CollectibleType type;
-        [SerializeField] private float value = 1f;
+        [SerializeField] protected float value = 1f;
         [SerializeField] private float moveSpeed = 4f; // Reduzido para uma atração mais fraca
 
         [Header("Animação Flutuante")]
@@ -53,7 +53,7 @@ namespace Sistemata.Common
 
             if (!_isBeingAttracted && Player.PlayerManager.Instance && Player.PlayerManager.Instance.IsMagnetActive)
             {
-                if (type is CollectibleType.XP or CollectibleType.Coin)
+                if (type is CollectibleType.Xp or CollectibleType.Coin)
                 {
                     _attractedByMagnet = true;
                     AttractTo(Player.PlayerManager.Instance.transform);
@@ -77,20 +77,21 @@ namespace Sistemata.Common
         {
             if (!_targetPlayer) return;
 
+            var manager = Player.PlayerManager.Instance;
+
             // Tentamos pegar o centro real do Player (CharacterController)
-            Vector3 targetCenter = _targetPlayer.position;
-            if (Sistemata.Player.PlayerManager.Instance && Sistemata.Player.PlayerManager.Instance.PlayerScript != null)
+            var targetCenter = _targetPlayer.position;
+            if (manager && manager.PlayerScript)
             {
-                targetCenter = Sistemata.Player.PlayerManager.Instance.PlayerScript.bounds.center;
+                targetCenter = manager.PlayerScript.bounds.center;
             }
 
-            Vector3 direction = targetCenter - transform.position;
-            float distance = direction.magnitude;
+            var direction = targetCenter - transform.position;
+            var distance = direction.magnitude;
 
-            // Se o imã global não está ativo e o item está fora do raio de coleta, desativa a atração
-            if (Player.PlayerManager.Instance && !Player.PlayerManager.Instance.IsMagnetActive)
+            if (manager && !manager.IsMagnetActive)
             {
-                float normalRadius = Player.PlayerManager.Instance.GetStat(Stats.StatType.PickupRadius)?.Get() ?? 2f;
+                var normalRadius = manager.GetStat(Stats.StatType.PickupRadius)?.Get() ?? 2f;
                 if (distance > normalRadius + 0.5f)
                 {
                     _isBeingAttracted = false;
@@ -100,16 +101,15 @@ namespace Sistemata.Common
                 }
             }
             
-            // Se estiver muito perto do centro, coleta
             if (distance < 0.5f)
             {
-                Collect();
+                Collect(null);
                 return;
             }
 
             // Aceleração/velocidade da atração
-            float speedMultiplier = 1f;
-            float magnetMinSpeed = 0f;
+            var speedMultiplier = 1f;
+            var magnetMinSpeed = 0f;
 
             if (Player.PlayerManager.Instance && Player.PlayerManager.Instance.IsMagnetActive)
             {
@@ -117,8 +117,8 @@ namespace Sistemata.Common
                 magnetMinSpeed = 12f;   // Velocidade mínima rápida para longo alcance
             }
 
-            float smoothFactor = Mathf.Clamp(2f / distance, 0.5f, 3f);
-            float currentSpeed = Mathf.Max(moveSpeed * smoothFactor * speedMultiplier, magnetMinSpeed);
+            var smoothFactor = Mathf.Clamp(2f / distance, 0.5f, 3f);
+            var currentSpeed = Mathf.Max(moveSpeed * smoothFactor * speedMultiplier, magnetMinSpeed);
             
             transform.position += direction.normalized * (currentSpeed * Time.deltaTime);
         }
@@ -130,10 +130,10 @@ namespace Sistemata.Common
             _isBeingAttracted = true;
         }
 
-        private void OnTriggerEnter(Collider collision)
+        protected virtual void OnTriggerEnter(Collider collision)
         {
             if (collision.CompareTag("Player"))
-                Collect();
+                Collect(collision);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Sistemata.Common
             value = newValue;
         }
 
-        protected virtual void Collect()
+        protected virtual void Collect(Collider collision)
         {
             if (Player.PlayerManager.Instance)
             {
@@ -153,9 +153,12 @@ namespace Sistemata.Common
                     case CollectibleType.Coin:
                         Player.PlayerManager.Instance.AddGold((int)value);
                         break;
-                    case CollectibleType.XP:
+                    case CollectibleType.Xp:
                         Player.PlayerManager.Instance.AddXp(value);
                         break;
+                    case CollectibleType.Magnet:
+                    case CollectibleType.Bomb:
+                    case CollectibleType.Life:
                     default:
                         // Magnet and Bomb are handled in their own subclass override of Collect()
                         break;

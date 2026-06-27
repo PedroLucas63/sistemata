@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using Sistemata.Ally;
 
 public class CardDraftManager : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class CardDraftManager : MonoBehaviour
     public GameObject cardPrefab;
     public Transform draftOptionsContainer;
     public CanvasGroup draftPanelCanvasGroup;
-    public List<CardData> allAvailableCards;
+    public List<AllyBaseData> allAvailableCards;
 
     [Header("Integração com Gameplay")]
     public Transform gameplayDeckContainer;
@@ -61,7 +62,7 @@ public class CardDraftManager : MonoBehaviour
 
         for (int i = 0; i < optionsPerDraft; i++)
         {
-            CardData randomCard = allAvailableCards[Random.Range(0, allAvailableCards.Count)];
+            AllyBaseData randomCard = allAvailableCards[Random.Range(0, allAvailableCards.Count)];
 
             GameObject cardObj = Instantiate(cardPrefab, draftOptionsContainer);
             CardDisplay cardDisplay = cardObj.GetComponent<CardDisplay>();
@@ -84,7 +85,7 @@ public class CardDraftManager : MonoBehaviour
         draftPanelCanvasGroup.DOFade(0f, 0.3f).OnComplete(() => draftPanelCanvasGroup.gameObject.SetActive(false));
 
         GameObject chosenCardObj = chosenCardDisplay.gameObject;
-        CardData chosenData = chosenCardDisplay.cardData;
+        AllyBaseData chosenData = chosenCardDisplay.cardData;
 
         foreach (GameObject cardOption in spawnedOptionCards)
         {
@@ -98,7 +99,7 @@ public class CardDraftManager : MonoBehaviour
         ConvertAndAnimateToDeck(chosenCardObj, chosenData);
     }
 
-    void ConvertAndAnimateToDeck(GameObject cardObj, CardData data)
+    void ConvertAndAnimateToDeck(GameObject cardObj, AllyBaseData data)
     {
         Destroy(cardObj.GetComponent<CardDisplay>());
 

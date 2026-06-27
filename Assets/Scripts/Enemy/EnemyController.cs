@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Sistemata.Common;
 using Sistemata.Core;
@@ -83,15 +84,7 @@ namespace Sistemata.Enemy
         }
         
         [Header("Loot")]
-        [SerializeField] protected Collectible xpPrefab;
-        [SerializeField] protected float minXP = 1f;
-        [SerializeField] protected float maxXP = 5f;
-        
-        [Space]
-        [SerializeField] protected Collectible coinPrefab;
-        [Range(0, 1)] [SerializeField] protected float coinDropChance = 0.1f;
-        [SerializeField] protected int minCoin = 1;
-        [SerializeField] protected int maxCoin = 3;
+        [SerializeField] protected List<LootItem> lootTable = new List<LootItem>();
 
         protected virtual void HandleDeath()
         {
@@ -121,38 +114,33 @@ namespace Sistemata.Enemy
 
         protected virtual void SpawnLoot()
         {
-            if (!CollectablePoolManager.Instance) return;
-            
-            if (xpPrefab)
-            {
-                if (minXP == 0 && maxXP == 0) return;
+            if (!CollectablePoolManager.Instance || lootTable == null) return;
 
-                var xpNoise = Random.insideUnitSphere;
-                xpNoise.y = 0;
-                var xpPosition = transform.position + xpNoise * 0.1f;
+            foreach (var loot in lootTable)
+            {
+                if (!loot.prefab) continue;
+
+                if (Random.value > loot.dropChance) continue;
+
+                var noise = Random.insideUnitSphere;
+                noise.y = 0;
+                var spawnPosition = transform.position + noise * 0.1f;
+
+                var instance = CollectablePoolManager.Instance.Spawn(loot.prefab, spawnPosition);
+                if (!instance) continue;
                 
-                var xpInstance = CollectablePoolManager.Instance.Spawn(xpPrefab, xpPosition);
-                if (xpInstance)
+                var min = loot.minValue;
+                var max = loot.maxValue;
+
+                if (loot.scaleWithLevel)
                 {
                     var multiplier = Mathf.Max(1f, Level / 2f);
-                    var max = maxXP * multiplier;
-                    var randomXp = Random.Range(minXP, max);
-                    xpInstance.SetValue(randomXp);
+                    max *= multiplier;
                 }
+
+                var randomValue = UnityEngine.Random.Range(min, max);
+                instance.SetValue(randomValue);
             }
-            
-            var probability = Random.Range(0f, 1f);
-            if (!coinPrefab || !(probability <= coinDropChance)) return;
-            
-            var coinNoise = Random.insideUnitSphere;
-            coinNoise.y = 0;
-            var coinPosition = transform.position + coinNoise * 0.1f;
-            
-            var coinInstance = CollectablePoolManager.Instance.Spawn(coinPrefab, coinPosition);
-            if (!coinInstance) return;
-                
-            var randomCoin = Random.Range(minCoin, maxCoin + 1);
-            coinInstance.SetValue(randomCoin);
         }
 
         public void DefineLevel(int level)
@@ -444,5 +432,20 @@ namespace Sistemata.Enemy
             MovementDirection += separationVector * 1.5f;
             MovementDirection.Normalize();
         }
+    }
+
+    [System.Serializable]
+    public struct LootItem
+    {
+        [Tooltip("Prefab do item coletável.")]
+        public Collectible prefab;
+        [Tooltip("Probabilidade de drop do item (de 0 a 1). Ex: 0.1 = 10%")]
+        [Range(0f, 1f)] public float dropChance;
+        [Tooltip("Valor mínimo que este coletável terá ao dropar.")]
+        public float minValue;
+        [Tooltip("Valor máximo que este coletável terá ao dropar.")]
+        public float maxValue;
+        [Tooltip("Se marcado, o valor máximo será multiplicado com base no nível do inimigo (usado para XP).")]
+        public bool scaleWithLevel;
     }
 }

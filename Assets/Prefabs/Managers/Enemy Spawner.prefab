@@ -61,11 +61,11 @@ MonoBehaviour:
   - Enemy: {fileID: 5066702936169762682, guid: 12fb468be9f6621bcbc1faa9f4bd431e, type: 3}
     Weight: 10
   initialSpawnDelay: 5
-  normalSpawnDelay: 1
+  normalSpawnDelay: 1.1
   chaosSpawnDelay: 0.2
-  chaosSpawnModifier: 5
-  invasionSpawnDelay: 0.5
-  invasionSpawnCount: 5
+  chaosSpawnModifier: 4
+  invasionSpawnDelay: 0.7
+  invasionSpawnCount: 4
   playerPositionPrediction: 1
   minimumSpawnDelay: 0.4
   initialLevel: 1

@@ -187,6 +187,11 @@ namespace Sistemata.Player
             _playerHealth.TakeDamage(damage);
         }
 
+        public void TakeHeal(float heal)
+        {
+            _playerHealth.Heal(heal);
+        }
+
         private void InitializeAllBaseStats()
         {
             _stats.InitializeStat(StatType.MaxHealth, baseData.DefaultMaxHealth);

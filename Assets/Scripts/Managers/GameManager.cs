@@ -187,10 +187,21 @@ namespace Sistemata.Core
         
         public void AddCollectible(CollectibleType type, float amount)
         {
-            if (type == CollectibleType.XP)
-                _roundData.XpCollected += amount;
-            else if (type == CollectibleType.Coin)
-                _roundData.GoldCollected += amount;
+            switch (type)
+            {
+                case CollectibleType.Xp:
+                    _roundData.XpCollected += amount;
+                    break;
+                case CollectibleType.Coin:
+                    _roundData.GoldCollected += amount;
+                    break;
+                case CollectibleType.Magnet:
+                case CollectibleType.Bomb:
+                case CollectibleType.Life:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
         }
         
         public void AddLevel()

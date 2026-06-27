@@ -269,14 +269,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a22b84b91124289b3eaf94e0354be45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Enemy.MeleeEnemy
-  despawnDistance: 55
+  aiTickRate: 0.2
+  repositionDistance: 20
+  repositionTime: 10
   spatialGroup: {x: 0, y: 0}
   baseData: {fileID: 11400000, guid: d3943c2b6cb00a3799e46e3117e629f9, type: 2}
-  xpPrefab: {fileID: 8399440314936118968, guid: a41e6bbfe515b4eaea289575b569459b, type: 3}
-  minXP: 0
-  maxXP: 0
-  coinPrefab: {fileID: 3815465021333323952, guid: 27223886b14987037b5a8c7511d1b77a, type: 3}
-  coinDropChance: 1
-  minCoin: 3
-  maxCoin: 10
+  lootTable:
+  - prefab: {fileID: 3815465021333323952, guid: 27223886b14987037b5a8c7511d1b77a, type: 3}
+    dropChance: 1
+    minValue: 5
+    maxValue: 10
+    scaleWithLevel: 0
   meleeAttackRange: 1.3

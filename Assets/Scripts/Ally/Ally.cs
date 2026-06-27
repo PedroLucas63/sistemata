@@ -176,6 +176,11 @@ namespace Sistemata.Ally
                 HealthBarUI.UpdatePercentage(current / max);
         }
 
+        public void TakeHeal(float amount)
+        {
+            Health.Heal(amount);
+        }
+
         protected virtual void Update()
         {
             if (!Player) return;

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6203cfcb9a41909a5ad91d9432a606, type: 3}
   m_Name: FormigaBossBaseData
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Enemy.EnemyBaseData
-  DefaultMaxHealth: 1500
-  DefaultMoveSpeed: 5
+  DefaultMaxHealth: 600
+  DefaultMoveSpeed: 4
   DefaultDamage: 10
   DefaultAttackRate: 1
-  DefaultArmor: 10
+  DefaultArmor: 6

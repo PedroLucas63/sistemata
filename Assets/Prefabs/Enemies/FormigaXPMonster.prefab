@@ -269,16 +269,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ea7ff6563a248409418847a8dfdfbcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Enemy.RangedEnemy
-  despawnDistance: 55
+  aiTickRate: 0.2
+  repositionDistance: 20
+  repositionTime: 10
   spatialGroup: {x: 0, y: 0}
   baseData: {fileID: 11400000, guid: fd834aa269d6eb68898796cd318c1752, type: 2}
-  xpPrefab: {fileID: 8399440314936118968, guid: a41e6bbfe515b4eaea289575b569459b, type: 3}
-  minXP: 20
-  maxXP: 50
-  coinPrefab: {fileID: 3815465021333323952, guid: 27223886b14987037b5a8c7511d1b77a, type: 3}
-  coinDropChance: 0
-  minCoin: 1
-  maxCoin: 3
+  lootTable:
+  - prefab: {fileID: 8399440314936118968, guid: a41e6bbfe515b4eaea289575b569459b, type: 3}
+    dropChance: 1
+    minValue: 20
+    maxValue: 30
+    scaleWithLevel: 1
   attackPrefab: {fileID: 5732902709889597986, guid: ee9bb49a5feb5c1678a66b7405071391, type: 3}
   firePoint: {fileID: 0}
   shootRange: 10
