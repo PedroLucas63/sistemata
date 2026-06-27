@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Sistemata.Common;
+using Sistemata.Ally;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,7 +14,7 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     public Transform visualTransform;
     public Image cardImage;
 
-    [HideInInspector] public CardData cardData;
+    [HideInInspector] public AllyBaseData cardData;
 
     // Variáveis de Estado
     private bool isAllyAlive = false;
@@ -22,14 +23,14 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     private Vector2 originalPosition;
 
     //Juice
-    private Vector3 gameplayScale = new Vector3(0.7f, 0.7f, 0.7f); //Cartas ficam 30% menores no deck de jogo
+    private Vector3 gameplayScale = new Vector3(0.5f, 0.5f, 0.5f); //Cartas ficam 30% menores no deck de jogo
     private float originalY;
     private bool isHovered = false;
 
     public static event Action OnAnyCardUsed;
     private Transform playerTransform;
 
-    public void SetupCard(CardData data, Transform player)
+    public void SetupCard(AllyBaseData data, Transform player)
     {
         cardData = data;
         playerTransform = player;

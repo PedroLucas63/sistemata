@@ -2,6 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using Sistemata.Ally;
 
 public class DeckGameplayManager : MonoBehaviour
 {
@@ -55,7 +56,7 @@ public class DeckGameplayManager : MonoBehaviour
         {
             GameObject cardObj = chosenCardObjects[i];
 
-            CardData data = cardObj.GetComponent<CardDisplay>().cardData;
+            AllyBaseData data = cardObj.GetComponent<CardDisplay>().cardData;
             Destroy(cardObj.GetComponent<CardDisplay>());
 
             GameplayCardUI gameplayLogic = cardObj.AddComponent<GameplayCardUI>();

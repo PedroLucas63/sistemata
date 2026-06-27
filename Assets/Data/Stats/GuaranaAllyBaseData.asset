@@ -18,3 +18,9 @@ MonoBehaviour:
   DefaultAttackRate: 0.6
   DefaultArmor: 1
   DefaultHealthRegen: 1.75
+  cardName: "Guaran\xE1"
+  cardImage: {fileID: 21300000, guid: 5161b5a4eb306579eb1c55ff69fbf877, type: 3}
+  category: 1
+  description: 
+  allyPrefab: {fileID: 1444332622434311970, guid: d1ee5b2f5768c4143b3b979722b715d5, type: 3}
+  specificCooldown: 60

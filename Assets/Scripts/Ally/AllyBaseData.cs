@@ -25,5 +25,14 @@ namespace Sistemata.Ally
         
         [Tooltip("Recuperação de vida básica do aliado.")]
         public float DefaultHealthRegen = 0.5f;
+
+        [Header("Card infos")]
+        public string cardName;
+        public Sprite cardImage;
+        public CardCategory category;
+        [TextArea(3, 5)] public string description;
+
+        public GameObject allyPrefab;
+        public float specificCooldown = 10f; // Tempo que leva para recarregar após o aliado morrer
     }
 }

@@ -737,7 +737,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1689288444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -758,8 +758,8 @@ MonoBehaviour:
   draftOptionsContainer: {fileID: 4545413730765709442}
   draftPanelCanvasGroup: {fileID: 4545413730765709450}
   allAvailableCards:
-  - {fileID: 11400000, guid: 1f8ab6eb17c3bb54da4cf8cd15c7b6d7, type: 2}
-  - {fileID: 11400000, guid: 935f6a2b995967b4484a1ade70d7e082, type: 2}
+  - {fileID: 11400000, guid: 19aa1af64a76f2975a03f38150c6a189, type: 2}
+  - {fileID: 11400000, guid: a87ab14f3f1b4352d9718f1ffd88c753, type: 2}
   gameplayDeckContainer: {fileID: 4545413730765709440}
   playerTransform: {fileID: 1940310457}
 --- !u!114 &1689288445

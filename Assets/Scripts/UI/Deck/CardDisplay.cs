@@ -3,17 +3,19 @@ using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using UnityEngine.EventSystems;
+using Sistemata.Ally;
 
 public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    [HideInInspector] public CardData cardData;
+    [HideInInspector] public AllyBaseData cardData;
 
     [Header("Referências de UI")]
-    public RectTransform visualContent;
-    public Image imageComponent;
-    public TextMeshProUGUI nameText;
-    public TextMeshProUGUI categoryText;
-    public TextMeshProUGUI descriptionText;
+    [SerializeField] private RectTransform visualContent;
+    [SerializeField] private Image imageComponent;
+    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private TextMeshProUGUI AttackText;
+    [SerializeField] private TextMeshProUGUI lifeText;
+    [SerializeField] private Image allyicon;
 
     private Vector3 originalScale;
 
@@ -25,13 +27,14 @@ public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         originalScale = visualContent.localScale;
     }
 
-    public void Setup(CardData data)
+    public void Setup(AllyBaseData data)
     {
         cardData = data;
         nameText.text = data.cardName;
         imageComponent.sprite ??= data.cardImage;
-        categoryText.text = data.category.ToString();
-        descriptionText.text = data.description;
+        AttackText.text = data.DefaultDamage.ToString();
+        lifeText.text = data.DefaultMaxHealth.ToString();
+        allyicon.sprite = data.cardImage;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
