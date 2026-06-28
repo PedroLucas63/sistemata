@@ -23,7 +23,7 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     private Vector2 originalPosition;
 
     //Juice
-    private Vector3 gameplayScale = new Vector3(0.5f, 0.5f, 0.5f); //Cartas ficam 30% menores no deck de jogo
+    [SerializeField] private Vector3 cardsGameplayScale = new Vector3(0.65f, 0.65f, 0.65f);
     private float originalY;
     private bool isHovered = false;
 
@@ -35,7 +35,7 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
         cardData = data;
         playerTransform = player;
 
-        visualTransform.localScale = gameplayScale;
+        visualTransform.localScale = cardsGameplayScale;
         originalY = visualTransform.localPosition.y;
     }
 
@@ -89,7 +89,7 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
 
         OnAnyCardUsed?.Invoke();
 
-        visualTransform.DOPunchScale(gameplayScale * 0.2f, 0.3f);
+        visualTransform.DOPunchScale(cardsGameplayScale * 0.2f, 0.3f);
         isHovered = false;
     }
 
@@ -105,7 +105,7 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
         {
             isHovered = true;
             visualTransform.DOKill();
-            visualTransform.DOScale(gameplayScale * 1.05f, 0.2f).SetEase(Ease.OutQuad);
+            visualTransform.DOScale(cardsGameplayScale * 1.05f, 0.2f).SetEase(Ease.OutQuad);
         }
     }
 
@@ -113,7 +113,7 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     {
         isHovered = false;
         visualTransform.DOKill();
-        visualTransform.DOScale(gameplayScale, 0.2f).SetEase(Ease.OutQuad);
+        visualTransform.DOScale(cardsGameplayScale, 0.2f).SetEase(Ease.OutQuad);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -133,7 +133,7 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
         isDragging = true;
         originalPosition = visualTransform.position;
 
-        visualTransform.DOScale(gameplayScale * 0.5f, 0.2f).SetEase(Ease.OutBack);
+        visualTransform.DOScale(cardsGameplayScale * 0.5f, 0.2f).SetEase(Ease.OutBack);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -147,13 +147,27 @@ public class GameplayCardUI : MonoBehaviour, IPointerClickHandler, IBeginDragHan
         if (!isDragging) return;
         isDragging = false;
 
-        visualTransform.DOScale(gameplayScale, 0.3f).SetEase(Ease.OutBack);
+        visualTransform.DOScale(cardsGameplayScale, 0.3f).SetEase(Ease.OutBack);
         visualTransform.DOMove(originalPosition, 0.3f).SetEase(Ease.OutBack);
 
-        Vector2 mousePos = Mouse.current.position.ReadValue();
-        Vector3 worldSpawnPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, Camera.main.nearClipPlane));
-        worldSpawnPosition.y = 0;
+        SpawnAllyOnDrag();
 
-        UseCard(worldSpawnPosition);
+    }
+
+    private void SpawnAllyOnDrag()
+    {
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
+
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+
+        if (groundPlane.Raycast(ray, out float distance))
+        {
+            Vector3 worldSpawnPosition = ray.GetPoint(distance);
+            worldSpawnPosition.y = 0f;
+
+            UseCard(worldSpawnPosition);
+        }
     }
 }
