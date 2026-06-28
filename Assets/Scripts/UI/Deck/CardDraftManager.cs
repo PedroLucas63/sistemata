@@ -101,25 +101,31 @@ public class CardDraftManager : MonoBehaviour
 
     void ConvertAndAnimateToDeck(GameObject cardObj, AllyBaseData data)
     {
+        Transform visual = cardObj.transform.GetChild(0);
+        Vector3 startWorldPos = visual.position;
+
         Destroy(cardObj.GetComponent<CardDisplay>());
 
         GameplayCardUI gameplayLogic = cardObj.AddComponent<GameplayCardUI>();
-        gameplayLogic.visualTransform = cardObj.transform.GetChild(0);
+        gameplayLogic.visualTransform = visual;
         gameplayLogic.cardImage = gameplayLogic.visualTransform.GetComponent<Image>();
-        gameplayLogic.SetupCard(data, playerTransform);
 
         cardObj.transform.SetParent(gameplayDeckContainer);
+        cardObj.transform.localScale = Vector3.one;
 
-        RectTransform rect = cardObj.GetComponent<RectTransform>();
+        gameplayLogic.SetupCard(data, playerTransform);
 
-        rect.DOScale(1.2f, 0.2f).SetEase(Ease.OutQuad);
-        rect.DORotate(new Vector3(0, 0, Random.Range(-15f, 15f)), 0.2f);
+        gameplayLogic.visualTransform.position = startWorldPos;
 
-        rect.DOAnchorPos(Vector2.zero, 0.5f).SetDelay(0.2f).SetEase(Ease.InBack).OnComplete(() => {
-            rect.DORotate(Vector3.zero, 0.2f);
-            rect.DOScale(1f, 0.2f);
+        gameplayLogic.visualTransform.DOScale(1.2f, 0.2f).SetEase(Ease.OutQuad);
+        gameplayLogic.visualTransform.DORotate(new Vector3(0, 0, UnityEngine.Random.Range(-15f, 15f)), 0.2f);
 
-            gameplayLogic.visualTransform.DOPunchScale(Vector3.one * 0.2f, 0.3f);
+        gameplayLogic.visualTransform.DOLocalMove(Vector3.zero, 0.5f).SetDelay(0.2f).SetEase(Ease.InBack).OnComplete(() => {
+            gameplayLogic.visualTransform.DORotate(Vector3.zero, 0.2f);
+
+            gameplayLogic.visualTransform.DOScale(new Vector3(0.5f, 0.5f, 0.5f), 0.2f);
+
+            gameplayLogic.visualTransform.DOPunchScale(Vector3.one * 0.1f, 0.3f);
         });
     }
 }
