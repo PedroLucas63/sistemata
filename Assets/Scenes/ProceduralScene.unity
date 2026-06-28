@@ -750,7 +750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f373f57ac8958d145aada2627ac94187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardDraftManager
-  draftIntervalSeconds: 5
+  draftIntervalSeconds: 60
   maxCardsInDeck: 3
   optionsPerDraft: 2
   triggerDraftAtStart: 1
@@ -774,7 +774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390608b0326da4142ad35aef81bc440b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeckGameplayManager
-  globalCooldownDuration: 60
+  globalCooldownDuration: 30
   playerTransform: {fileID: 1940310457}
   gameplayDeckContainer: {fileID: 4545413730765709440}
   draftPanelCanvasGroup: {fileID: 4545413730765709450}

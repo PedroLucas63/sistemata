@@ -4,79 +4,82 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using Sistemata.Ally;
 
-public class DeckGameplayManager : MonoBehaviour
+namespace sistemata.UI.Deck
 {
-    public static DeckGameplayManager Instance;
-
-    [Header("Configurações")]
-    public float globalCooldownDuration = 3f; // Tempo que todas as cartas bloqueiam ao usar 1
-
-    [Header("Referências")]
-    public Transform playerTransform;
-    public RectTransform gameplayDeckContainer;
-    public CanvasGroup draftPanelCanvasGroup;
-
-    public float GlobalCooldownTimer { get; private set; }
-
-    void Awake()
+    public class DeckGameplayManager : MonoBehaviour
     {
-        Instance = this;
-    }
+        public static DeckGameplayManager Instance;
 
-    void OnEnable()
-    {
-        GameplayCardUI.OnAnyCardUsed += StartGlobalCooldown;
-    }
+        [Header("Configurações")]
+        public float globalCooldownDuration = 3f; // Tempo que todas as cartas bloqueiam ao usar 1
 
-    void OnDisable()
-    {
-        GameplayCardUI.OnAnyCardUsed -= StartGlobalCooldown;
-    }
+        [Header("Referências")]
+        public Transform playerTransform;
+        public RectTransform gameplayDeckContainer;
+        public CanvasGroup draftPanelCanvasGroup;
 
-    void Update()
-    {
-        if (GlobalCooldownTimer > 0)
+        public float GlobalCooldownTimer { get; private set; }
+
+        void Awake()
         {
-            GlobalCooldownTimer -= Time.deltaTime;
+            Instance = this;
         }
-    }
 
-    private void StartGlobalCooldown()
-    {
-        GlobalCooldownTimer = globalCooldownDuration;
-    }
-
-    public void TransitionCardsToGameplay(List<GameObject> chosenCardObjects)
-    {
-        draftPanelCanvasGroup.DOFade(0f, 0.5f);
-        draftPanelCanvasGroup.interactable = false;
-        draftPanelCanvasGroup.blocksRaycasts = false;
-
-        for (int i = 0; i < chosenCardObjects.Count; i++)
+        void OnEnable()
         {
-            GameObject cardObj = chosenCardObjects[i];
+            GameplayCardUI.OnAnyCardUsed += StartGlobalCooldown;
+        }
 
-            AllyBaseData data = cardObj.GetComponent<CardDisplay>().cardData;
-            Destroy(cardObj.GetComponent<CardDisplay>());
+        void OnDisable()
+        {
+            GameplayCardUI.OnAnyCardUsed -= StartGlobalCooldown;
+        }
 
-            GameplayCardUI gameplayLogic = cardObj.AddComponent<GameplayCardUI>();
-            gameplayLogic.visualTransform = cardObj.transform.GetChild(0);
-            gameplayLogic.cardImage = gameplayLogic.visualTransform.GetComponent<Image>();
-            gameplayLogic.SetupCard(data, playerTransform);
+        void Update()
+        {
+            if (GlobalCooldownTimer > 0)
+            {
+                GlobalCooldownTimer -= Time.deltaTime;
+            }
+        }
 
-            cardObj.transform.SetParent(gameplayDeckContainer);
+        private void StartGlobalCooldown()
+        {
+            GlobalCooldownTimer = globalCooldownDuration;
+        }
 
-            float delay = i * 0.15f;
+        public void TransitionCardsToGameplay(List<GameObject> chosenCardObjects)
+        {
+            draftPanelCanvasGroup.DOFade(0f, 0.5f);
+            draftPanelCanvasGroup.interactable = false;
+            draftPanelCanvasGroup.blocksRaycasts = false;
 
-            RectTransform rect = cardObj.GetComponent<RectTransform>();
+            for (int i = 0; i < chosenCardObjects.Count; i++)
+            {
+                GameObject cardObj = chosenCardObjects[i];
 
-            rect.DOScale(1.2f, 0.3f).SetDelay(delay).SetEase(Ease.OutQuad);
-            rect.DORotate(new Vector3(0, 0, Random.Range(-15f, 15f)), 0.3f).SetDelay(delay);
+                AllyBaseData data = cardObj.GetComponent<CardDisplay>().cardData;
+                Destroy(cardObj.GetComponent<CardDisplay>());
 
-            rect.DOAnchorPos(Vector2.zero, 0.6f).SetDelay(delay + 0.2f).SetEase(Ease.InBack).OnComplete(() => {
-                rect.DORotate(Vector3.zero, 0.2f);
-                rect.DOScale(1f, 0.2f);
-            });
+                GameplayCardUI gameplayLogic = cardObj.AddComponent<GameplayCardUI>();
+                gameplayLogic.visualTransform = cardObj.transform.GetChild(0);
+                gameplayLogic.cardImage = gameplayLogic.visualTransform.GetComponent<Image>();
+                gameplayLogic.SetupCard(data, playerTransform);
+
+                cardObj.transform.SetParent(gameplayDeckContainer);
+
+                float delay = i * 0.15f;
+
+                RectTransform rect = cardObj.GetComponent<RectTransform>();
+
+                rect.DOScale(1.2f, 0.3f).SetDelay(delay).SetEase(Ease.OutQuad);
+                rect.DORotate(new Vector3(0, 0, Random.Range(-15f, 15f)), 0.3f).SetDelay(delay);
+
+                rect.DOAnchorPos(Vector2.zero, 0.6f).SetDelay(delay + 0.2f).SetEase(Ease.InBack).OnComplete(() => {
+                    rect.DORotate(Vector3.zero, 0.2f);
+                    rect.DOScale(1f, 0.2f);
+                });
+            }
         }
     }
 }
