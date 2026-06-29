@@ -1,3 +1,5 @@
+using System;
+using Sistemata.Player;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
@@ -16,14 +18,26 @@ namespace Sistemata.Core
         [SerializeField] private GameObject invasionPanel;
         [SerializeField] private GameObject gameOverPanel;
 
+        [Header("UI de XP e Level")] [SerializeField]
+        private GameObject xpPanel;
+
         [Header("Textos Game Over")]
         [SerializeField] private TextMeshProUGUI killsText;
         [SerializeField] private TextMeshProUGUI timeSurvivedText;
+
+        private Slider _xpSlider;
+        private TextMeshProUGUI _levelText;
 
         private void Start()
         {
             bossWarningPanel.SetActive(false);
             gameOverPanel.SetActive(false);
+
+            if (xpPanel)
+            {
+                _xpSlider = xpPanel.GetComponentInChildren<Slider>();
+                _levelText = xpPanel.GetComponentInChildren<TextMeshProUGUI>();
+            }
 
             GameManager.Instance.OnBossWarning += ShowBossWarning;
             GameManager.Instance.OnChaosWarning += ShowChaosWarning;
@@ -31,6 +45,8 @@ namespace Sistemata.Core
             GameManager.Instance.OnInvasionStart += ShowInvasionStart;
             GameManager.Instance.OnInvasionEnd += ShowInvasionEnd;
             GameManager.Instance.OnGameOver += ShowGameOverScreen;
+            
+            PlayerManager.Instance.OnXPChanged +=  UpdateXpPanel;
         }
 
         private void ShowInvasionWarning()
@@ -65,10 +81,20 @@ namespace Sistemata.Core
         private void Update()
         {
             if ((GameManager.Instance.currentState == GameState.Normal ||
-                 GameManager.Instance.currentState == GameState.Invasion) && gameplayTimerText)
+                 GameManager.Instance.currentState == GameState.Invasion ||
+                 GameManager.Instance.currentState == GameState.InvasionTransition) && gameplayTimerText)
             {
                 gameplayTimerText.text = GameManager.Instance.GetTimerText();
             }
+        }
+
+        private void UpdateXpPanel(int level, float currentXp, float targetXp)
+        {
+            if (_xpSlider)
+                _xpSlider.value = currentXp / targetXp;
+            
+            if (_levelText)
+                _levelText.text = $"Nível {level}";
         }
 
         private void UpdateTimerText()

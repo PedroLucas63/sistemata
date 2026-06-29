@@ -25,10 +25,17 @@ namespace Sistemata.UI.LevelUp
         private List<UpgradeData> _currentOptions;
         private int _pendingLevelUps = 0;
         
+        private TensionClock _tensionClock;
+        
         private void Awake()
         {
             if (Instance == null) Instance = this;
             else Destroy(gameObject);
+
+            _tensionClock = timerBar.GetComponent<TensionClock>();
+            if (_tensionClock)
+                _tensionClock.SetTimeToDecide(timeLimit);
+                
         }
         
         public void QueueLevelUp()
