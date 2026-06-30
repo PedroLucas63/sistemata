@@ -1,12 +1,13 @@
 using DG.Tweening;
-using Sistemata.Common;
 using Sistemata.Ally;
+using Sistemata.Audio;
+using Sistemata.Common;
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using TMPro;
 using Random = UnityEngine.Random;
 
 
@@ -21,6 +22,11 @@ namespace sistemata.UI.Deck
         [Header("Referências de Cooldown")]
         [SerializeField] private Image cooldownOverlay;
         [SerializeField] private TextMeshProUGUI cooldownText;
+
+        [Header("Áudio da Carta")]
+        [SerializeField] private AudioClip clickSound;
+        [SerializeField] private AudioClip releaseSound;
+        [Range(0f, 1f)][SerializeField] private float cardVolume = 0.8f;
 
         [HideInInspector] public AllyBaseData cardData;
 
@@ -179,6 +185,9 @@ namespace sistemata.UI.Deck
         {
             if (!isDragging && IsCardReady())
             {
+                if (clickSound != null && AudioManager.Instance != null)
+                    AudioManager.Instance.PlayUISFX(clickSound, cardVolume);
+
                 Vector2 randomOffset = Random.insideUnitCircle * 2f;
                 Vector3 spawnPos = playerTransform.position + new Vector3(randomOffset.x, 0f, randomOffset.y);
                 UseCard(spawnPos);
@@ -189,6 +198,10 @@ namespace sistemata.UI.Deck
         {
             if (!IsCardReady()) return;
             isDragging = true;
+
+            if (clickSound != null && AudioManager.Instance != null)
+                AudioManager.Instance.PlayUISFX(clickSound, cardVolume);
+
             visualTransform.DOScale(gameplayScale * 0.5f, 0.2f).SetEase(Ease.OutBack);
         }
 
@@ -202,6 +215,9 @@ namespace sistemata.UI.Deck
         {
             if (!isDragging) return;
             isDragging = false;
+
+            if (releaseSound != null && AudioManager.Instance != null)
+                AudioManager.Instance.PlayUISFX(releaseSound, cardVolume);
 
             visualTransform.DOScale(gameplayScale, 0.3f).SetEase(Ease.OutBack);
 

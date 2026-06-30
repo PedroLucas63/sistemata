@@ -4,6 +4,7 @@ using TMPro;
 using DG.Tweening;
 using UnityEngine.EventSystems;
 using Sistemata.Ally;
+using Sistemata.Audio;
 
 namespace sistemata.UI.Deck
 {
@@ -18,6 +19,11 @@ namespace sistemata.UI.Deck
         [SerializeField] private TextMeshProUGUI AttackText;
         [SerializeField] private TextMeshProUGUI lifeText;
         [SerializeField] private Image allyicon;
+
+        [Header("Áudio da Carta")]
+        [SerializeField] private AudioClip hoverSound;
+        [SerializeField] private AudioClip selectSound;
+        [Range(0f, 1f)][SerializeField] private float cardVolume = 0.8f;
 
         private Vector3 originalScale;
 
@@ -43,6 +49,11 @@ namespace sistemata.UI.Deck
         {
             visualContent.DOKill();
             visualContent.DOScale(originalScale * 1.1f, 0.2f).SetEase(Ease.OutBack).SetUpdate(true);
+
+            if (selectSound != null && AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayUISFX(hoverSound, cardVolume);
+            }
         }
 
         public void OnPointerExit(PointerEventData eventData)
@@ -53,6 +64,10 @@ namespace sistemata.UI.Deck
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            if (selectSound != null && AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayUISFX(selectSound, cardVolume);
+            }
             OnCardChosen?.Invoke(this);
         }
     }

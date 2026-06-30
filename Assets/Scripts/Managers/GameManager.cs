@@ -216,5 +216,10 @@ namespace Sistemata.Core
             OnGameOver?.Invoke(MonstersKilled, TotalTimeSurvived);
             SaveManager.Instance.UpdateSave(_roundData);
         }
+
+        public void ExitGame()
+        {
+            Application.Quit();
+        }
     }
 }

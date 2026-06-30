@@ -1269,6 +1269,7 @@ GameObject:
   - component: {fileID: 326587321}
   - component: {fileID: 326587320}
   - component: {fileID: 326587323}
+  - component: {fileID: 326587324}
   m_Layer: 5
   m_Name: ExitButton
   m_TagString: Untagged
@@ -1403,6 +1404,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daabc2d065c84a1786f5adca829a5785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.UI.ButtonHoverSelect
+--- !u!114 &326587324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 326587318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588178835a481f24ca50eba469320833, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.UI.UIButtonAudio
+  hoverSound: {fileID: 8300000, guid: e7caa16175b98f14a8dbb889b7de63fb, type: 3}
+  clickSound: {fileID: 8300000, guid: 027202bd35218be49abc5ef2de32d886, type: 3}
+  volume: 0.8
+  ignoreButtonState: 0
 --- !u!1 &364424648
 GameObject:
   m_ObjectHideFlags: 0
@@ -2815,6 +2832,7 @@ GameObject:
   - component: {fileID: 823478631}
   - component: {fileID: 823478630}
   - component: {fileID: 823478633}
+  - component: {fileID: 823478634}
   m_Layer: 5
   m_Name: StatsButton
   m_TagString: Untagged
@@ -2949,6 +2967,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daabc2d065c84a1786f5adca829a5785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.UI.ButtonHoverSelect
+--- !u!114 &823478634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 823478628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588178835a481f24ca50eba469320833, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.UI.UIButtonAudio
+  hoverSound: {fileID: 8300000, guid: e7caa16175b98f14a8dbb889b7de63fb, type: 3}
+  clickSound: {fileID: 8300000, guid: 027202bd35218be49abc5ef2de32d886, type: 3}
+  volume: 0.8
+  ignoreButtonState: 0
 --- !u!1 &861076476
 GameObject:
   m_ObjectHideFlags: 0
@@ -3585,6 +3619,7 @@ GameObject:
   - component: {fileID: 1016209124}
   - component: {fileID: 1016209123}
   - component: {fileID: 1016209126}
+  - component: {fileID: 1016209127}
   m_Layer: 5
   m_Name: PlayButton
   m_TagString: Untagged
@@ -3719,6 +3754,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daabc2d065c84a1786f5adca829a5785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.UI.ButtonHoverSelect
+--- !u!114 &1016209127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1016209121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588178835a481f24ca50eba469320833, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.UI.UIButtonAudio
+  hoverSound: {fileID: 8300000, guid: e7caa16175b98f14a8dbb889b7de63fb, type: 3}
+  clickSound: {fileID: 8300000, guid: 027202bd35218be49abc5ef2de32d886, type: 3}
+  volume: 0.8
+  ignoreButtonState: 0
 --- !u!1 &1035166085
 GameObject:
   m_ObjectHideFlags: 0
@@ -4143,6 +4194,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1165335411}
   m_CullTransparentMesh: 1
+--- !u!1 &1195254444
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1195254446}
+  - component: {fileID: 1195254445}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1195254445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195254444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12007c6e21985734b8b31d8287ffd209, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.Audio.AudioManager
+  mainMixer: {fileID: 24100000, guid: 42f32d5f51fd28d46812a47559746242, type: 2}
+  bgmGroup: {fileID: -5478827254049979327, guid: 42f32d5f51fd28d46812a47559746242, type: 2}
+  sfxGroup: {fileID: 810161651165712697, guid: 42f32d5f51fd28d46812a47559746242, type: 2}
+  uiGroup: {fileID: -743640164325611843, guid: 42f32d5f51fd28d46812a47559746242, type: 2}
+  initialPoolSize: 20
+--- !u!4 &1195254446
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195254444}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1229743391
 GameObject:
   m_ObjectHideFlags: 0
@@ -4690,6 +4790,7 @@ GameObject:
   - component: {fileID: 1554971194}
   - component: {fileID: 1554971193}
   - component: {fileID: 1554971196}
+  - component: {fileID: 1554971197}
   m_Layer: 5
   m_Name: AboutButton
   m_TagString: Untagged
@@ -4824,6 +4925,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daabc2d065c84a1786f5adca829a5785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.UI.ButtonHoverSelect
+--- !u!114 &1554971197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1554971191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588178835a481f24ca50eba469320833, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.UI.UIButtonAudio
+  hoverSound: {fileID: 8300000, guid: e7caa16175b98f14a8dbb889b7de63fb, type: 3}
+  clickSound: {fileID: 8300000, guid: 027202bd35218be49abc5ef2de32d886, type: 3}
+  volume: 0.8
+  ignoreButtonState: 0
 --- !u!1 &1572408173
 GameObject:
   m_ObjectHideFlags: 0
@@ -5148,6 +5265,7 @@ GameObject:
   - component: {fileID: 1683473665}
   - component: {fileID: 1683473664}
   - component: {fileID: 1683473667}
+  - component: {fileID: 1683473668}
   m_Layer: 5
   m_Name: StoreButton
   m_TagString: Untagged
@@ -5270,6 +5388,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daabc2d065c84a1786f5adca829a5785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sistemata.UI.ButtonHoverSelect
+--- !u!114 &1683473668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683473662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588178835a481f24ca50eba469320833, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sistemata.UI.UIButtonAudio
+  hoverSound: {fileID: 8300000, guid: e7caa16175b98f14a8dbb889b7de63fb, type: 3}
+  clickSound: {fileID: 8300000, guid: 027202bd35218be49abc5ef2de32d886, type: 3}
+  volume: 0.8
+  ignoreButtonState: 0
 --- !u!1 &1700743146
 GameObject:
   m_ObjectHideFlags: 0
@@ -6798,3 +6932,4 @@ SceneRoots:
   - {fileID: 199846607}
   - {fileID: 469093115}
   - {fileID: 709313029}
+  - {fileID: 1195254446}

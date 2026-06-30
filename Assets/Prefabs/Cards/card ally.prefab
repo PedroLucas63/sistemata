@@ -760,6 +760,9 @@ MonoBehaviour:
   AttackText: {fileID: 2656294630986083206}
   lifeText: {fileID: 6182340866109135320}
   allyicon: {fileID: 4078408795759647847}
+  hoverSound: {fileID: 8300000, guid: 80ec489815be22d42bc4438b03ab7d41, type: 3}
+  selectSound: {fileID: 8300000, guid: 58fca450a51eefe44872f5515b812c6f, type: 3}
+  cardVolume: 0.8
 --- !u!114 &3583184374953567967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -776,4 +779,7 @@ MonoBehaviour:
   cardImage: {fileID: 4078408795759647847}
   cooldownOverlay: {fileID: 386063310985564821}
   cooldownText: {fileID: 6119577201719796198}
+  clickSound: {fileID: 8300000, guid: 80ec489815be22d42bc4438b03ab7d41, type: 3}
+  releaseSound: {fileID: 8300000, guid: 9d0b492c88f30bb4ab08539d35b9eac4, type: 3}
+  cardVolume: 0.8
   cardData: {fileID: 0}
